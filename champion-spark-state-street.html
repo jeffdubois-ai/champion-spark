@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Champion Spark — State Street Financial</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#F0F2F7;color:#1A1D2E;line-height:1.65}
+a{color:#1B6AFF;text-decoration:none}
+a:hover{text-decoration:underline}
+p{margin-bottom:.85em}
+p:last-child{margin-bottom:0}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(135deg,#0B0E27 0%,#1A2560 60%,#0D3B8C 100%);color:#fff;padding:48px 40px 40px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-80px;right:-80px;width:320px;height:320px;background:radial-gradient(circle,rgba(27,106,255,.25) 0%,transparent 70%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:4px 12px;font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px;color:#93C5FD}
+.hero-badge .dot{width:7px;height:7px;background:#F59E0B;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.3)}}
+.hero h1{font-size:2rem;font-weight:800;letter-spacing:-.03em;margin-bottom:6px}
+.hero-subtitle{color:#93C5FD;font-size:1rem;margin-bottom:28px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px}
+.hero-chip{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:6px 14px;font-size:.8rem;color:#E0E7FF}
+.hero-chip span{color:#93C5FD;font-weight:600;margin-right:4px}
+.hero-sf-link{display:inline-flex;align-items:center;gap:6px;background:rgba(0,161,224,.18);border:1px solid rgba(0,161,224,.45);border-radius:8px;padding:6px 14px;font-size:.8rem;color:#7DD3FC;font-weight:600;text-decoration:none;transition:background .15s,border-color .15s,color .15s}
+.hero-sf-link:hover{background:rgba(0,161,224,.30);border-color:rgba(0,161,224,.70);color:#fff;text-decoration:none}
+.hero-sf-link svg{flex-shrink:0;opacity:.85}
+.hero-attribution{margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.1);display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-size:.75rem;color:rgba(255,255,255,.45)}
+.hero-attribution .ha-account{font-weight:700;color:rgba(255,255,255,.7)}
+.hero-attribution .ha-sep{color:rgba(255,255,255,.2)}
+.hero-attribution .ha-ai{color:rgba(255,255,255,.5)}
+.hero-attribution .ha-ai strong{color:#93C5FD;font-weight:600}
+
+/* ── MAIN ── */
+.page{max-width:1000px;margin:0 auto;padding:32px 24px 64px}
+
+/* ── SECTION HEADER ── */
+.section-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#9CA3AF;margin:36px 0 12px}
+
+/* ── TIMELINE WRAPPER ── */
+.timeline-wrapper{background:#fff;border-radius:16px;padding:36px 32px 0;box-shadow:0 1px 3px rgba(0,0,0,.07),0 4px 16px rgba(0,0,0,.04);margin-bottom:16px}
+
+/* ── TIMELINE TRACK ── */
+.tl-track{display:flex;align-items:flex-start;position:relative;padding-bottom:0;overflow-x:auto;padding:0 0 8px}
+.tl-track::after{content:'';position:absolute;top:28px;left:56px;right:56px;height:2px;background:linear-gradient(90deg,#E0E7FF 0%,#C7D2FE 50%,#E0E7FF 100%);z-index:0}
+
+.tl-node{flex:1;display:flex;flex-direction:column;align-items:center;position:relative;z-index:1;cursor:pointer;min-width:160px;padding:0 8px 32px}
+.tl-circle{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.35rem;margin-bottom:12px;transition:transform .2s,box-shadow .2s;border:3px solid transparent;position:relative;z-index:1}
+.tl-node:hover .tl-circle{transform:scale(1.08)}
+.tl-node.active .tl-circle{transform:scale(1.1)}
+
+.tl-node.type-spark1 .tl-circle{background:#EFF6FF;border-color:#3B82F6;color:#2563EB}
+.tl-node.type-spark1.active .tl-circle{background:#DBEAFE;box-shadow:0 0 0 6px rgba(59,130,246,.15)}
+.tl-node.type-spark2 .tl-circle{background:#F5F3FF;border-color:#7C3AED;color:#6D28D9}
+.tl-node.type-spark2.active .tl-circle{background:#EDE9FE;box-shadow:0 0 0 6px rgba(124,58,237,.15)}
+.tl-node.type-spark3 .tl-circle{background:#ECFDF5;border-color:#10B981;color:#059669}
+.tl-node.type-spark3.active .tl-circle{background:#D1FAE5;box-shadow:0 0 0 6px rgba(16,185,129,.15)}
+
+.tl-week{display:inline-flex;align-items:center;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:20px;margin-bottom:6px}
+.type-spark1  .tl-week{background:#DBEAFE;color:#1D4ED8}
+.type-spark2  .tl-week{background:#EDE9FE;color:#5B21B6}
+.type-spark3  .tl-week{background:#D1FAE5;color:#065F46}
+
+.tl-title{font-size:.88rem;font-weight:700;color:#1A1D2E;text-align:center;line-height:1.3;margin-bottom:4px}
+.tl-desc{font-size:.73rem;color:#9CA3AF;text-align:center;line-height:1.3}
+
+.tl-expand-hint{font-size:.68rem;color:#C4B5FD;margin-top:6px;display:flex;align-items:center;gap:3px}
+.tl-expand-hint svg{transition:transform .25s}
+.tl-node.active .tl-expand-hint svg{transform:rotate(180deg)}
+.type-spark1 .tl-expand-hint{color:#93C5FD}
+.type-spark2 .tl-expand-hint{color:#C4B5FD}
+.type-spark3 .tl-expand-hint{color:#6EE7B7}
+
+/* ── TIMELINE DETAIL PANELS ── */
+.tl-panels{border-top:1px solid #F3F4F6}
+.tl-panel{display:none;padding:28px 0 32px;border-bottom:1px solid #F3F4F6;animation:fadeSlide .25s ease}
+.tl-panel:last-child{border-bottom:none}
+.tl-panel.open{display:block}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+
+.panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.panel-header-left{display:flex;align-items:center;gap:12px}
+.panel-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.panel-validate .panel-icon{background:#FEF3C7}
+.panel-spark1  .panel-icon{background:#DBEAFE}
+.panel-spark2  .panel-icon{background:#EDE9FE}
+.panel-spark3  .panel-icon{background:#D1FAE5}
+.panel-title{font-size:1.05rem;font-weight:800;color:#111827;letter-spacing:-.02em}
+.panel-subtitle{font-size:.78rem;color:#6B7280;margin-top:2px}
+.cal-btn{display:inline-flex;align-items:center;gap:7px;padding:8px 16px;border-radius:8px;font-size:.8rem;font-weight:700;cursor:pointer;border:none;transition:all .15s}
+.cal-btn-validate{background:#FEF3C7;color:#92400E}
+.cal-btn-spark1{background:#DBEAFE;color:#1D4ED8}
+.cal-btn-spark2{background:#EDE9FE;color:#5B21B6}
+.cal-btn-spark3{background:#D1FAE5;color:#065F46}
+.cal-btn:hover{filter:brightness(.93);transform:translateY(-1px)}
+.cal-btn:active{transform:translateY(0)}
+
+/* ── PANEL CONTENT COMPONENTS ── */
+.arc-strip{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.arc-tag{display:inline-flex;align-items:center;gap:5px;font-size:.75rem;font-weight:600;padding:4px 10px;border-radius:6px}
+.arc-tag-commit{background:#DBEAFE;color:#1D4ED8}
+.arc-tag-format{background:#F3F4F6;color:#374151}
+.arc-tag-build{background:#D1FAE5;color:#065F46}
+blockquote{border-left:4px solid #1B6AFF;background:#F0F5FF;border-radius:0 10px 10px 0;padding:14px 18px;margin:16px 0;font-style:italic;color:#1E3A8A;font-size:.95rem;line-height:1.6}
+blockquote cite{display:block;font-style:normal;font-size:.75rem;color:#6B7280;margin-top:8px;font-weight:500}
+.callout{border-radius:10px;padding:14px 18px;margin:14px 0;display:flex;gap:10px;font-size:.875rem}
+.callout-icon{flex-shrink:0;font-size:1.1rem;margin-top:1px}
+.callout-blue{background:#EFF6FF;border-left:4px solid #3B82F6}
+.callout-green{background:#F0FDF4;border-left:4px solid #22C55E}
+.callout-amber{background:#FFFBEB;border-left:4px solid #F59E0B}
+.callout-red{background:#FFF1F2;border-left:4px solid #F43F5E}
+.callout-title{font-weight:700;font-size:.85rem;margin-bottom:3px;color:#1A1D2E}
+.callout-body{color:#374151}
+.email-box{background:#F8F9FF;border:1px solid #E0E7FF;border-radius:10px;padding:16px;margin:14px 0}
+.email-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#6366F1;margin-bottom:8px}
+.email-body{font-size:.85rem;color:#374151;line-height:1.6;font-style:italic}
+.why-works{background:#F0FDF4;border-left:3px solid #22C55E;border-radius:0 8px 8px 0;padding:10px 14px;margin-top:14px;font-size:.84rem;color:#166534}
+.why-works strong{display:block;font-weight:700;margin-bottom:3px}
+.checklist{list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.checklist li{display:flex;align-items:flex-start;gap:10px;font-size:.875rem;color:#374151;padding:10px 12px;background:#FAFBFF;border:1px solid #E8ECFF;border-radius:8px}
+.checklist li::before{content:'☐';font-size:1rem;color:#6366F1;flex-shrink:0;margin-top:1px}
+.checklist li strong{font-weight:600;display:block;margin-bottom:2px;color:#1A1D2E}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+@media(max-width:640px){.two-col{grid-template-columns:1fr}}
+
+/* ── HW CONFIDENCE BADGES ── */
+.conf{display:inline-flex;align-items:center;gap:5px;border-radius:6px;padding:3px 10px;font-size:.72rem;font-weight:700;letter-spacing:.02em}
+.conf-high{background:#ECFDF5;color:#065F46}
+.conf-med{background:#FFFBEB;color:#92400E}
+.conf-low{background:#FEF2F2;color:#991B1B}
+.conf-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.conf-high .conf-dot{background:#10B981}
+.conf-med .conf-dot{background:#F59E0B}
+.conf-low .conf-dot{background:#EF4444}
+.hw-item{border:1px solid #E5E7EB;border-radius:12px;margin-bottom:14px;overflow:hidden}
+.hw-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #F3F4F6;gap:10px;flex-wrap:wrap}
+.hw-head-left{display:flex;align-items:center;gap:9px}
+.hw-num{width:26px;height:26px;background:#1A1D2E;color:#fff;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0}
+.hw-title{font-size:.9rem;font-weight:700;color:#111827}
+.hw-body{padding:14px 16px;font-size:.875rem;color:#374151}
+.hw-body p{margin-bottom:8px}
+.hw-body ul{padding-left:18px}
+.hw-body li{margin-bottom:5px;color:#374151}
+
+/* ── COLLAPSIBLE SECTIONS ── */
+.section{background:#fff;border-radius:12px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.07),0 4px 16px rgba(0,0,0,.04);overflow:hidden;transition:box-shadow .2s}
+.section:hover{box-shadow:0 2px 8px rgba(0,0,0,.10),0 8px 24px rgba(0,0,0,.06)}
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;cursor:pointer;user-select:none;border-bottom:2px solid transparent;transition:background .15s,border-color .2s}
+.sec-hdr:hover{background:#F8F9FF}
+.section.open .sec-hdr{border-bottom-color:#E8ECFF}
+.sec-left{display:flex;align-items:center;gap:12px}
+.sec-num{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0}
+.t-blue  .sec-num{background:#EEF2FF;color:#4F46E5}
+.t-teal  .sec-num{background:#F0FDFA;color:#0D9488}
+.t-purple.sec-num,.t-purple .sec-num{background:#F5F3FF;color:#7C3AED}
+.t-amber .sec-num{background:#FFFBEB;color:#D97706}
+.t-indigo .sec-num{background:#EEF2FF;color:#3730A3}
+.t-rose  .sec-num{background:#FFF1F2;color:#E11D48}
+.t-red   .sec-num{background:#FEF2F2;color:#DC2626}
+.sec-title{font-size:.95rem;font-weight:700;color:#1A1D2E}
+.sec-sub{font-size:.75rem;color:#6B7280;margin-top:1px}
+.chevron{width:18px;height:18px;color:#9CA3AF;transition:transform .25s cubic-bezier(.4,0,.2,1);flex-shrink:0}
+.section.open .chevron{transform:rotate(180deg)}
+.sec-body{padding:0 22px;max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.4,0,.2,1),padding .25s}
+.section.open .sec-body{max-height:9999px;padding:22px 22px 26px}
+
+/* ── TABLES ── */
+.tbl{width:100%;border-collapse:collapse;font-size:.85rem}
+.tbl th{background:#F8F9FF;color:#4B5563;font-weight:600;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;padding:9px 13px;text-align:left;border-bottom:2px solid #E5E7EB}
+.tbl td{padding:11px 13px;border-bottom:1px solid #F3F4F6;vertical-align:top;color:#374151}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:#FAFBFF}
+.kv td{padding:9px 12px;border-bottom:1px solid #F3F4F6;vertical-align:top;font-size:.875rem}
+.kv td:first-child{font-weight:600;color:#6B7280;font-size:.75rem;text-transform:uppercase;letter-spacing:.04em;width:190px;white-space:nowrap}
+.kv tr:last-child td{border-bottom:none}
+.alert{color:#DC2626;font-weight:700}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;gap:4px;border-radius:6px;padding:2px 8px;font-size:.7rem;font-weight:600;white-space:nowrap}
+.b-blue{background:#EEF2FF;color:#4F46E5}
+.b-purple{background:#F5F3FF;color:#7C3AED}
+.b-green{background:#ECFDF5;color:#065F46}
+.b-amber{background:#FFFBEB;color:#B45309}
+.b-gray{background:#F3F4F6;color:#6B7280}
+.b-red{background:#FEF2F2;color:#991B1B}
+
+/* ── STAT ROW ── */
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:18px}
+.stat-card{background:#F8F9FF;border:1px solid #E0E7FF;border-radius:10px;padding:14px;text-align:center}
+.stat-n{font-size:1.7rem;font-weight:800;color:#1B6AFF;line-height:1.1;margin-bottom:5px}
+.stat-l{font-size:.75rem;color:#6B7280;line-height:1.4}
+.stat-s{font-size:.65rem;color:#9CA3AF;margin-top:5px}
+
+/* ── PERSON CARD ── */
+.person-card{border:1px solid #E5E7EB;border-radius:12px;padding:18px;margin-bottom:14px;position:relative;overflow:hidden}
+.person-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%}
+.pc-primary::before{background:#4F46E5}
+.pc-secondary::before{background:#7C3AED}
+.pc-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.pc-name{font-size:1rem;font-weight:700;color:#111827}
+.pc-role{font-size:.78rem;color:#6B7280;margin-top:2px}
+.signal-list{list-style:none;margin-top:8px}
+.signal-list li{display:flex;gap:8px;font-size:.85rem;color:#374151;padding:3px 0}
+.signal-list li::before{content:'→';color:#1B6AFF;font-weight:700;flex-shrink:0}
+.risk-list{list-style:none;margin-top:8px}
+.risk-list li{display:flex;gap:8px;font-size:.85rem;color:#374151;padding:3px 0}
+.risk-list li::before{content:'⚠';color:#F59E0B;flex-shrink:0}
+hr.div{border:none;border-top:1px solid #F3F4F6;margin:14px 0}
+
+/* ── SIGNAL STRIP ── */
+.sig-strip{display:flex;flex-direction:column;gap:9px}
+.sig-item{display:flex;align-items:flex-start;gap:11px;padding:11px 13px;background:#FAFBFF;border:1px solid #E8ECFF;border-radius:8px;font-size:.85rem}
+.sig-item strong{display:block;font-weight:700;color:#1A1D2E;margin-bottom:2px}
+.sig-item span{color:#6B7280}
+.sig-ico{font-size:1.1rem;flex-shrink:0;margin-top:1px}
+
+/* ── PROOF TABLE ── */
+.proof-best td{background:#F0F5FF!important}
+.proof-best td:first-child{border-left:3px solid #1B6AFF}
+
+/* ── VALIDATION HOMEWORK SECTION ── */
+.hw-section{background:#FFFBEB;border:2px solid #FDE68A;border-radius:12px;margin-bottom:16px;overflow:hidden;box-shadow:0 1px 4px rgba(245,158,11,.12)}
+.hw-section:hover{box-shadow:0 2px 10px rgba(245,158,11,.18)}
+.hw-sec-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;cursor:pointer;user-select:none;border-bottom:2px solid transparent;transition:background .15s,border-color .2s}
+.hw-sec-hdr:hover{background:#FEF3C7}
+.hw-section.open .hw-sec-hdr{border-bottom-color:#FDE68A}
+.hw-sec-left{display:flex;align-items:center;gap:12px}
+.hw-sec-icon{width:36px;height:36px;background:#FEF3C7;border:2px solid #F59E0B;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.hw-sec-title{font-size:.95rem;font-weight:700;color:#92400E}
+.hw-sec-sub{font-size:.75rem;color:#B45309;margin-top:1px}
+.hw-section .hw-chevron{width:18px;height:18px;color:#D97706;transition:transform .25s cubic-bezier(.4,0,.2,1);flex-shrink:0}
+.hw-section.open .hw-chevron{transform:rotate(180deg)}
+.hw-sec-body{padding:0 22px;max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.4,0,.2,1),padding .25s}
+.hw-section.open .hw-sec-body{max-height:9999px;padding:20px 22px 24px}
+/* Checkbox items */
+.cb-item{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:#fff;border:1px solid #FDE68A;border-radius:10px;margin-bottom:10px;transition:background .2s,border-color .2s,opacity .2s}
+.cb-item:last-child{margin-bottom:0}
+.cb-item input[type=checkbox]{width:17px;height:17px;margin-top:3px;flex-shrink:0;cursor:pointer;accent-color:#D97706}
+.cb-content{flex:1;cursor:pointer}
+.cb-title{font-weight:700;font-size:.88rem;color:#92400E;display:flex;align-items:center;gap:8px;margin-bottom:3px;transition:color .2s}
+.cb-detail{font-size:.8rem;color:#6B7280;line-height:1.5}
+.cb-detail ul{padding-left:16px;margin-top:4px}
+.cb-detail li{margin-bottom:3px}
+.cb-item.checked{background:#FEF9EE;border-color:#FCD34D;opacity:.65}
+.cb-item.checked .cb-title{color:#B45309;text-decoration:line-through}
+.cb-item.checked .cb-detail{text-decoration:line-through;color:#9CA3AF}
+
+/* ── FOOTER ── */
+.footer{text-align:center;color:#9CA3AF;font-size:.75rem;margin-top:36px;padding-top:20px;border-top:1px solid #E5E7EB}
+
+@media(max-width:640px){
+  .hero{padding:28px 18px}
+  .hero h1{font-size:1.5rem}
+  .page{padding:16px 12px 48px}
+  .timeline-wrapper{padding:24px 16px 0}
+  .tl-node{min-width:120px}
+  .tl-circle{width:44px;height:44px;font-size:1.1rem}
+  .tl-track::after{top:22px;left:44px;right:44px}
+  .kv td:first-child{width:130px;white-space:normal}
+  .stat-row{grid-template-columns:1fr 1fr}
+}
+@media print{
+  body{background:#fff}
+  .hero{background:#0B0E27!important;-webkit-print-color-adjust:exact}
+  .section{box-shadow:none;border:1px solid #E5E7EB}
+  .sec-body{max-height:none!important;padding:20px 22px!important}
+  .tl-panel{display:block!important}
+  .chevron{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HERO ══ -->
+<div class="hero">
+  <div class="hero-badge"><span class="dot"></span>Champion Spark &nbsp;·&nbsp; Active Deal</div>
+  <h1>State Street Financial</h1>
+  <div class="hero-subtitle">Champion Identification &amp; Relationship Development Brief</div>
+  <div class="hero-meta">
+    <div class="hero-chip"><span>ACV</span>$184K New ARR</div>
+    <div class="hero-chip"><span>Stage</span>S2 Qualification</div>
+    <div class="hero-chip"><span>SE Score</span>Yellow — Tech Win On Track</div>
+    <div class="hero-chip"><span>Close</span>June 17, 2026</div>
+    <div class="hero-chip"><span>AE</span>PJ Franovic</div>
+    <div class="hero-chip"><span>SE</span>Aaron Gottesfeld</div>
+    <div class="hero-chip"><span>Prepared</span>April 14, 2026</div>
+    <a class="hero-sf-link" href="https://amplitude.my.salesforce.com/006VH00000jAmxXYAS" target="_blank" rel="noopener">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z"/></svg>
+      View in Salesforce
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+    </a>
+  </div>
+  <div class="hero-attribution">
+    <span class="ha-account">State Street Financial</span>
+    <span class="ha-sep">·</span>
+    <span>Generated April 14, 2026 at 10:24 AM ET</span>
+    <span class="ha-sep">·</span>
+    <span class="ha-ai">Champion Spark built for <strong>Jeff Dubois</strong> by Amplitude AI</span>
+  </div>
+</div>
+
+<!-- ══ PAGE ══ -->
+<div class="page">
+
+  <div class="section-label">Champion Relationship Timeline — click any node to expand</div>
+
+  <!-- ══ TIMELINE ══ -->
+  <div class="timeline-wrapper">
+    <div class="tl-track">
+
+      <div class="tl-node type-spark1" id="n-spark1" onclick="togglePanel('spark1')">
+        <div class="tl-circle">⚡</div>
+        <div class="tl-week">Week 1</div>
+        <div class="tl-title">The Signal Latency POV</div>
+        <div class="tl-desc">Low-commitment insight share</div>
+        <div class="tl-expand-hint">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          details
+        </div>
+      </div>
+
+      <div class="tl-node type-spark2" id="n-spark2" onclick="togglePanel('spark2')">
+        <div class="tl-circle">🎬</div>
+        <div class="tl-week">Week 2</div>
+        <div class="tl-title">Your Scenario, Live</div>
+        <div class="tl-desc">Co-creation session</div>
+        <div class="tl-expand-hint">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          details
+        </div>
+      </div>
+
+      <div class="tl-node type-spark3" id="n-spark3" onclick="togglePanel('spark3')">
+        <div class="tl-circle">🗺️</div>
+        <div class="tl-week">Week 3–4</div>
+        <div class="tl-title">OKR to Signal Map</div>
+        <div class="tl-desc">Co-authored artifact they own</div>
+        <div class="tl-expand-hint">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          details
+        </div>
+      </div>
+
+    </div><!-- /tl-track -->
+
+    <!-- ══ DETAIL PANELS ══ -->
+    <div class="tl-panels">
+
+      <!-- SPARK 1 PANEL -->
+      <div class="tl-panel panel-spark1" id="p-spark1">
+        <div class="panel-header">
+          <div class="panel-header-left">
+            <div class="panel-icon">⚡</div>
+            <div>
+              <div class="panel-title">Spark 1 — The Signal Latency POV</div>
+              <div class="panel-subtitle">Week 1 · Low-commitment insight share · No ask · Builds on validation homework</div>
+            </div>
+          </div>
+          <button class="cal-btn cal-btn-spark1" onclick="downloadICS('spark1')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Add to Calendar
+          </button>
+        </div>
+        <div class="arc-strip">
+          <span class="arc-tag arc-tag-format">📧 Email + 1 asset</span>
+          <span class="arc-tag arc-tag-commit">~5 min for David</span>
+          <span class="arc-tag arc-tag-build">No ask — build credibility only</span>
+        </div>
+        <p style="font-size:.875rem;color:#374151;">Send a brief, challenger-framed note that names the insight David surfaced in the demo and connects it to an industry-level pattern. Don't pitch Amplitude — pitch the <em>idea</em>. This is designed to validate his intelligence and position you as a thought partner, not a vendor. He'll share it internally if it lands.</p>
+        <p style="font-size:.875rem;color:#374151;">Prerequisite: Validation Homework items 1 and 5 are complete — you've confirmed David's title and verified his engagement was genuine before investing in this sequence.</p>
+        <div class="email-box">
+          <div class="email-label">Suggested Subject Line</div>
+          <div class="email-body">"The feedback collection problem is solved. The signal latency problem isn't."</div>
+        </div>
+        <div class="email-box">
+          <div class="email-label">Opening Draft</div>
+          <div class="email-body">"David — you said something in our session I keep coming back to: the goal is to 'understand how to address an issue before it becomes an issue.' You named the exact gap most VoC programs have — they collect signals well, but act on them slowly. In wealth management, J.D. Power found every 10% improvement in digital satisfaction correlates with a 15% higher likelihood of a client becoming a promoter. The question isn't whether to invest in client signals — it's whether the time between signal and action is measured in days or quarters."</div>
+        </div>
+        <p style="font-size:.8rem;color:#6B7280;">Attach: ClearScore customer story (verify it's approved for external use — see Homework #4). Don't ask for a meeting. Let it land.</p>
+        <div class="why-works"><strong>Why this builds toward Spark 2</strong>If David responds — even a brief "thanks, interesting" — you have proof of engagement and an opening to propose the live session. If he doesn't respond within 5 business days, follow up with a single line referencing the stat. His response is the green light for Spark 2.</div>
+      </div><!-- /spark1 panel -->
+
+      <!-- SPARK 2 PANEL -->
+      <div class="tl-panel panel-spark2" id="p-spark2">
+        <div class="panel-header">
+          <div class="panel-header-left">
+            <div class="panel-icon">🎬</div>
+            <div>
+              <div class="panel-title">Spark 2 — "Your Scenario, Live"</div>
+              <div class="panel-subtitle">Week 2 · 30-min co-creation session · Builds on Spark 1 response</div>
+            </div>
+          </div>
+          <button class="cal-btn cal-btn-spark2" onclick="downloadICS('spark2')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Add to Calendar
+          </button>
+        </div>
+        <div class="arc-strip">
+          <span class="arc-tag arc-tag-format">📅 30-min video session</span>
+          <span class="arc-tag arc-tag-commit">Explicitly for David (+ Brendan optional)</span>
+          <span class="arc-tag arc-tag-build">Aaron builds the scenario in advance</span>
+        </div>
+        <p style="font-size:.875rem;color:#374151;">Prerequisite: David responded to Spark 1 — that's your signal. Now close the loop on the use case <em>he</em> designed in the April 1 demo. Ask Aaron to build a financial services persona (institutional client, authenticated user on a wealth portal) around David's exact workflow. This is co-creation, not a canned demo.</p>
+        <div class="email-box">
+          <div class="email-label">Calendar Invite Framing</div>
+          <div class="email-body">"David — you described exactly the workflow we want to show you: a client who submitted a low NPS score, found in Amplitude, their exact moment of friction replayed, and the RM armed with that context before the client calls. We want to build that scenario around a profile that looks like MyStateStreet — your data model, your workflow. 30 minutes. Would [date] work?"</div>
+        </div>
+        <div class="callout callout-blue">
+          <div class="callout-icon">🔧</div>
+          <div>
+            <div class="callout-title">What Aaron should build before this session</div>
+            <div class="callout-body">A financial services persona: institutional wealth client, authenticated user, MyStateStreet-style portal. Pre-built funnel showing drop-off at document download step. Session replay of that user's session (DOM reconstruction). RM Slack alert template. Low NPS event triggering the lookup. Full narrative, not a feature tour.</div>
+          </div>
+        </div>
+        <div class="why-works"><strong>Why this builds toward Spark 3</strong>David watches his own use case executed. His questions and reactions in this session will surface exactly which signals matter most to his OKRs — which is the raw material for the artifact you'll co-build in Spark 3. Take notes on what he reacts to. That becomes the agenda for Spark 3.</div>
+      </div><!-- /spark2 panel -->
+
+      <!-- SPARK 3 PANEL -->
+      <div class="tl-panel panel-spark3" id="p-spark3">
+        <div class="panel-header">
+          <div class="panel-header-left">
+            <div class="panel-icon">🗺️</div>
+            <div>
+              <div class="panel-title">Spark 3 — "OKR to Signal" Working Session</div>
+              <div class="panel-subtitle">Week 3–4 · 45 min · Co-authored artifact David owns</div>
+            </div>
+          </div>
+          <button class="cal-btn cal-btn-spark3" onclick="downloadICS('spark3')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Add to Calendar
+          </button>
+        </div>
+        <div class="arc-strip">
+          <span class="arc-tag arc-tag-format">📝 45-min working session</span>
+          <span class="arc-tag arc-tag-commit">Output: 1-page Signal Architecture Map</span>
+          <span class="arc-tag arc-tag-build">David presents it internally — not Amplitude's pitch</span>
+        </div>
+        <p style="font-size:.875rem;color:#374151;">Prerequisite: Spark 2 completed. You now know which signals David reacted to most strongly. Use that as the agenda for this session. The goal is to co-build his VoC signal architecture — not Amplitude's — answering: what are the 3 leading indicators of client attrition visible in behavioral data on MyStateStreet, and how do they ladder to his team's OKRs?</p>
+        <p style="font-size:.875rem;color:#374151;">Leave the session with a 1-page "Signal Architecture Map" that David co-authored. He presents it internally as his proposal. Amplitude is acknowledged as the thought partner. This is how technical champions are made.</p>
+        <div class="email-box">
+          <div class="email-label">Challenger Invite Framing</div>
+          <div class="email-body">"Most VoC programs measure what clients said last quarter. The ones that actually move NPS measure what clients did yesterday and predict what they'll say next quarter. I'd love to spend 45 minutes sketching out what that looks like specifically for MyStateStreet — not a demo, a working session where we build your signal architecture together. You'd leave with a one-pager you own."</div>
+        </div>
+        <div class="callout callout-green">
+          <div class="callout-icon">🏆</div>
+          <div>
+            <div class="callout-title">The arc is complete when David presents the artifact</div>
+            <div class="callout-body">The 3-Spark sequence moves deliberately from <strong>low-commitment insight share → co-creation session → co-authored artifact</strong>. By Week 4, David is no longer a meeting attendee — he's an internal author of the vision. That's a champion. The artifact he presents is Amplitude's POV delivered in his voice, which is infinitely more credible than any deck you could send.</div>
+          </div>
+        </div>
+        <div class="why-works"><strong>What a successful Spark 3 looks like</strong>David schedules time with Kyle, Lev, or Matt to walk through the Signal Architecture Map. He forwards the one-pager without being asked. He starts using "signal latency" in his own language. Any of these is confirmation that the champion relationship is established.</div>
+      </div><!-- /spark3 panel -->
+
+    </div><!-- /tl-panels -->
+  </div><!-- /timeline-wrapper -->
+
+  <!-- ══ VALIDATION HOMEWORK ══ -->
+  <div class="hw-section" id="hw">
+    <div class="hw-sec-hdr" onclick="toggleHW()">
+      <div class="hw-sec-left">
+        <div class="hw-sec-icon">⚠️</div>
+        <div>
+          <div class="hw-sec-title">Validation Homework — Trust But Verify</div>
+          <div class="hw-sec-sub">5 items to complete before Spark 1 goes out · Check each off as done</div>
+        </div>
+      </div>
+      <svg class="hw-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="hw-sec-body">
+      <div class="cb-item" id="cb1">
+        <input type="checkbox" id="chk1" onchange="toggleCheck('cb1')"/>
+        <div class="cb-content" onclick="document.getElementById('chk1').click()">
+          <div class="cb-title">Confirm David Gibson's title and budget authority <span class="conf conf-med" style="font-size:.68rem"><span class="conf-dot"></span>Medium</span></div>
+          <div class="cb-detail">"Voice of Client" comes from Granola notes — Jeff and Aaron's interpretation, not a confirmed title. Both Champion and EB fields in Salesforce point to <strong>Matt Andon</strong>. If David has no budget line, the champion strategy routes <em>through</em> Matt, not around him.<ul><li>Search David Gibson on LinkedIn + State Street website. Confirm title, reporting line, and VoC scope.</li><li>Ask PJ: has anyone spoken to David directly since Apr 1?</li><li>Clarify with Matt whether David has budget influence or is purely an end-user stakeholder.</li></ul></div>
+        </div>
+      </div>
+      <div class="cb-item" id="cb2">
+        <input type="checkbox" id="chk2" onchange="toggleCheck('cb2')"/>
+        <div class="cb-content" onclick="document.getElementById('chk2').click()">
+          <div class="cb-title">Pressure-test Josh's skepticism — blocker or just technical rigor? <span class="conf conf-low" style="font-size:.68rem"><span class="conf-dot"></span>Low–Med</span></div>
+          <div class="cb-detail">SE Notes flag him as "may be a skeptic" — a soft label, not a direct signal from Josh. Also: Josh's last name was inferred from Salesforce cross-reference — unconfirmed.<ul><li>Ask Aaron: what was Josh's closing energy after the demo? Follow-up questions or went quiet?</li><li>Run a direct touchpoint before the identity session to gauge temperature.</li><li>Confirm Josh's full name and official title before any formal written communication.</li></ul></div>
+        </div>
+      </div>
+      <div class="cb-item" id="cb3">
+        <input type="checkbox" id="chk3" onchange="toggleCheck('cb3')"/>
+        <div class="cb-content" onclick="document.getElementById('chk3').click()">
+          <div class="cb-title">Verify industry stats before external use <span class="conf conf-med" style="font-size:.68rem"><span class="conf-dot"></span>Mixed confidence</span></div>
+          <div class="cb-detail">J.D. Power 2024 stat (Med-High — pull original report before citing). Alpha FMC 10–15% attrition (Low — consulting blog, not primary research; replace with Capgemini). InvestSuite 25% stat (Low — vendor-published, do not use without independent corroboration).</div>
+        </div>
+      </div>
+      <div class="cb-item" id="cb4">
+        <input type="checkbox" id="chk4" onchange="toggleCheck('cb4')"/>
+        <div class="cb-content" onclick="document.getElementById('chk4').click()">
+          <div class="cb-title">Confirm customer story metrics are approved for external use <span class="conf conf-med" style="font-size:.68rem"><span class="conf-dot"></span>Medium</span></div>
+          <div class="cb-detail">ClearScore, Intuit/QuickBooks, Zip, WeMoney, Salt Bank metrics from internal Highspot slides — may not be cleared externally.<ul><li>Check Highspot for current approved versions before sharing.</li><li><strong>ClearScore is highest priority</strong> — also ask CS team about a peer reference call (outperforms any slide).</li><li>Confirm Intuit/QuickBooks is framed as Adobe co-exist before using in an Adobe co-exist motion.</li></ul></div>
+        </div>
+      </div>
+      <div class="cb-item" id="cb5">
+        <input type="checkbox" id="chk5" onchange="toggleCheck('cb5')"/>
+        <div class="cb-content" onclick="document.getElementById('chk5').click()">
+          <div class="cb-title">Validate David's "WOW" was genuine, not polite video-call engagement <span class="conf conf-med" style="font-size:.68rem"><span class="conf-dot"></span>Medium</span></div>
+          <div class="cb-detail">Granola characterizes his session-replay-for-NPS moment as a standout reaction — but "lit up" is the meeting host's interpretation, and David joined from London by video.<ul><li>Pull the Apr 1 Granola transcript and read David's lines verbatim. Did he <em>volunteer</em> the NPS workflow (strong signal) or respond to a prompt?</li><li><strong>Fastest validation:</strong> Send Spark 1 this week — his response time and depth tells you everything.</li></ul></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ COLLAPSIBLE SECTIONS ══ -->
+
+  <div class="section-label" style="margin-top:28px">Account Context — click to expand</div>
+
+  <!-- 1. Account Snapshot -->
+  <div class="section t-blue" id="s1">
+    <div class="sec-hdr" onclick="toggleSec('s1')">
+      <div class="sec-left"><div class="sec-num">1</div><div><div class="sec-title">Account Snapshot</div><div class="sec-sub">Deal vitals, stack &amp; pressure points</div></div></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="sec-body">
+      <table class="tbl kv">
+        <tbody>
+          <tr><td>Deal</td><td>State Street Financial — <strong>$184K New ARR</strong> (Total: $250K)</td></tr>
+          <tr><td>Stage</td><td>S2 Qualification &nbsp;<span class="badge b-amber">SE Score: Yellow — Tech Win On Track</span></td></tr>
+          <tr><td>Close Target</td><td><strong>June 17, 2026</strong></td></tr>
+          <tr><td>Team</td><td>PJ Franovic (AE) · Aaron Gottesfeld (SE) · Jeff Dubois (SE Director)</td></tr>
+          <tr><td>Incumbent</td><td>Adobe Analytics <strong class="alert">($385K/yr — renewal Oct 31)</strong> + Qualtrics</td></tr>
+          <tr><td>Tech Stack</td><td>Snowflake · Databricks · Adobe Experience Cloud · Homegrown RM "air traffic control" dashboard (tool name TBD)</td></tr>
+          <tr><td>Products in Scope</td><td>Core · Session Replay · Guides &amp; Surveys · AI Feedback</td></tr>
+          <tr><td>Pipeline Source</td><td>SDR Outbound</td></tr>
+        </tbody>
+      </table>
+      <div class="callout callout-red" style="margin-top:14px">
+        <div class="callout-icon">🔑</div>
+        <div><div class="callout-title">Critical Pressure Point</div><div class="callout-body">Adobe renewal is <strong>October 31, 2026</strong>. The co-exist positioning must be established well before the renewal conversation, not during it. Waiting until Q3 is too late.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Champion Hypothesis -->
+  <div class="section t-purple" id="s3">
+    <div class="sec-hdr" onclick="toggleSec('s3')">
+      <div class="sec-left"><div class="sec-num">2</div><div><div class="sec-title">Champion Hypothesis</div><div class="sec-sub">Primary and secondary candidates with supporting evidence</div></div></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="sec-body">
+      <div class="person-card pc-primary">
+        <div class="pc-head">
+          <div><div class="pc-name">David Gibson</div><div class="pc-role">Voice of Client · London</div></div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge b-blue">Primary Champion</span><span class="badge b-gray">London — Remote</span></div>
+        </div>
+        <blockquote>"We need to bring in signals not just from direct feedback, but also from operational systems… get predictive and understand how to address an issue before it becomes an issue."<cite>— David Gibson, April 1, 2026 demo (verbatim, Granola)</cite></blockquote>
+        <p style="font-size:.85rem;color:#374151;margin-bottom:8px;">Granola notes call him <em>"the most forward-looking thinker on the account."</em> He walked into the demo already in the predictive frame Amplitude had to sell to everyone else in the room.</p>
+        <ul class="signal-list">
+          <li>Owns the use case — Voice of Client is the exact function Amplitude's AI Feedback and Session Replay augment.</li>
+          <li>WOW moment is documented — proposed the NPS investigation workflow himself in real time (see Section 4).</li>
+          <li>Asked about OKR tracking — someone building internal justification, not just evaluating features.</li>
+          <li>Brendan named the Qualtrics gap unprompted: "Copilot strong on quantitative but weak on qualitative." David lives this gap every day.</li>
+        </ul>
+        <hr class="div">
+        <p style="font-size:.75rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Risk Factors</p>
+        <ul class="risk-list">
+          <li>London-based — relationship investment requires deliberate scheduling.</li>
+          <li>Not mapped as Champion or EB in Salesforce (Matt Andon holds both). Budget authority unconfirmed.</li>
+          <li>Not named in any action item from Apr 1 — at risk of falling out of follow-up cadence.</li>
+        </ul>
+      </div>
+      <div class="person-card pc-secondary">
+        <div class="pc-head">
+          <div><div class="pc-name">Josh <span style="font-weight:400;color:#9CA3AF;font-size:.82rem">(last name unconfirmed)</span></div><div class="pc-role">Head of Digital / Marketing</div></div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge b-purple">Secondary</span><span class="badge b-amber">Currently Skeptic</span></div>
+        </div>
+        <p style="font-size:.85rem;color:#374151;margin-bottom:8px;">SE Notes (Apr 3): "Josh may be a skeptic until we build a relationship." Converted technical skeptics are the most credible internal champions. He controls the identity architecture decision — winning him is a pre-condition to him not becoming a quiet blocker.</p>
+        <ul class="signal-list">
+          <li>DOM reconstruction framing landed — privacy/compliance reframe addressed his instinct.</li>
+          <li>Flagged the SSIM branding issue unprompted — detail-oriented and invested even if skeptical.</li>
+        </ul>
+        <div class="callout callout-amber" style="margin-top:10px">
+          <div class="callout-icon">🎯</div>
+          <div><div class="callout-title">What Josh needs</div><div class="callout-body">A dedicated 45-minute identity architecture session with Aaron. Win him on technical merit and he becomes an internal advocate. Leave him uncertain and he has quiet veto power with no visible surface.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. AHA Moment -->
+  <div class="section t-indigo" id="s4">
+    <div class="sec-hdr" onclick="toggleSec('s4')">
+      <div class="sec-left"><div class="sec-num">3</div><div><div class="sec-title">The AHA Moment That Landed</div><div class="sec-sub">What resonated, with whom, and why it matters</div></div></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="sec-body">
+      <div class="callout callout-blue">
+        <div class="callout-icon">⚡</div>
+        <div><div class="callout-title">David Gibson — NPS Investigation Workflow</div><div class="callout-body">David proposed his own use case in real time: identify an NPS detractor → find their session in Amplitude → watch the DOM reconstruction of their experience → identify the exact friction moment (MFA timeout? download failure? navigation dead end?) → arm the RM with that context so they can reach out <strong>before the client calls to complain.</strong> He designed the workflow; we confirmed it was possible. This reframed Amplitude from "analytics platform" to "RM intelligence tool."</div></div>
+      </div>
+      <div class="callout callout-green">
+        <div class="callout-icon">🛡️</div>
+        <div><div class="callout-title">Josh — DOM Reconstruction as Compliance Framing</div><div class="callout-body">"You're not recording screens — you're reconstructing behavior patterns." Reframed the privacy objection into a competitive differentiator. This is the technical surface for his dedicated architecture session with Aaron.</div></div>
+      </div>
+      <div class="callout callout-amber">
+        <div class="callout-icon">💬</div>
+        <div><div class="callout-title">Brendan — Qualtrics Gap Signal (verbatim, Granola)</div><div class="callout-body">"Copilot strong on quantitative but weak on qualitative." An unprompted competitive comparison that confirms the team has already identified a gap in their current stack. Amplify this with David — he runs VoC and lives this gap every day.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Stakeholder Map -->
+  <div class="section t-teal" id="s2">
+    <div class="sec-hdr" onclick="toggleSec('s2')">
+      <div class="sec-left"><div class="sec-num">4</div><div><div class="sec-title">Stakeholder Map</div><div class="sec-sub">Who's in the room, what they care about, and how to move them</div></div></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="sec-body">
+      <table class="tbl" style="margin-bottom:16px">
+        <thead>
+          <tr><th>Name</th><th>Role</th><th>Sentiment</th><th>Priority Lever</th><th>Next Step</th></tr>
+        </thead>
+        <tbody>
+          <tr style="background:#F0F5FF">
+            <td><strong>David Gibson</strong></td>
+            <td>Voice of Client · London</td>
+            <td><span class="badge b-blue">Champion Target</span></td>
+            <td>Signal latency → proactive RM model. Owns the use case. Already thinks in Amplitude's frame.</td>
+            <td>Spark 1 email this week. He's the arc.</td>
+          </tr>
+          <tr>
+            <td><strong>Matt Andon</strong></td>
+            <td>Champion &amp; Economic Buyer (Salesforce)</td>
+            <td><span class="badge b-green">Favorable</span></td>
+            <td>Mapped as both EB and Champion in SF. Budget authority confirmed. Deal depends on his continued engagement.</td>
+            <td>Keep PJ close. Don't route around him — route David's narrative <em>to</em> him.</td>
+          </tr>
+          <tr>
+            <td><strong>Josh</strong> <span style="font-size:.75rem;color:#9CA3AF">(last name unconfirmed)</span></td>
+            <td>Head of Digital / Marketing</td>
+            <td><span class="badge b-amber">Skeptic — Convertible</span></td>
+            <td>Technical rigor on identity &amp; privacy architecture. DOM reconstruction reframe landed — follow through.</td>
+            <td>Dedicated 45-min identity session with Aaron. Win on merit — he becomes a credible internal advocate.</td>
+          </tr>
+          <tr>
+            <td><strong>Brendan</strong></td>
+            <td>Role unconfirmed (demo attendee)</td>
+            <td><span class="badge b-green">Engaged</span></td>
+            <td>Surfaced the Qualtrics qualitative gap unprompted. Aware of stack limitations and not defensive about them.</td>
+            <td>Optionally include in Spark 2 co-creation session. Don't over-index — follow David's lead.</td>
+          </tr>
+          <tr>
+            <td><strong>Kyle</strong></td>
+            <td>Senior stakeholder (role unconfirmed)</td>
+            <td><span class="badge b-gray">Unknown</span></td>
+            <td>Named as a likely internal audience for David's Signal Architecture Map deliverable (Spark 3 output).</td>
+            <td>No direct action yet. Confirm role before any outreach.</td>
+          </tr>
+          <tr>
+            <td><strong>Lev</strong></td>
+            <td>Senior stakeholder (role unconfirmed)</td>
+            <td><span class="badge b-gray">Unknown</span></td>
+            <td>Also named as likely audience for David's internal presentation. Relationship with Matt TBD.</td>
+            <td>No direct action yet. Map reporting line before Spark 3.</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="callout callout-amber">
+        <div class="callout-icon">⚠️</div>
+        <div>
+          <div class="callout-title">Power map risk: two parallel paths</div>
+          <div class="callout-body">David (champion candidate) and Matt (EB) are <em>not the same person</em>. If David has no budget line, the champion strategy must route <em>through</em> Matt — not around him. The Spark 3 artifact David presents should be framed as a proposal <em>for</em> Matt's approval, not a back-channel end-run. Validate this dynamic before Spark 2.</div>
+        </div>
+      </div>
+      <div class="callout callout-blue" style="margin-top:10px">
+        <div class="callout-icon">🎯</div>
+        <div>
+          <div class="callout-title">Josh is the hidden gate</div>
+          <div class="callout-body">A converted technical skeptic is the most credible internal champion. Josh controls the identity architecture decision — a quiet "not ready" from him can stall the deal without ever surfacing in a status call. Prioritize his dedicated session with Aaron before the deal moves to S3.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Industry Intelligence -->
+  <div class="section t-amber" id="s5">
+    <div class="sec-hdr" onclick="toggleSec('s5')">
+      <div class="sec-left"><div class="sec-num">5</div><div><div class="sec-title">Industry &amp; External Intelligence</div><div class="sec-sub">Market context, State Street signals, and challenger ammunition</div></div></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="sec-body">
+      <p style="font-size:.8rem;color:#9CA3AF;margin-bottom:14px">Verify all stats against Section 7 before any external use.</p>
+      <div class="stat-row">
+        <div class="stat-card"><div class="stat-n">10–15%</div><div class="stat-l">of WM clients at attrition risk at any given time</div><div class="stat-s">Alpha FMC — verify before external use</div></div>
+        <div class="stat-card"><div class="stat-n">+15%</div><div class="stat-l">net promoter likelihood per 10% digital satisfaction gain</div><div class="stat-s">J.D. Power 2024 — confirm exact wording</div></div>
+        <div class="stat-card"><div class="stat-n">25%</div><div class="stat-l">of investors would leave a WM that doesn't modernize</div><div class="stat-s">InvestSuite 2025 — low confidence, see §7</div></div>
+      </div>
+      <div class="callout callout-blue" style="margin-bottom:16px">
+        <div class="callout-icon">🎯</div>
+        <div><div class="callout-title">The Challenger Reframe — Signal Latency</div><div class="callout-body">Most banks have solved the feedback <em>collection</em> problem. The battle now is signal latency — how fast can you get from a behavioral anomaly to an RM action? State Street already named this: "reactive RM firefighting" is a signal latency problem dressed up as a workflow problem. The firms winning on retention aren't running more surveys — they're closing the loop in hours, not quarters.</div></div>
+      </div>
+      <div class="sig-strip">
+        <div class="sig-item"><div class="sig-ico">🤝</div><div><strong>Neudata Data Partnership (March 2026)</strong><span>Corporate appetite for predictive, alternative data signals established at the enterprise level. Shows alignment with Amplitude's direction.</span></div></div>
+        <div class="sig-item"><div class="sig-ico">❄️</div><div><strong>Alpha Data Platform on Snowflake</strong><span>Their primary data warehouse aligns with Amplitude's integration story. No greenfield infrastructure argument needed.</span></div></div>
+        <div class="sig-item"><div class="sig-ico">💳</div><div><strong>Apex Fintech Minority Investment</strong><span>Active digital infrastructure modernization at the board level. This is not a cost-cutting environment.</span></div></div>
+        <div class="sig-item"><div class="sig-ico">📅</div><div><strong>Adobe Renewal — October 31, 2026</strong><span>Window for co-exist positioning is open now. Establish the narrative before the renewal conversation, not during it.</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Proof Points -->
+  <div class="section t-teal" id="s6">
+    <div class="sec-hdr" onclick="toggleSec('s6')">
+      <div class="sec-left"><div class="sec-num">6</div><div><div class="sec-title">Amplitude Proof Points — Financial Services</div><div class="sec-sub">Best analogs by persona and use case</div></div></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="sec-body">
+      <p style="font-size:.8rem;color:#9CA3AF;margin-bottom:12px">Verify all metrics on Highspot before external use — see Section 7 Homework #4.</p>
+      <table class="tbl">
+        <thead><tr><th>Customer</th><th>Analog for State Street</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr class="proof-best"><td><strong>ClearScore (UK) ★</strong></td><td>UK finserv, VoC + subscription retention — best peer for David</td><td style="color:#065F46;font-weight:600">Subscription rate 2× in 12 months</td></tr>
+          <tr class="proof-best"><td><strong>Intuit / QuickBooks ★</strong></td><td>Enterprise Adobe displacement — best analog for Josh / architecture</td><td style="color:#065F46;font-weight:600">1,000+ active users; 2× invoice conversion</td></tr>
+          <tr><td>Zip (BNPL)</td><td>Payment journey friction → optimization</td><td style="color:#065F46;font-weight:600">60% improvement in repayment starts</td></tr>
+          <tr><td>Salt Bank</td><td>Full digital product launch analytics</td><td style="color:#065F46;font-weight:600">Beat launch expectations 2×</td></tr>
+          <tr><td>WeMoney</td><td>Behavioral data → retention improvement</td><td style="color:#065F46;font-weight:600">Retention +20%; CAC reduced 2×</td></tr>
+        </tbody>
+      </table>
+      <div class="callout callout-blue" style="margin-top:14px">
+        <div class="callout-icon">💡</div>
+        <div><div class="callout-title">ClearScore peer reference opportunity</div><div class="callout-body">ClearScore is UK-based financial services with a VoC + retention framing — David's closest peer analog. If the story is approved externally, ask the CS or account team whether a 15-min peer reference call can be arranged. That will outperform any slide by 10×.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. Verify Before You Use — link back to timeline top -->
+  <div class="section t-red" id="s7">
+    <div class="sec-hdr" onclick="toggleSec('s7')">
+      <div class="sec-left"><div class="sec-num">7</div><div><div class="sec-title">Verify Before You Use</div><div class="sec-sub">Full detail in the Validation Homework timeline node above — summary here</div></div></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="sec-body">
+      <div class="callout callout-red" style="margin-bottom:16px">
+        <div class="callout-icon">🚨</div>
+        <div><div class="callout-title">Read this before any customer-facing communication</div><div class="callout-body">Full homework checklist lives in the <strong>Validation Homework</strong> timeline node above. Expand it for item-by-item action steps and sourcing notes. Summary of what's confirmed vs. inferred is below.</div></div>
+      </div>
+      <table class="tbl">
+        <thead><tr><th>Claim</th><th>Source</th><th>Confidence</th><th>Action Needed</th></tr></thead>
+        <tbody>
+          <tr><td>David Gibson's title "Voice of Client"</td><td>Granola notes (interpretation)</td><td><span class="conf conf-med"><span class="conf-dot"></span>Medium</span></td><td>Confirm via LinkedIn</td></tr>
+          <tr><td>Josh is a skeptic</td><td>SE Notes, Salesforce (soft flag)</td><td><span class="conf conf-low"><span class="conf-dot"></span>Low–Med</span></td><td>Direct touchpoint to verify</td></tr>
+          <tr><td>David's WOW was genuine</td><td>Granola notes (host interpretation)</td><td><span class="conf conf-med"><span class="conf-dot"></span>Medium</span></td><td>Read transcript verbatim; Spark 1 response is the test</td></tr>
+          <tr><td>J.D. Power 10%→15% stat</td><td>J.D. Power 2024 (via web search)</td><td><span class="conf conf-med"><span class="conf-dot"></span>Med-High</span></td><td>Pull original report before citing</td></tr>
+          <tr><td>Alpha FMC 10–15% attrition</td><td>Consulting blog (not primary research)</td><td><span class="conf conf-low"><span class="conf-dot"></span>Low</span></td><td>Replace with Capgemini or cut</td></tr>
+          <tr><td>InvestSuite 25% stat</td><td>Vendor-published claim</td><td><span class="conf conf-low"><span class="conf-dot"></span>Low</span></td><td>Do not use without independent corroboration</td></tr>
+          <tr><td>ClearScore 2× subscriptions</td><td>Highspot internal slides</td><td><span class="conf conf-med"><span class="conf-dot"></span>Medium</span></td><td>Verify approved for external distribution</td></tr>
+          <tr><td>Intuit/QuickBooks 1,000+ users</td><td>Highspot internal slides</td><td><span class="conf conf-med"><span class="conf-dot"></span>Medium</span></td><td>Confirm framing aligns with co-exist motion</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p><strong>Champion Spark — State Street Financial</strong> · April 14, 2026 · Confidential — Internal Use Only</p>
+    <p style="margin-top:6px">Sources: Granola (Mar 3, Mar 12, Apr 1, 2026) · Salesforce via Glean · Outreach · Slack #statestreet · <a href="https://www.jdpower.com/business/press-releases/2024-us-wealth-management-digital-experience-study" target="_blank">J.D. Power 2024</a> · <a href="https://alphafmc.com/blog/2023/09/05/offsetting-client-attrition-a-playbook-for-wealth-managers/" target="_blank">Alpha FMC</a> · <a href="https://www.snowflake.com/en/customers/all-customers/case-study/state-street/" target="_blank">Snowflake / State Street</a> · Amplitude Highspot FinServ slides (internal)</p>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+// ── Toggle timeline panel ──
+function togglePanel(id) {
+  const node = document.getElementById('n-' + id);
+  const panel = document.getElementById('p-' + id);
+  const isOpen = panel.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.tl-panel').forEach(p => p.classList.remove('open'));
+  document.querySelectorAll('.tl-node').forEach(n => n.classList.remove('active'));
+  // Open clicked (unless it was already open)
+  if (!isOpen) {
+    panel.classList.add('open');
+    node.classList.add('active');
+    panel.scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+}
+
+// ── Toggle collapsible section ──
+function toggleSec(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+// ── Toggle Validation Homework accordion ──
+function toggleHW() {
+  document.getElementById('hw').classList.toggle('open');
+}
+
+// ── Toggle checkbox item checked state ──
+function toggleCheck(cbId) {
+  const item = document.getElementById(cbId);
+  const chk = item.querySelector('input[type=checkbox]');
+  if (chk.checked) {
+    item.classList.add('checked');
+  } else {
+    item.classList.remove('checked');
+  }
+}
+
+// ── Keyboard accessibility ──
+document.querySelectorAll('.tl-node, .sec-hdr, .hw-sec-hdr').forEach(el => {
+  el.setAttribute('tabindex','0');
+  el.setAttribute('role','button');
+  el.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
+  });
+});
+
+// ── ICS generation ──
+function downloadICS(spark) {
+  const pad = n => String(n).padStart(2,'0');
+  function dt(y,m,d,h,mi){ return `${y}${pad(m)}${pad(d)}T${pad(h)}${pad(mi)}00Z`; }
+
+  const configs = {
+    validate: {
+      file: 'validation-homework-state-street',
+      summary: 'Champion Spark: Validation Homework — State Street / David Gibson',
+      start: dt(2026,4,15,14,0),
+      end:   dt(2026,4,15,14,30),
+      desc:  'Complete 5 validation items before sending Spark 1:\\n1. Confirm David Gibson title + budget authority (LinkedIn)\\n2. Pressure-test Josh skepticism with Aaron\\n3. Verify J.D. Power stat against original report\\n4. Confirm ClearScore story approved for external use on Highspot\\n5. Read Apr 1 Granola transcript verbatim to validate David WOW moment',
+      location: 'Internal prep'
+    },
+    spark1: {
+      file: 'champion-spark-1-state-street-david-gibson',
+      summary: 'Champion Spark 1: Send Signal Latency POV → David Gibson (State Street)',
+      start: dt(2026,4,21,14,0),
+      end:   dt(2026,4,21,14,15),
+      desc:  'Send personalized email to David Gibson with Signal Latency POV.\\nSubject: "The feedback collection problem is solved. The signal latency problem isn\'t."\\nAttach: ClearScore customer story (verify approved).\\nNo ask — build credibility only.\\nMonitor response within 5 business days before sending Spark 2 invite.',
+      location: 'Email / Outreach'
+    },
+    spark2: {
+      file: 'champion-spark-2-state-street-david-gibson',
+      summary: 'Champion Spark 2: "Your Scenario, Live" — 30 min w/ David Gibson (State Street)',
+      start: dt(2026,4,28,15,0),
+      end:   dt(2026,4,28,15,30),
+      desc:  '30-min co-creation session with David Gibson (+ Brendan optional).\\nPrerequisite: David responded to Spark 1.\\nAaron to build in advance: financial services persona, NPS detractor session replay, RM alert template.\\nGoal: walk David\'s exact workflow — his scenario, his data model.\\nTake notes on what signals he reacts to most — this feeds Spark 3 agenda.',
+      location: 'Zoom / Teams'
+    },
+    spark3: {
+      file: 'champion-spark-3-state-street-david-gibson',
+      summary: 'Champion Spark 3: OKR to Signal Working Session — 45 min w/ David Gibson (State Street)',
+      start: dt(2026,5,5,15,0),
+      end:   dt(2026,5,5,15,45),
+      desc:  '45-min working session with David Gibson.\\nPrerequisite: Spark 2 completed. Use Spark 2 notes as agenda.\\nGoal: co-build Signal Architecture Map — 3 leading indicators of client attrition on MyStateStreet, laddered to his OKRs.\\nDeliverable: 1-page Signal Architecture Map that David owns and presents internally.\\nSuccess: David presents the artifact without being asked. That\'s a confirmed champion.',
+      location: 'Zoom / Teams'
+    }
+  };
+
+  const c = configs[spark];
+  const uid = `champion-spark-${spark}-${Date.now()}@amplitude.com`;
+  const now = dt(2026,4,14,12,0);
+
+  const ics = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Champion Spark//Amplitude//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'BEGIN:VEVENT',
+    `UID:${uid}`,
+    `DTSTAMP:${now}`,
+    `DTSTART:${c.start}`,
+    `DTEND:${c.end}`,
+    `SUMMARY:${c.summary}`,
+    `DESCRIPTION:${c.desc}`,
+    `LOCATION:${c.location}`,
+    'STATUS:CONFIRMED',
+    'END:VEVENT',
+    'END:VCALENDAR'
+  ].join('\r\n');
+
+  const blob = new Blob([ics], {type:'text/calendar;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${c.file}.ics`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+
+</script>
+</body>
+</html>
