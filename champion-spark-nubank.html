@@ -1,832 +1,934 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Champion Spark — Nubank</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Champion Spark — Nubank</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#F0F2F7;color:#1A1D2E;line-height:1.65}
+a{color:#1B6AFF;text-decoration:none}
+a:hover{text-decoration:underline}
+p{margin-bottom:.85em}
+p:last-child{margin-bottom:0}
 
-    body {
-      background: #0B1629;
-      color: #F0F4FF;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      font-size: 15px;
-      line-height: 1.6;
-    }
+/* ── HERO ── */
+.hero{background:linear-gradient(135deg,#0B0E27 0%,#1A2560 60%,#0D3B8C 100%);color:#fff;padding:48px 40px 40px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-80px;right:-80px;width:320px;height:320px;background:radial-gradient(circle,rgba(27,106,255,.25) 0%,transparent 70%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:4px 12px;font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px;color:#93C5FD}
+.hero-badge .dot{width:7px;height:7px;background:#F59E0B;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.3)}}
+.hero h1{font-size:2rem;font-weight:800;letter-spacing:-.03em;margin-bottom:6px}
+.hero-subtitle{color:#93C5FD;font-size:1rem;margin-bottom:28px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px}
+.hero-chip{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:6px 14px;font-size:.8rem;color:#E0E7FF}
+.hero-chip span{color:#93C5FD;font-weight:600;margin-right:4px}
+.hero-sf-link{display:inline-flex;align-items:center;gap:6px;background:rgba(0,161,224,.18);border:1px solid rgba(0,161,224,.45);border-radius:8px;padding:6px 14px;font-size:.8rem;color:#7DD3FC;font-weight:600;text-decoration:none;transition:background .15s,border-color .15s,color .15s}
+.hero-sf-link:hover{background:rgba(0,161,224,.30);border-color:rgba(0,161,224,.70);color:#fff;text-decoration:none}
+.hero-sf-link svg{flex-shrink:0;opacity:.85}
+.hero-attribution{margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.1);display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-size:.75rem;color:rgba(255,255,255,.45)}
+.hero-attribution .ha-account{font-weight:700;color:rgba(255,255,255,.7)}
+.hero-attribution .ha-sep{color:rgba(255,255,255,.2)}
+.hero-attribution .ha-ai{color:rgba(255,255,255,.5)}
+.hero-attribution .ha-ai strong{color:#93C5FD;font-weight:600}
 
-    /* HEADER */
-    .spark-header {
-      background: #0B1629;
-      border-bottom: 1px solid #1E2F4F;
-      padding: 2rem 2.5rem;
-    }
-    .spark-logo {
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: #3D7EFF;
-      margin-bottom: 0.5rem;
-    }
-    .account-name {
-      font-size: 2rem;
-      font-weight: 700;
-      color: #F0F4FF;
-      margin-bottom: 0.75rem;
-    }
-    .deal-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-    .tag {
-      background: #1A2E50;
-      color: #8EA3C3;
-      font-size: 0.75rem;
-      padding: 0.25rem 0.65rem;
-      border-radius: 9999px;
-      border: 1px solid #1E2F4F;
-    }
-    .tag.timestamp { color: #4A607A; }
+/* ── MAIN ── */
+.page{max-width:1000px;margin:0 auto;padding:32px 24px 64px}
 
-    /* TIMELINE */
-    .timeline-section {
-      padding: 2rem 2.5rem;
-      border-bottom: 1px solid #1E2F4F;
-    }
-    .timeline-header {
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #4A607A;
-      margin-bottom: 1.25rem;
-    }
-    .timeline-track {
-      display: flex;
-      align-items: center;
-      gap: 0;
-      margin-bottom: 1.5rem;
-    }
-    .timeline-week {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      cursor: pointer;
-      padding: 0 1.5rem;
-      transition: all 0.2s;
-    }
-    .timeline-week:first-child { padding-left: 0; }
-    .timeline-week.active .week-dot { background: #3D7EFF; box-shadow: 0 0 0 4px rgba(61,126,255,0.2); }
-    .timeline-week.active .week-label { color: #3D7EFF; }
-    .week-dot {
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: #1A3A6B;
-      border: 2px solid #3D7EFF;
-      margin-bottom: 0.5rem;
-      transition: all 0.2s;
-    }
-    .week-label {
-      font-weight: 700;
-      font-size: 0.875rem;
-      color: #8EA3C3;
-      transition: color 0.2s;
-    }
-    .week-subtitle {
-      font-size: 0.7rem;
-      color: #4A607A;
-      margin-top: 0.15rem;
-      text-align: center;
-    }
-    .timeline-connector {
-      flex: 1;
-      height: 2px;
-      background: #1E2F4F;
-      margin-bottom: 1.25rem;
-    }
+/* ── SECTION HEADER ── */
+.section-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#9CA3AF;margin:36px 0 12px}
 
-    .week-content { padding: 1rem 0; }
-    .week-content.hidden { display: none; }
+/* ── TIMELINE WRAPPER ── */
+.timeline-wrapper{background:#fff;border-radius:16px;padding:36px 32px 0;box-shadow:0 1px 3px rgba(0,0,0,.07),0 4px 16px rgba(0,0,0,.04);margin-bottom:16px}
 
-    .followup-card {
-      background: #111D35;
-      border: 1px solid #1E2F4F;
-      border-radius: 10px;
-      padding: 1.25rem 1.5rem;
-    }
-    .followup-meta {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 0.75rem;
-      align-items: center;
-    }
-    .followup-format {
-      background: #1A3A6B;
-      color: #3D7EFF;
-      font-size: 0.7rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      padding: 0.2rem 0.6rem;
-      border-radius: 4px;
-    }
-    .followup-timing {
-      color: #4A607A;
-      font-size: 0.75rem;
-    }
-    .followup-subject {
-      font-weight: 600;
-      color: #F0F4FF;
-      margin-bottom: 0.5rem;
-      font-size: 0.9rem;
-    }
-    .followup-body {
-      color: #8EA3C3;
-      font-size: 0.875rem;
-      line-height: 1.65;
-    }
-    .followup-body p { margin-bottom: 0.5rem; }
-    .followup-body p:last-child { margin-bottom: 0; }
+/* ── TIMELINE TRACK ── */
+.tl-track{display:flex;align-items:flex-start;position:relative;padding-bottom:0;overflow-x:auto;padding:0 0 8px}
+.tl-track::after{content:'';position:absolute;top:28px;left:56px;right:56px;height:2px;background:linear-gradient(90deg,#E0E7FF 0%,#C7D2FE 50%,#E0E7FF 100%);z-index:0}
 
-    /* VALIDATION / AMBER */
-    .validation-section {
-      padding: 1rem 2.5rem;
-      border-bottom: 1px solid #1E2F4F;
-    }
-    .amber-collapsible {
-      background: #1C1500 !important;
-      border-color: #7C4A00 !important;
-      color: #F59E0B !important;
-    }
-    .amber-collapsible:hover { background: #231900 !important; }
+.tl-node{flex:1;display:flex;flex-direction:column;align-items:center;position:relative;z-index:1;cursor:pointer;min-width:160px;padding:0 8px 32px}
+.tl-circle{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.35rem;margin-bottom:12px;transition:transform .2s,box-shadow .2s;border:3px solid transparent;position:relative;z-index:1}
+.tl-node:hover .tl-circle{transform:scale(1.08)}
+.tl-node.active .tl-circle{transform:scale(1.1)}
 
-    .checklist {
-      list-style: none;
-      padding: 0;
-    }
-    .checklist li {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.6rem;
-      padding: 0.5rem 0;
-      color: #D4A44A;
-      font-size: 0.875rem;
-      border-bottom: 1px solid #2A1900;
-    }
-    .checklist li:last-child { border-bottom: none; }
-    .checklist input[type="checkbox"] { margin-top: 3px; accent-color: #F59E0B; flex-shrink: 0; }
+.tl-node.type-spark1 .tl-circle{background:#EFF6FF;border-color:#3B82F6;color:#2563EB}
+.tl-node.type-spark1.active .tl-circle{background:#DBEAFE;box-shadow:0 0 0 6px rgba(59,130,246,.15)}
+.tl-node.type-spark2 .tl-circle{background:#F5F3FF;border-color:#7C3AED;color:#6D28D9}
+.tl-node.type-spark2.active .tl-circle{background:#EDE9FE;box-shadow:0 0 0 6px rgba(124,58,237,.15)}
+.tl-node.type-spark3 .tl-circle{background:#ECFDF5;border-color:#10B981;color:#059669}
+.tl-node.type-spark3.active .tl-circle{background:#D1FAE5;box-shadow:0 0 0 6px rgba(16,185,129,.15)}
 
-    /* COLLAPSIBLE SECTIONS */
-    .content-section {
-      padding: 0.75rem 2.5rem;
-      border-bottom: 1px solid #1E2F4F;
-    }
-    .collapsible {
-      width: 100%;
-      background: #111D35;
-      border: 1px solid #1E2F4F;
-      border-radius: 8px;
-      color: #F0F4FF;
-      font-size: 0.9rem;
-      font-weight: 600;
-      text-align: left;
-      padding: 0.875rem 1.25rem;
-      cursor: pointer;
-      transition: background 0.15s;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .collapsible:hover { background: #152240; }
-    .collapsible::after {
-      content: '›';
-      font-size: 1.1rem;
-      color: #4A607A;
-      transform: rotate(90deg);
-      transition: transform 0.2s;
-      display: inline-block;
-    }
-    .collapsible.open::after { transform: rotate(270deg); }
-    .collapsible-content {
-      display: none;
-      padding: 1rem 0.25rem;
-    }
-    .collapsible-content.open { display: block; }
+.tl-week{display:inline-flex;align-items:center;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:20px;margin-bottom:6px}
+.type-spark1  .tl-week{background:#DBEAFE;color:#1D4ED8}
+.type-spark2  .tl-week{background:#EDE9FE;color:#5B21B6}
+.type-spark3  .tl-week{background:#D1FAE5;color:#065F46}
 
-    /* CHAMPION CARDS */
-    .champion-card {
-      background: #111D35;
-      border: 1px solid #1E2F4F;
-      border-radius: 10px;
-      padding: 1.25rem 1.5rem;
-      margin-bottom: 1rem;
-    }
-    .champion-card.primary { border-left: 3px solid #3D7EFF; }
-    .champion-card.secondary { border-left: 3px solid #1A3A6B; }
-    .champion-badge {
-      font-size: 0.65rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: #3D7EFF;
-      margin-bottom: 0.4rem;
-    }
-    .champion-card.secondary .champion-badge { color: #8EA3C3; }
-    .champion-card h3 { font-size: 1.1rem; color: #F0F4FF; margin-bottom: 0.2rem; }
-    .champion-title { color: #8EA3C3; font-size: 0.85rem; margin-bottom: 0.75rem; }
-    .champion-signals { margin-bottom: 0.5rem; }
-    .champion-signals strong { color: #F0F4FF; font-size: 0.875rem; }
-    .champion-signals ul { color: #8EA3C3; font-size: 0.875rem; padding-left: 1.25rem; margin-top: 0.25rem; }
-    .champion-signals ul li { margin-bottom: 0.25rem; }
-    .champion-risk { color: #4A607A; font-size: 0.8rem; margin-top: 0.75rem; }
-    .champion-risk strong { color: #8EA3C3; }
+.tl-title{font-size:.88rem;font-weight:700;color:#1A1D2E;text-align:center;line-height:1.3;margin-bottom:4px}
+.tl-desc{font-size:.73rem;color:#9CA3AF;text-align:center;line-height:1.3}
 
-    /* AHA CARD */
-    .aha-card {
-      background: #111D35;
-      border: 1px solid #1E2F4F;
-      border-left: 3px solid #10B981;
-      border-radius: 10px;
-      padding: 1.25rem 1.5rem;
-    }
-    .aha-moment-quote {
-      font-size: 1rem;
-      font-style: italic;
-      color: #F0F4FF;
-      margin-bottom: 1rem;
-      padding-left: 1rem;
-      border-left: 2px solid #10B981;
-      line-height: 1.7;
-    }
-    .aha-context, .aha-why, .aha-followthrough {
-      font-size: 0.875rem;
-      color: #8EA3C3;
-      margin-bottom: 0.75rem;
-      line-height: 1.65;
-    }
-    .aha-context:last-child, .aha-why:last-child, .aha-followthrough:last-child { margin-bottom: 0; }
-    .aha-context strong, .aha-why strong, .aha-followthrough strong { color: #F0F4FF; }
+.tl-expand-hint{font-size:.68rem;color:#C4B5FD;margin-top:6px;display:flex;align-items:center;gap:3px}
+.tl-expand-hint svg{transition:transform .25s}
+.tl-node.active .tl-expand-hint svg{transform:rotate(180deg)}
+.type-spark1 .tl-expand-hint{color:#93C5FD}
+.type-spark2 .tl-expand-hint{color:#C4B5FD}
+.type-spark3 .tl-expand-hint{color:#6EE7B7}
 
-    /* STAKEHOLDER TABLE */
-    .stakeholder-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.85rem;
-    }
-    .stakeholder-table th {
-      background: #0B1629;
-      color: #4A607A;
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      padding: 0.6rem 0.75rem;
-      text-align: left;
-      border-bottom: 1px solid #1E2F4F;
-    }
-    .stakeholder-table td {
-      padding: 0.65rem 0.75rem;
-      border-bottom: 1px solid #1E2F4F;
-      color: #8EA3C3;
-      vertical-align: top;
-    }
-    .stakeholder-table tr:last-child td { border-bottom: none; }
-    .stakeholder-table td:first-child { color: #F0F4FF; font-weight: 500; }
+/* ── TIMELINE DETAIL PANELS ── */
+.tl-panels{border-top:1px solid #F3F4F6}
+.tl-panel{display:none;padding:28px 0 32px;border-bottom:1px solid #F3F4F6;animation:fadeSlide .25s ease}
+.tl-panel:last-child{border-bottom:none}
+.tl-panel.open{display:block}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
 
-    .sentiment-badge {
-      font-size: 0.7rem;
-      font-weight: 700;
-      padding: 0.2rem 0.5rem;
-      border-radius: 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      white-space: nowrap;
-    }
-    .sentiment-badge.positive { background: rgba(16,185,129,0.15); color: #10B981; }
-    .sentiment-badge.neutral { background: rgba(142,163,195,0.1); color: #8EA3C3; }
-    .sentiment-badge.negative { background: rgba(239,68,68,0.15); color: #EF4444; }
-    .sentiment-badge.unknown { background: rgba(74,96,122,0.2); color: #4A607A; }
+.panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.panel-header-left{display:flex;align-items:center;gap:12px}
+.panel-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.panel-validate .panel-icon{background:#FEF3C7}
+.panel-spark1  .panel-icon{background:#DBEAFE}
+.panel-spark2  .panel-icon{background:#EDE9FE}
+.panel-spark3  .panel-icon{background:#D1FAE5}
+.panel-title{font-size:1.05rem;font-weight:800;color:#111827;letter-spacing:-.02em}
+.panel-subtitle{font-size:.78rem;color:#6B7280;margin-top:2px}
+.cal-btn{display:inline-flex;align-items:center;gap:7px;padding:8px 16px;border-radius:8px;font-size:.8rem;font-weight:700;cursor:pointer;border:none;transition:all .15s}
+.cal-btn-validate{background:#FEF3C7;color:#92400E}
+.cal-btn-spark1{background:#DBEAFE;color:#1D4ED8}
+.cal-btn-spark2{background:#EDE9FE;color:#5B21B6}
+.cal-btn-spark3{background:#D1FAE5;color:#065F46}
+.cal-btn:hover{filter:brightness(.93);transform:translateY(-1px)}
+.cal-btn:active{transform:translateY(0)}
 
-    /* GENERAL CONTENT STYLING */
-    .section-body {
-      font-size: 0.875rem;
-      color: #8EA3C3;
-      line-height: 1.7;
-    }
-    .section-body h4 {
-      color: #4A607A;
-      font-size: 0.7rem;
-      font-weight: 700;
-      margin: 1rem 0 0.4rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-    .section-body h4:first-child { margin-top: 0; }
-    .section-body p { margin-bottom: 0.65rem; }
-    .section-body p:last-child { margin-bottom: 0; }
-    .section-body ul { padding-left: 1.25rem; margin-bottom: 0.65rem; }
-    .section-body ul li { margin-bottom: 0.3rem; }
-    .section-body strong { color: #F0F4FF; }
+/* ── PANEL CONTENT COMPONENTS ── */
+.arc-strip{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.arc-tag{display:inline-flex;align-items:center;gap:5px;font-size:.75rem;font-weight:600;padding:4px 10px;border-radius:6px}
+.arc-tag-commit{background:#DBEAFE;color:#1D4ED8}
+.arc-tag-format{background:#F3F4F6;color:#374151}
+.arc-tag-build{background:#D1FAE5;color:#065F46}
+blockquote{border-left:4px solid #1B6AFF;background:#F0F5FF;border-radius:0 10px 10px 0;padding:14px 18px;margin:16px 0;font-style:italic;color:#1E3A8A;font-size:.95rem;line-height:1.6}
+blockquote cite{display:block;font-style:normal;font-size:.75rem;color:#6B7280;margin-top:8px;font-weight:500}
+.callout{border-radius:10px;padding:14px 18px;margin:14px 0;display:flex;gap:10px;font-size:.875rem}
+.callout-icon{flex-shrink:0;font-size:1.1rem;margin-top:1px}
+.callout-blue{background:#EFF6FF;border-left:4px solid #3B82F6}
+.callout-green{background:#F0FDF4;border-left:4px solid #22C55E}
+.callout-amber{background:#FFFBEB;border-left:4px solid #F59E0B}
+.callout-red{background:#FFF1F2;border-left:4px solid #F43F5E}
+.callout-title{font-weight:700;font-size:.85rem;margin-bottom:3px;color:#1A1D2E}
+.callout-body{color:#374151}
+.email-box{background:#F8F9FF;border:1px solid #E0E7FF;border-radius:10px;padding:16px;margin:14px 0}
+.email-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#6366F1;margin-bottom:8px}
+.email-body{font-size:.85rem;color:#374151;line-height:1.6;font-style:italic}
+.why-works{background:#F0FDF4;border-left:3px solid #22C55E;border-radius:0 8px 8px 0;padding:10px 14px;margin-top:14px;font-size:.84rem;color:#166534}
+.why-works strong{display:block;font-weight:700;margin-bottom:3px}
+.checklist{list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.checklist li{display:flex;align-items:flex-start;gap:10px;font-size:.875rem;color:#374151;padding:10px 12px;background:#FAFBFF;border:1px solid #E8ECFF;border-radius:8px}
+.checklist li::before{content:'☐';font-size:1rem;color:#6366F1;flex-shrink:0;margin-top:1px}
+.checklist li strong{font-weight:600;display:block;margin-bottom:2px;color:#1A1D2E}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+@media(max-width:640px){.two-col{grid-template-columns:1fr}}
 
-    .info-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
-      margin-bottom: 1rem;
-    }
-    .info-card {
-      background: #0B1629;
-      border: 1px solid #1E2F4F;
-      border-radius: 8px;
-      padding: 0.75rem 1rem;
-    }
-    .info-card-label {
-      font-size: 0.65rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: #4A607A;
-      margin-bottom: 0.2rem;
-    }
-    .info-card-value {
-      font-size: 0.9rem;
-      color: #F0F4FF;
-      font-weight: 500;
-    }
+/* ── HW CONFIDENCE BADGES ── */
+.conf{display:inline-flex;align-items:center;gap:5px;border-radius:6px;padding:3px 10px;font-size:.72rem;font-weight:700;letter-spacing:.02em}
+.conf-high{background:#ECFDF5;color:#065F46}
+.conf-med{background:#FFFBEB;color:#92400E}
+.conf-low{background:#FEF2F2;color:#991B1B}
+.conf-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.conf-high .conf-dot{background:#10B981}
+.conf-med .conf-dot{background:#F59E0B}
+.conf-low .conf-dot{background:#EF4444}
+.hw-item{border:1px solid #E5E7EB;border-radius:12px;margin-bottom:14px;overflow:hidden}
+.hw-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #F3F4F6;gap:10px;flex-wrap:wrap}
+.hw-head-left{display:flex;align-items:center;gap:9px}
+.hw-num{width:26px;height:26px;background:#1A1D2E;color:#fff;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0}
+.hw-title{font-size:.9rem;font-weight:700;color:#111827}
+.hw-body{padding:14px 16px;font-size:.875rem;color:#374151}
+.hw-body p{margin-bottom:8px}
+.hw-body ul{padding-left:18px}
+.hw-body li{margin-bottom:5px;color:#374151}
 
-    .proof-point {
-      background: #111D35;
-      border: 1px solid #1E2F4F;
-      border-radius: 8px;
-      padding: 1rem 1.25rem;
-      margin-bottom: 0.75rem;
-    }
-    .proof-point-label {
-      font-size: 0.65rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: #3D7EFF;
-      margin-bottom: 0.3rem;
-    }
-    .proof-point p {
-      font-size: 0.875rem;
-      color: #8EA3C3;
-      line-height: 1.6;
-      margin: 0;
-    }
+/* ── COLLAPSIBLE SECTIONS ── */
+.section{background:#fff;border-radius:12px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.07),0 4px 16px rgba(0,0,0,.04);overflow:hidden;transition:box-shadow .2s}
+.section:hover{box-shadow:0 2px 8px rgba(0,0,0,.10),0 8px 24px rgba(0,0,0,.06)}
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;cursor:pointer;user-select:none;border-bottom:2px solid transparent;transition:background .15s,border-color .2s}
+.sec-hdr:hover{background:#F8F9FF}
+.section.open .sec-hdr{border-bottom-color:#E8ECFF}
+.sec-left{display:flex;align-items:center;gap:12px}
+.sec-num{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0}
+.t-blue  .sec-num{background:#EEF2FF;color:#4F46E5}
+.t-teal  .sec-num{background:#F0FDFA;color:#0D9488}
+.t-purple.sec-num,.t-purple .sec-num{background:#F5F3FF;color:#7C3AED}
+.t-amber .sec-num{background:#FFFBEB;color:#D97706}
+.t-indigo .sec-num{background:#EEF2FF;color:#3730A3}
+.t-rose  .sec-num{background:#FFF1F2;color:#E11D48}
+.t-red   .sec-num{background:#FEF2F2;color:#DC2626}
+.sec-title{font-size:.95rem;font-weight:700;color:#1A1D2E}
+.sec-sub{font-size:.75rem;color:#6B7280;margin-top:1px}
+.chevron{width:18px;height:18px;color:#9CA3AF;transition:transform .25s cubic-bezier(.4,0,.2,1);flex-shrink:0}
+.section.open .chevron{transform:rotate(180deg)}
+.sec-body{padding:0 22px;max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.4,0,.2,1),padding .25s}
+.section.open .sec-body{max-height:9999px;padding:22px 22px 26px}
 
-    .intel-card {
-      background: #111D35;
-      border: 1px solid #1E2F4F;
-      border-radius: 8px;
-      padding: 1rem 1.25rem;
-      margin-bottom: 0.75rem;
-    }
-    .intel-card-title {
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: #F0F4FF;
-      margin-bottom: 0.3rem;
-    }
-    .intel-card p {
-      font-size: 0.85rem;
-      color: #8EA3C3;
-      line-height: 1.6;
-      margin: 0;
-    }
+/* ── TABLES ── */
+.tbl{width:100%;border-collapse:collapse;font-size:.85rem}
+.tbl th{background:#F8F9FF;color:#4B5563;font-weight:600;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;padding:9px 13px;text-align:left;border-bottom:2px solid #E5E7EB}
+.tbl td{padding:11px 13px;border-bottom:1px solid #F3F4F6;vertical-align:top;color:#374151}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:#FAFBFF}
+.kv td{padding:9px 12px;border-bottom:1px solid #F3F4F6;vertical-align:top;font-size:.875rem}
+.kv td:first-child{font-weight:600;color:#6B7280;font-size:.75rem;text-transform:uppercase;letter-spacing:.04em;width:190px;white-space:nowrap}
+.kv tr:last-child td{border-bottom:none}
+.alert{color:#DC2626;font-weight:700}
 
-    /* RESPONSIVE */
-    @media (max-width: 640px) {
-      .spark-header, .timeline-section, .validation-section, .content-section {
-        padding-left: 1rem;
-        padding-right: 1rem;
-      }
-      .timeline-track { flex-direction: column; align-items: flex-start; }
-      .timeline-connector { width: 2px; height: 2rem; }
-      .account-name { font-size: 1.4rem; }
-      .info-grid { grid-template-columns: 1fr; }
-      .stakeholder-table { font-size: 0.75rem; }
-    }
-  </style>
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;gap:4px;border-radius:6px;padding:2px 8px;font-size:.7rem;font-weight:600;white-space:nowrap}
+.b-blue{background:#EEF2FF;color:#4F46E5}
+.b-purple{background:#F5F3FF;color:#7C3AED}
+.b-green{background:#ECFDF5;color:#065F46}
+.b-amber{background:#FFFBEB;color:#B45309}
+.b-gray{background:#F3F4F6;color:#6B7280}
+.b-red{background:#FEF2F2;color:#991B1B}
+
+/* ── STAT ROW ── */
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:18px}
+.stat-card{background:#F8F9FF;border:1px solid #E0E7FF;border-radius:10px;padding:14px;text-align:center}
+.stat-n{font-size:1.7rem;font-weight:800;color:#1B6AFF;line-height:1.1;margin-bottom:5px}
+.stat-l{font-size:.75rem;color:#6B7280;line-height:1.4}
+.stat-s{font-size:.65rem;color:#9CA3AF;margin-top:5px}
+
+/* ── PERSON CARD ── */
+.person-card{border:1px solid #E5E7EB;border-radius:12px;padding:18px;margin-bottom:14px;position:relative;overflow:hidden}
+.person-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%}
+.pc-primary::before{background:#4F46E5}
+.pc-secondary::before{background:#7C3AED}
+.pc-watch::before{background:#F59E0B}
+.pc-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.pc-name{font-size:1rem;font-weight:700;color:#111827}
+.pc-role{font-size:.78rem;color:#6B7280;margin-top:2px}
+.signal-list{list-style:none;margin-top:8px}
+.signal-list li{display:flex;gap:8px;font-size:.85rem;color:#374151;padding:3px 0}
+.signal-list li::before{content:'→';color:#1B6AFF;font-weight:700;flex-shrink:0}
+.risk-list{list-style:none;margin-top:8px}
+.risk-list li{display:flex;gap:8px;font-size:.85rem;color:#374151;padding:3px 0}
+.risk-list li::before{content:'⚠';color:#F59E0B;flex-shrink:0}
+hr.div{border:none;border-top:1px solid #F3F4F6;margin:14px 0}
+
+/* ── SIGNAL STRIP ── */
+.sig-strip{display:flex;flex-direction:column;gap:9px}
+.sig-item{display:flex;align-items:flex-start;gap:11px;padding:11px 13px;background:#FAFBFF;border:1px solid #E8ECFF;border-radius:8px;font-size:.85rem}
+.sig-item strong{display:block;font-weight:700;color:#1A1D2E;margin-bottom:2px}
+.sig-item span{color:#6B7280}
+.sig-ico{font-size:1.1rem;flex-shrink:0;margin-top:1px}
+
+/* ── PROOF TABLE ── */
+.proof-best td{background:#F0F5FF!important}
+.proof-best td:first-child{border-left:3px solid #1B6AFF}
+
+/* ── VALIDATION HOMEWORK SECTION ── */
+.hw-section{background:#FFFBEB;border:2px solid #FDE68A;border-radius:12px;margin-bottom:16px;overflow:hidden;box-shadow:0 1px 4px rgba(245,158,11,.12)}
+.hw-section:hover{box-shadow:0 2px 10px rgba(245,158,11,.18)}
+.hw-sec-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;cursor:pointer;user-select:none;border-bottom:2px solid transparent;transition:background .15s,border-color .2s}
+.hw-sec-hdr:hover{background:#FEF3C7}
+.hw-section.open .hw-sec-hdr{border-bottom-color:#FDE68A}
+.hw-sec-left{display:flex;align-items:center;gap:12px}
+.hw-sec-icon{width:36px;height:36px;background:#FEF3C7;border:2px solid #F59E0B;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.hw-sec-title{font-size:.95rem;font-weight:700;color:#92400E}
+.hw-sec-sub{font-size:.75rem;color:#B45309;margin-top:1px}
+.hw-section .hw-chevron{width:18px;height:18px;color:#D97706;transition:transform .25s cubic-bezier(.4,0,.2,1);flex-shrink:0}
+.hw-section.open .hw-chevron{transform:rotate(180deg)}
+.hw-sec-body{padding:0 22px;max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.4,0,.2,1),padding .25s}
+.hw-section.open .hw-sec-body{max-height:9999px;padding:20px 22px 24px}
+/* Checkbox items */
+.cb-item{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:#fff;border:1px solid #FDE68A;border-radius:10px;margin-bottom:10px;transition:background .2s,border-color .2s,opacity .2s}
+.cb-item:last-child{margin-bottom:0}
+.cb-item input[type=checkbox]{width:17px;height:17px;margin-top:3px;flex-shrink:0;cursor:pointer;accent-color:#D97706}
+.cb-content{flex:1;cursor:pointer}
+.cb-title{font-weight:700;font-size:.88rem;color:#92400E;display:flex;align-items:center;gap:8px;margin-bottom:3px;transition:color .2s}
+.cb-detail{font-size:.8rem;color:#6B7280;line-height:1.5}
+.cb-detail ul{padding-left:16px;margin-top:4px}
+.cb-detail li{margin-bottom:3px}
+.cb-item.checked{background:#FEF9EE;border-color:#FCD34D;opacity:.65}
+.cb-item.checked .cb-title{color:#B45309;text-decoration:line-through}
+.cb-item.checked .cb-detail{text-decoration:line-through;color:#9CA3AF}
+
+/* ── FOOTER ── */
+.footer{text-align:center;color:#9CA3AF;font-size:.75rem;margin-top:36px;padding-top:20px;border-top:1px solid #E5E7EB}
+
+@media(max-width:640px){
+  .hero{padding:28px 18px}
+  .hero h1{font-size:1.5rem}
+  .page{padding:16px 12px 48px}
+  .timeline-wrapper{padding:24px 16px 0}
+  .tl-node{min-width:120px}
+  .tl-circle{width:44px;height:44px;font-size:1.1rem}
+  .tl-track::after{top:22px;left:44px;right:44px}
+  .kv td:first-child{width:130px;white-space:normal}
+  .stat-row{grid-template-columns:1fr 1fr}
+}
+@media print{
+  body{background:#fff}
+  .hero{background:#0B0E27!important;-webkit-print-color-adjust:exact}
+  .section{box-shadow:none;border:1px solid #E5E7EB}
+  .sec-body{max-height:none!important;padding:20px 22px!important}
+  .tl-panel{display:block!important}
+  .chevron{display:none}
+}
+</style>
 </head>
 <body>
 
-  <!-- HEADER -->
-  <header class="spark-header">
-    <div class="spark-logo">&#9889; Champion Spark</div>
-    <h1 class="account-name">Nubank</h1>
-    <div class="deal-tags">
-      <span class="tag">AE: Luiz Gustavo Amorim</span>
-      <span class="tag">SE: Jeff Dubois</span>
-      <span class="tag">Stage: 6 — Negotiation</span>
-      <span class="tag">ARR Floor: $6.3M</span>
-      <span class="tag">Close: Apr 30, 2026</span>
-      <span class="tag timestamp">Generated 2026-04-15T00:00:00Z</span>
+<!-- ══ HERO ══ -->
+<div class="hero">
+  <div class="hero-badge"><span class="dot"></span>Champion Spark &nbsp;·&nbsp; Active Deal</div>
+  <h1>Nubank</h1>
+  <div class="hero-subtitle">Champion Identification &amp; Relationship Development Brief</div>
+  <div class="hero-meta">
+    <div class="hero-chip"><span>ARR Floor</span>$6.3M Renewal</div>
+    <div class="hero-chip"><span>Stage</span>S6 Negotiation</div>
+    <div class="hero-chip"><span>Close</span>April 30, 2026</div>
+    <div class="hero-chip"><span>AE</span>Luiz Gustavo Amorim</div>
+    <div class="hero-chip"><span>SE</span>Jeff Dubois</div>
+    <div class="hero-chip"><span>Prepared</span>April 15, 2026</div>
+    <a class="hero-sf-link" href="https://amplitude.my.salesforce.com/006Uw00000AR1qIAT" target="_blank" rel="noopener">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z"/></svg>
+      View in Salesforce
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+    </a>
+  </div>
+  <div class="hero-attribution">
+    <span class="ha-account">Nubank</span>
+    <span class="ha-sep">·</span>
+    <span>Generated April 15, 2026</span>
+    <span class="ha-sep">·</span>
+    <span class="ha-ai">Champion Spark built for <strong>Jeff Dubois</strong> by Amplitude AI</span>
+  </div>
+</div>
+
+<!-- ══ PAGE ══ -->
+<div class="page">
+
+  <div class="section-label">Champion Relationship Timeline — Elisa Buonanni · click any node to expand</div>
+
+  <!-- ══ TIMELINE ══ -->
+  <div class="timeline-wrapper">
+    <div class="tl-track">
+
+      <div class="tl-node type-spark1" id="n-spark1" onclick="togglePanel('spark1')">
+        <div class="tl-circle">⚡</div>
+        <div class="tl-week">Week 1</div>
+        <div class="tl-title">The Lending Signal POV</div>
+        <div class="tl-desc">Low-commitment insight share</div>
+        <div class="tl-expand-hint">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          details
+        </div>
+      </div>
+
+      <div class="tl-node type-spark2" id="n-spark2" onclick="togglePanel('spark2')">
+        <div class="tl-circle">🎬</div>
+        <div class="tl-week">Week 2</div>
+        <div class="tl-title">Co-Design the Masking Policy</div>
+        <div class="tl-desc">Working session — Elisa as expert</div>
+        <div class="tl-expand-hint">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          details
+        </div>
+      </div>
+
+      <div class="tl-node type-spark3" id="n-spark3" onclick="togglePanel('spark3')">
+        <div class="tl-circle">🗺️</div>
+        <div class="tl-week">Week 3–4</div>
+        <div class="tl-title">Technical Success Plan</div>
+        <div class="tl-desc">Co-authored artifact Elisa owns</div>
+        <div class="tl-expand-hint">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          details
+        </div>
+      </div>
+
+    </div><!-- /tl-track -->
+
+    <!-- ══ DETAIL PANELS ══ -->
+    <div class="tl-panels">
+
+      <!-- SPARK 1 PANEL -->
+      <div class="tl-panel panel-spark1" id="p-spark1">
+        <div class="panel-header">
+          <div class="panel-header-left">
+            <div class="panel-icon">⚡</div>
+            <div>
+              <div class="panel-title">Spark 1 — The Lending Signal POV</div>
+              <div class="panel-subtitle">Week 1 · Day 3–5 after renewal closes · No ask · Zero commercial pressure</div>
+            </div>
+          </div>
+          <button class="cal-btn cal-btn-spark1" onclick="downloadICS('spark1')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Add to Calendar
+          </button>
+        </div>
+        <div class="arc-strip">
+          <span class="arc-tag arc-tag-format">📧 Email + 1 insight piece</span>
+          <span class="arc-tag arc-tag-commit">~5 min for Elisa</span>
+          <span class="arc-tag arc-tag-build">No ask — build credibility only</span>
+        </div>
+        <p style="font-size:.875rem;color:#374151;">Send a warm, insight-forward note that names the specific signal João surfaced and connects it to a broader pattern across financial services — without pitching Amplitude. This validates Elisa's technical judgment and positions you as a thought partner, not a vendor. She will recognize it immediately; she controls the masking policy that makes João's insight actionable.</p>
+        <p style="font-size:.875rem;color:#374151;">Prerequisite: Validation Homework items 1 and 2 are complete — Elisa's title is confirmed and João's identity is verified before referencing him in outreach.</p>
+        <div class="email-box">
+          <div class="email-label">Suggested Subject Line</div>
+          <div class="email-body">"Something your Lending team showed us that reframed how we think about SR fidelity"</div>
+        </div>
+        <div class="email-box">
+          <div class="email-label">Opening Draft</div>
+          <div class="email-body">"Elisa — working through the feedback from the alpha, there was a moment that stuck with us: the Lending team's observation that text visibility — principal amounts, installment counts — was more valuable to them than frame rate. That's not a common instinct. Most teams optimize for visual smoothness. Yours went straight to decision context.
+
+That insight maps to something we're seeing across financial services customers: the most valuable SR signal isn't 'what did the user see' — it's 'what information were they weighing when they decided.' I put together a short read on how two other lending-product teams are using selective masking to unlock that layer without compromising privacy posture. No ask — just thought it would land differently after what your team surfaced."</div>
+        </div>
+        <p style="font-size:.8rem;color:#6B7280;">Do not ask for a meeting. Let it land. Monitor for a reply within 5 business days — any response is the green light for Spark 2.</p>
+        <div class="why-works"><strong>Why this builds toward Spark 2</strong>Elisa controls the masking policy. By framing João's insight as something that validates her technical judgment — and positioning selective masking as the direct answer — you make her the expert before you ever ask for a working session. Her reply is proof of engagement and a natural opening to propose co-design.</div>
+      </div><!-- /spark1 panel -->
+
+      <!-- SPARK 2 PANEL -->
+      <div class="tl-panel panel-spark2" id="p-spark2">
+        <div class="panel-header">
+          <div class="panel-header-left">
+            <div class="panel-icon">🎬</div>
+            <div>
+              <div class="panel-title">Spark 2 — Co-Design the Masking Policy</div>
+              <div class="panel-subtitle">Week 2 · After reply, or 7 days post-Spark 1 · 45-min working session</div>
+            </div>
+          </div>
+          <button class="cal-btn cal-btn-spark2" onclick="downloadICS('spark2')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Add to Calendar
+          </button>
+        </div>
+        <div class="arc-strip">
+          <span class="arc-tag arc-tag-format">📅 45-min working session</span>
+          <span class="arc-tag arc-tag-commit">Elisa as the spec author, not the audience</span>
+          <span class="arc-tag arc-tag-build">Jeff / Evandro prep the framework in advance</span>
+        </div>
+        <p style="font-size:.875rem;color:#374151;">Prerequisite: Elisa responded to Spark 1. Now close the loop on the masking configuration decision that's sitting in her queue. The default SR config wasn't designed for a lending-product context — it was built for consumer apps with simpler privacy requirements. Elisa understands both the instrumentation and the privacy constraints better than anyone on the Amplitude side.</p>
+        <div class="email-box">
+          <div class="email-label">Calendar Invite Framing</div>
+          <div class="email-body">"Elisa — following up on the fidelity conversation. We're at the point in the SR rollout where the masking configuration has a real impact on what the Lending team can actually see and act on. The default config isn't designed for a lending-product context — it was built for consumer apps with simpler privacy requirements.
+
+You understand the instrumentation and the privacy constraints better than anyone on our side. I'd rather we define the masking spec together in a working session than ship a config and spend two months adjusting it. Would you be open to a 45-minute call where we map out what should be visible, what should be masked, and what the rollout criteria look like? The output of that call becomes the spec your engineering team owns — not a vendor recommendation."</div>
+        </div>
+        <div class="callout callout-blue">
+          <div class="callout-icon">🔧</div>
+          <div>
+            <div class="callout-title">What to prepare before this session</div>
+            <div class="callout-body">A draft masking taxonomy for lending flows: visible fields (principal amounts, installment counts, product selection), masked fields (PII, account numbers, auth tokens), and a proposed acceptance threshold for P90 screen load post-masking. Don't come with a recommendation — come with a framework Elisa can edit. Her edits to your draft are the first act of co-authorship.</div>
+          </div>
+        </div>
+        <div class="why-works"><strong>Why this builds toward Spark 3</strong>Elisa's decisions in this session — what to mask, what to keep visible, what performance thresholds define success — are exactly the inputs that become the Technical Success Plan in Spark 3. The working session is not preparation for the artifact; it <em>is</em> the artifact in draft form. Take detailed notes on her specific choices.</div>
+      </div><!-- /spark2 panel -->
+
+      <!-- SPARK 3 PANEL -->
+      <div class="tl-panel panel-spark3" id="p-spark3">
+        <div class="panel-header">
+          <div class="panel-header-left">
+            <div class="panel-icon">🗺️</div>
+            <div>
+              <div class="panel-title">Spark 3 — Nubank SR Technical Success Plan</div>
+              <div class="panel-subtitle">Week 3–4 · After working session · Before internal SR go/no-go review</div>
+            </div>
+          </div>
+          <button class="cal-btn cal-btn-spark3" onclick="downloadICS('spark3')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Add to Calendar
+          </button>
+        </div>
+        <div class="arc-strip">
+          <span class="arc-tag arc-tag-format">📝 Shared Google Doc</span>
+          <span class="arc-tag arc-tag-commit">Elisa Buonanni listed as co-author in the header</span>
+          <span class="arc-tag arc-tag-build">She presents it internally to get engineering sign-off</span>
+        </div>
+        <p style="font-size:.875rem;color:#374151;">Prerequisite: Spark 2 working session completed. Deliver the co-authored Technical Success Plan via Google Doc — Elisa's name as co-author in the document header. Frame it explicitly: <em>"We built this together so your team owns the criteria, not us."</em> Her judgment on the masking spec becomes the definitive reference. She should feel ownership of the SR program, not the outcome of a vendor pitch.</p>
+        <p style="font-size:.875rem;color:#374151;">The document defines: (1) masking policy for lending flows based on her decisions in Spark 2, (2) performance acceptance criteria for P90 screen load, (3) phased rollout from alpha to 1% to full fleet, and (4) success metrics Nubank engineering will use to evaluate SR health independently of Amplitude's input.</p>
+        <div class="email-box">
+          <div class="email-label">Delivery Hook</div>
+          <div class="email-body">"Nubank Session Replay Technical Success Plan — Co-authored by Elisa Buonanni and Jeff Dubois, Amplitude"</div>
+        </div>
+        <div class="callout callout-green">
+          <div class="callout-icon">🏆</div>
+          <div>
+            <div class="callout-title">The arc is complete when Elisa presents the artifact</div>
+            <div class="callout-body">The 3-Spark sequence moves deliberately from <strong>low-commitment insight share → co-creation working session → co-authored artifact</strong>. By Week 4, Elisa is not just the SR evaluation owner — she's the internal author of the SR success criteria. The artifact she presents to Bruno Simioni is Amplitude's technical POV delivered in her voice, which is infinitely more credible than any vendor doc we could send.</div>
+          </div>
+        </div>
+        <div class="why-works"><strong>What a successful Spark 3 looks like</strong>Elisa shares the Technical Success Plan with Luís Jaeger and the broader engineering team without being asked. She references it in the #nubank-alphas Slack channel as the working spec. Bruno Simioni references it when discussing the SR go/no-go. Any of these confirms the champion relationship is established — and the SR expansion timeline is no longer driven by Amplitude.</div>
+      </div><!-- /spark3 panel -->
+
+    </div><!-- /tl-panels -->
+  </div><!-- /timeline-wrapper -->
+
+  <!-- ══ VALIDATION HOMEWORK ══ -->
+  <div class="hw-section" id="hw">
+    <div class="hw-sec-hdr" onclick="toggleHW()">
+      <div class="hw-sec-left">
+        <div class="hw-sec-icon">⚠️</div>
+        <div>
+          <div class="hw-sec-title">Validation Homework — Verify Before You Use</div>
+          <div class="hw-sec-sub">5 items to confirm before Spark 1 goes out · Check each off as done</div>
+        </div>
+      </div>
+      <svg class="hw-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
     </div>
-  </header>
-
-  <!-- TIMELINE -->
-  <section class="timeline-section">
-    <div class="timeline-header">3-Week Champion Sequence — Elisa Buonanni</div>
-    <div class="timeline-track">
-      <div class="timeline-week active" onclick="showWeek(1)">
-        <div class="week-dot"></div>
-        <div class="week-label">Week 1</div>
-        <div class="week-subtitle">Insight Share</div>
-      </div>
-      <div class="timeline-connector"></div>
-      <div class="timeline-week" onclick="showWeek(2)">
-        <div class="week-dot"></div>
-        <div class="week-label">Week 2</div>
-        <div class="week-subtitle">Co-Creation</div>
-      </div>
-      <div class="timeline-connector"></div>
-      <div class="timeline-week" onclick="showWeek(3)">
-        <div class="week-dot"></div>
-        <div class="week-label">Week 3&#8211;4</div>
-        <div class="week-subtitle">Co-Authored Artifact</div>
-      </div>
-    </div>
-
-    <div class="week-content" id="week-1">
-      <div class="followup-card">
-        <div class="followup-meta">
-          <span class="followup-format">Email</span>
-          <span class="followup-timing">Day 3&#8211;5 after renewal closes — warm, zero commercial pressure</span>
-        </div>
-        <div class="followup-subject">Subject: Something your Lending team showed us that reframed how we think about SR fidelity</div>
-        <div class="followup-body">
-          <p>Elisa — working through the feedback from the alpha, there was a moment that stuck with us: the Lending team's observation that text visibility — principal amounts, installment counts — was more valuable to them than frame rate. That's not a common instinct. Most teams optimize for visual smoothness. Yours went straight to decision context.</p>
-          <p>That insight maps to something we're seeing across financial services customers: the most valuable SR signal isn't "what did the user see" — it's "what information were they weighing when they decided." I put together a short read on how two other lending-product teams are using selective masking to unlock that layer without compromising privacy posture. No ask — just thought it would land differently after what your team surfaced.</p>
+    <div class="hw-sec-body">
+      <div class="cb-item" id="cb1">
+        <input type="checkbox" id="chk1" onchange="toggleCheck('cb1')"/>
+        <div class="cb-content" onclick="document.getElementById('chk1').click()">
+          <div class="cb-title">Confirm Elisa Buonanni's exact title <span class="conf conf-med" style="font-size:.68rem"><span class="conf-dot"></span>Medium</span></div>
+          <div class="cb-detail">SE Notes list her as "Technical Lead / Engineering" but no title is captured in Salesforce or Outreach. Do not use in any external materials without confirming directly.<ul><li>Search Elisa Buonanni on LinkedIn and Nubank's engineering blog.</li><li>Verify she still owns the SR evaluation — personnel can shift between SE Notes sessions.</li><li>Confirm email is still elisa.buonanni@nubank.com.br before any outreach.</li></ul></div>
         </div>
       </div>
-    </div>
-
-    <div class="week-content hidden" id="week-2">
-      <div class="followup-card">
-        <div class="followup-meta">
-          <span class="followup-format">Email + Calendar Invite</span>
-          <span class="followup-timing">Week 2 — after reply, or 7 days post-Week 1 if no response</span>
+      <div class="cb-item" id="cb2">
+        <input type="checkbox" id="chk2" onchange="toggleCheck('cb2')"/>
+        <div class="cb-content" onclick="document.getElementById('chk2').click()">
+          <div class="cb-title">Identify "João" from the Lending team — full name and title unknown <span class="conf conf-low" style="font-size:.68rem"><span class="conf-dot"></span>Low</span></div>
+          <div class="cb-detail">João has the strongest organic AHA signal in the dataset — "seeing copy is more valuable than solving more FPS" — but he is not in Salesforce or Outreach. His feedback is third-hand, relayed by Luís Jaeger in #nubank-alphas on April 15.<ul><li>Ask Luís Jaeger for João's full name and title before referencing him in outreach to Elisa.</li><li>Add him to Outreach once identified — he is an active SR user and a potential secondary champion.</li><li>Do not cite the "João" feedback in writing to Nubank without confirming the source.</li></ul></div>
         </div>
-        <div class="followup-subject">Subject: Want to co-design Nubank's masking policy before we finalize the config?</div>
-        <div class="followup-body">
-          <p>Elisa — following up on the fidelity conversation. We're at the point in the SR rollout where the masking configuration has a real impact on what the Lending team can actually see and act on. The default config isn't designed for a lending-product context — it was built for consumer apps with simpler privacy requirements.</p>
-          <p>You understand the instrumentation and the privacy constraints better than anyone on our side. I'd rather we define the masking spec together in a working session than ship a config and spend two months adjusting it. Would you be open to a 45-minute call where we map out what should be visible, what should be masked, and what the rollout criteria look like? The output of that call becomes the spec your engineering team owns — not a vendor recommendation.</p>
+      </div>
+      <div class="cb-item" id="cb3">
+        <input type="checkbox" id="chk3" onchange="toggleCheck('cb3')"/>
+        <div class="cb-content" onclick="document.getElementById('chk3').click()">
+          <div class="cb-title">Investigate Ligia Alvarenga immediately — Outreach score 22, no context <span class="conf conf-low" style="font-size:.68rem"><span class="conf-dot"></span>Low–Med</span></div>
+          <div class="cb-detail">Outreach engaged score of 22 — dramatically higher than all other Nubank contacts (next highest is 6). Last engaged April 15, 2026. No title, no meeting history, no Salesforce record matched.<ul><li>Pull her full email activity from Outreach right now — what sequences is she in, what did she open or click?</li><li>This is either a hidden champion or a data artifact. Either answer matters before the renewal closes.</li><li>If she has a title and meeting history, add her to the stakeholder map and the champion assessment immediately.</li></ul></div>
+        </div>
+      </div>
+      <div class="cb-item" id="cb4">
+        <input type="checkbox" id="chk4" onchange="toggleCheck('cb4')"/>
+        <div class="cb-content" onclick="document.getElementById('chk4').click()">
+          <div class="cb-title">Verify Bruno Simioni's title — inferred, not confirmed <span class="conf conf-med" style="font-size:.68rem"><span class="conf-dot"></span>Medium</span></div>
+          <div class="cb-detail">"Sr. Director of Engineering" is inferred from meeting context. Not confirmed in Salesforce field data. Any exec briefing document that names him needs an accurate title.<ul><li>Verify via LinkedIn before any written communication that includes his name and title.</li><li>Confirm whether Bruno's decision-making scope covers SR expansion or just the base analytics renewal.</li></ul></div>
+        </div>
+      </div>
+      <div class="cb-item" id="cb5">
+        <input type="checkbox" id="chk5" onchange="toggleCheck('cb5')"/>
+        <div class="cb-content" onclick="document.getElementById('chk5').click()">
+          <div class="cb-title">Confirm Eric Young (CTO) has had zero prior Amplitude contact <span class="conf conf-med" style="font-size:.68rem"><span class="conf-dot"></span>Medium</span></div>
+          <div class="cb-detail">No meeting, email, or contact record found for Eric Young (hired Aug 2025, ex-SVP Engineering Snap). His Snap background makes him a high-value exec target, but his familiarity with Amplitude is entirely assumed.<ul><li>Run a full Salesforce and Outreach search to confirm no prior contact exists.</li><li>Do not reference Snap analytics culture in outreach until you've confirmed no prior history that might contradict the framing.</li><li>Eric Young is a post-renewal target, not a pre-close play — sequence accordingly.</li></ul></div>
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="week-content hidden" id="week-3">
-      <div class="followup-card">
-        <div class="followup-meta">
-          <span class="followup-format">Shared Google Doc</span>
-          <span class="followup-timing">Week 3&#8211;4 — delivered after working session, before internal SR go/no-go review</span>
-        </div>
-        <div class="followup-subject">Hook: "Nubank Session Replay Technical Success Plan" — co-authored with Elisa Buonanni, her name in the header</div>
-        <div class="followup-body">
-          <p>Deliver a co-authored Technical Success Plan via Google Doc — Elisa's name as co-author in the document header. The document defines: (1) masking policy for lending flows, (2) performance acceptance criteria for P90 screen load, (3) phased rollout from alpha to 1% to full fleet, and (4) success metrics Nubank engineering will use to evaluate SR health independently of Amplitude's input.</p>
-          <p>This artifact is designed for Elisa to present internally to get engineering sign-off on SR expansion — independently of the commercial renewal. Frame it clearly: "We built this together so your team owns the criteria, not us." Her judgment on the masking spec becomes the definitive reference. She should feel ownership of the SR program, not the outcome of a vendor pitch.</p>
-        </div>
+  <!-- ══ COLLAPSIBLE SECTIONS ══ -->
+
+  <div class="section-label" style="margin-top:28px">Account Context — click to expand</div>
+
+  <!-- 1. Account Snapshot -->
+  <div class="section t-blue" id="s1">
+    <div class="sec-hdr" onclick="toggleSec('s1')">
+      <div class="sec-left"><div class="sec-num">1</div><div><div class="sec-title">Account Snapshot</div><div class="sec-sub">Deal vitals, stack, and commercial mechanics</div></div></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="sec-body">
+      <table class="tbl kv">
+        <tbody>
+          <tr><td>Legal Entity</td><td>Nu Pagamentos S.A. — Instituição de Pagamento (NYSE: NU, São Paulo)</td></tr>
+          <tr><td>Deal</td><td>Nubank Renewal — <strong>$6.3M ARR floor</strong> (900B events @ $7 CPM)</td></tr>
+          <tr><td>Nubank Counter</td><td>$5.4M (900B events @ $6 CPM, 1-year) <strong class="alert">— $900K gap</strong></td></tr>
+          <tr><td>SF Opportunity</td><td>$6,804,000 — <span class="badge b-red">Stage 6: Negotiation</span></td></tr>
+          <tr><td>Close Target</td><td><strong class="alert">April 30, 2026 — AWS Marketplace deadline end of week</strong></td></tr>
+          <tr><td>Team</td><td>Luiz Gustavo Amorim (AE) · Jeff Dubois (SE) · Evandro Pacolla (CSM)</td></tr>
+          <tr><td>Mechanism</td><td>AWS ISV order form (2P Brazil). Prior renewal (2024) closed at $12.6M — current reflects scope consolidation, not contraction.</td></tr>
+          <tr><td>Amplitude Footprint</td><td>Forked Flutter SDK → HTTP API → Kafka shards (~900B events/year). SDK data feeds directly into Nubank's Databricks "Jeannie" LLM platform.</td></tr>
+          <tr><td>Session Replay</td><td>Alpha at 0.1% of users (~500K sessions) via SDK v11. <strong class="alert">Blocked: P90 performance regression (10.44% on general screens)</strong></td></tr>
+          <tr><td>Expansion History</td><td>Two expansion attempts in 2025 both closed lost ($8.9M vertical + $384K horizontal). SR is the primary post-renewal expansion vector.</td></tr>
+        </tbody>
+      </table>
+      <div class="callout callout-red" style="margin-top:14px">
+        <div class="callout-icon">🔑</div>
+        <div><div class="callout-title">Two Parallel Motions — Do Not Conflate</div><div class="callout-body">Bruno Simioni is deliberately keeping the renewal commercial separate from the SR technical evaluation. Procurement (Juliana Spirandelli, Carlos Novello) owns the renewal. Elisa Buonanni owns SR. These require different relationships and different plays running simultaneously. Conflating them risks losing both.</div></div>
+      </div>
+      <div class="callout callout-amber" style="margin-top:10px">
+        <div class="callout-icon">💡</div>
+        <div><div class="callout-title">The $900K Gap Is Not a Distress Signal</div><div class="callout-body">Nubank posted $16.3B revenue (+45% YoY) and $2.9B net income in FY2025. The $900K gap represents approximately one hour of Nubank's quarterly net income growth. Juliana's $6 CPM counter is a procurement tactic, not a financial constraint. The political cost of losing Amplitude — embedded in their AI infrastructure — is structurally higher than the gap suggests.</div></div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- VALIDATION HOMEWORK -->
-  <section class="validation-section">
-    <button class="collapsible amber-collapsible" onclick="toggleSection(this, 'validation')">
-      &#9888; Validation Homework &#8212; Verify Before You Use
-    </button>
-    <div class="collapsible-content" id="validation">
-      <ul class="checklist">
-        <li><input type="checkbox" /> <span>Confirm Elisa Buonanni's exact title — SE Notes lists her as "Technical Lead / Engineering" but no title is captured in Salesforce or Outreach. Verify before using in any external materials.</span></li>
-        <li><input type="checkbox" /> <span>Identify "Jo&#227;o" from the Lending team — he has the strongest organic AHA signal in the dataset but is not in Salesforce or Outreach. Get his full name and title before referencing him in outreach to Elisa.</span></li>
-        <li><input type="checkbox" /> <span>Investigate Ligia Alvarenga — Outreach engagement score of 22 (highest of all Nubank contacts) with no title, no meeting history surfaced, and no Salesforce record matched. Pull her email activity from Outreach immediately.</span></li>
-        <li><input type="checkbox" /> <span>Verify Bruno Simioni's title — inferred as Sr. Director of Engineering from meeting context; not confirmed in Salesforce. Verify via LinkedIn before any exec briefing document.</span></li>
-        <li><input type="checkbox" /> <span>Confirm whether Eric Young (CTO, ex-Snap, hired Aug 2025) has had any prior Amplitude contact — no meeting or outreach record found. Do not assume familiarity before initial outreach.</span></li>
-      </ul>
+  <!-- 2. Champion Hypothesis -->
+  <div class="section t-purple" id="s2">
+    <div class="sec-hdr" onclick="toggleSec('s2')">
+      <div class="sec-left"><div class="sec-num">2</div><div><div class="sec-title">Champion Hypothesis</div><div class="sec-sub">Primary and secondary candidates with supporting evidence</div></div></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
     </div>
-  </section>
-
-  <!-- SECTION 1: ACCOUNT SNAPSHOT -->
-  <section class="content-section">
-    <button class="collapsible" onclick="toggleSection(this, 'account-snapshot')">Account Snapshot</button>
-    <div class="collapsible-content" id="account-snapshot">
-      <div class="info-grid">
-        <div class="info-card">
-          <div class="info-card-label">Legal Entity</div>
-          <div class="info-card-value">Nu Pagamentos S.A. &#8212; Institu&#231;&#227;o de Pagamento</div>
+    <div class="sec-body">
+      <div class="person-card pc-primary">
+        <div class="pc-head">
+          <div><div class="pc-name">Elisa Buonanni</div><div class="pc-role">Technical Lead, Engineering — Session Replay Evaluation Owner</div></div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge b-blue">Primary Champion</span><span class="badge b-green">Confirmed Email</span></div>
         </div>
-        <div class="info-card">
-          <div class="info-card-label">Headquarters</div>
-          <div class="info-card-value">S&#227;o Paulo, Brazil (NYSE: NU)</div>
-        </div>
-        <div class="info-card">
-          <div class="info-card-label">Customers</div>
-          <div class="info-card-value">131M (FY2025)</div>
-        </div>
-        <div class="info-card">
-          <div class="info-card-label">FY2025 Revenue</div>
-          <div class="info-card-value">$16.3B (+45% YoY)</div>
-        </div>
-        <div class="info-card">
-          <div class="info-card-label">Employees</div>
-          <div class="info-card-value">~8,716</div>
-        </div>
-        <div class="info-card">
-          <div class="info-card-label">SF Opportunity</div>
-          <div class="info-card-value">$6,804,000 &#8212; Stage 6: Negotiation</div>
-        </div>
-        <div class="info-card">
-          <div class="info-card-label">Amplitude Floor</div>
-          <div class="info-card-value">$6.3M (900B events @ $7 CPM)</div>
-        </div>
-        <div class="info-card">
-          <div class="info-card-label">Nubank Counter</div>
-          <div class="info-card-value">$5.4M (900B events @ $6 CPM, 1-year)</div>
-        </div>
+        <blockquote>"Asked to hold AI Replay Summaries until performance is cleared" — Elisa controls the sequencing of feature adoption, not just the testing process.<cite>— SE Notes, Jeff Dubois, April 13, 2026</cite></blockquote>
+        <p style="font-size:.85rem;color:#374151;margin-bottom:8px;">Confirmed as technical champion in SE Notes — the only contact explicitly named in that role across all sources. Elisa owns the SR alpha testing process end-to-end and attended the Mar 16 procurement call alongside Juliana Spirandelli and Carlos Novello — unusual for a technical lead, signaling cross-functional influence beyond engineering.</p>
+        <ul class="signal-list">
+          <li>Owns the SR alpha testing process end-to-end: confirmed stable 1fps version for small cohort, confirmed SDK event volumes and sampling math directly with Evandro Pacolla.</li>
+          <li>Attended Mar 16 procurement call — signals cross-functional influence beyond engineering.</li>
+          <li>Active in #nubank-alphas shared Slack channel with Amplitude EPD — the primary real-time SR coordination surface.</li>
+          <li>Controls the masking policy that determines whether João's "lending text visibility" use case becomes real or stays blocked.</li>
+          <li>Email confirmed: elisa.buonanni@nubank.com.br</li>
+        </ul>
+        <hr class="div">
+        <p style="font-size:.75rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Risk Factors</p>
+        <ul class="risk-list">
+          <li>Title not confirmed in Salesforce or Outreach — verify before any external materials.</li>
+          <li>Outreach engagement score of 6 (responsive but not high-frequency).</li>
+          <li>SR alpha is blocked on P90 performance regression — if engineering escalates, her workstream could deprioritize.</li>
+          <li>No evidence of direct exec access above Bruno Simioni.</li>
+        </ul>
       </div>
-      <div class="section-body">
-        <h4>Deal Mechanism</h4>
-        <p>Renewal via <strong>AWS ISV order form (2P Brazil)</strong>. AWS Marketplace processing deadline is end of this week. Prior renewal (2024) closed at $12.6M — the current renewal reflects scope consolidation, not contraction in usage.</p>
-        <h4>Amplitude Footprint</h4>
-        <p>Nubank is Amplitude's <strong>second-largest global customer</strong>. They run a custom <strong>forked Flutter SDK</strong> delivering events via HTTP API into Kafka shards (~900B events/year). Amplitude SDK data feeds directly into Nubank's internal Databricks "Jeannie" LLM platform (credit underwriting, churn prediction, customer service AI). Session Replay is in alpha at 0.1% of users (~500K sessions) via SDK v11, blocked on P90 performance regression (10.44% degradation on general screens).</p>
-        <h4>Two Parallel Motions</h4>
-        <p>The renewal and SR expansion are being deliberately kept separate by Bruno Simioni. Procurement (Juliana Spirandelli, Carlos Novello) owns the renewal commercial. Elisa Buonanni owns the SR technical evaluation. These require different relationships and different plays running simultaneously &#8212; do not conflate them.</p>
-        <h4>Expansion History</h4>
-        <p>Two expansion attempts in 2025 both closed lost ($8.9M vertical + $384K horizontal). Current renewal is a defend-and-hold motion. SR represents the primary post-renewal expansion vector.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 2: CHAMPION HYPOTHESIS -->
-  <section class="content-section">
-    <button class="collapsible" onclick="toggleSection(this, 'champion-hypothesis')">Champion Hypothesis</button>
-    <div class="collapsible-content" id="champion-hypothesis">
-
-      <div class="champion-card primary">
-        <div class="champion-badge">Primary Champion</div>
-        <h3>Elisa Buonanni</h3>
-        <div class="champion-title">Technical Lead, Engineering &#8212; Session Replay Evaluation Owner</div>
-        <div class="champion-signals">
-          <strong>Why this person:</strong>
-          <ul>
-            <li>Confirmed as technical champion in SE Notes (Jeff Dubois, Apr 13, 2026) &#8212; the only contact explicitly named in that role across all sources</li>
-            <li>Owns the SR alpha testing process end-to-end: confirmed stable 1fps version for small cohort, confirmed SDK event volumes and sampling math directly with Evandro Pacolla</li>
-            <li>Attended the Mar 16 procurement call alongside Juliana Spirandelli and Carlos Novello &#8212; unusual for a technical lead, signals cross-functional influence beyond engineering</li>
-            <li>Active in the #nubank-alphas shared Slack channel with Amplitude EPD &#8212; the primary real-time coordination surface for the SR program</li>
-            <li>Asked to hold AI Replay Summaries "until performance is cleared" &#8212; she controls the sequencing of feature adoption, not just the testing process</li>
-            <li>Email confirmed: elisa.buonanni@nubank.com.br</li>
-          </ul>
+      <div class="person-card pc-secondary">
+        <div class="pc-head">
+          <div><div class="pc-name">Luís Jaeger</div><div class="pc-role">Engineering Lead — Session Replay Alpha Testing (Nubank side)</div></div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge b-purple">Secondary Champion</span><span class="badge b-green">Active in #nubank-alphas</span></div>
         </div>
-        <div class="champion-risk"><strong>Risk factors:</strong> Title not confirmed in Salesforce or Outreach &#8212; verify before any external use. Outreach engagement score of 6 (responsive but not high-frequency). SR alpha is blocked on P90 performance, which could deprioritize her workstream if engineering escalates the regression. No evidence of direct exec access above Bruno Simioni.</div>
+        <blockquote>"The current 1fps recording is already compromising session understanding on their end."<cite>— Luís Jaeger, #nubank-alphas, April 2026 — advocating for higher fidelity, not pulling back</cite></blockquote>
+        <p style="font-size:.85rem;color:#374151;margin-bottom:8px;">Primary engineering POC in #nubank-alphas. Delivering precise P90 regression benchmarks to Amplitude EPD: "3.89% home load deterioration, 10.44% P90 general screens." Acts as internal amplifier between Nubank product stakeholders and Amplitude's technical team — relaying Lending team feedback from João directly.</p>
+        <ul class="signal-list">
+          <li>Delivering precise P90 benchmarks — deeply technically engaged, not just coordinating.</li>
+          <li>Relaying Lending team feedback from João — acting as internal champion for SR quality improvements.</li>
+          <li>Advocating for higher fidelity, not for pulling back the program.</li>
+        </ul>
+        <hr class="div">
+        <p style="font-size:.75rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Risk Factors</p>
+        <ul class="risk-list">
+          <li>Execution champion, not influence champion — his advocacy stays inside engineering and is unlikely to reach Bruno or procurement independently.</li>
+          <li>Use him to accelerate the Technical Success Plan, not to move the commercial needle.</li>
+        </ul>
       </div>
-
-      <div class="champion-card secondary">
-        <div class="champion-badge">Secondary Champion</div>
-        <h3>Lu&#237;s Jaeger</h3>
-        <div class="champion-title">Engineering Lead &#8212; Session Replay Alpha Testing (Nubank side)</div>
-        <div class="champion-signals">
-          <strong>Why this person:</strong>
-          <ul>
-            <li>Primary engineering point of contact in the #nubank-alphas shared Slack channel &#8212; where all real-time SR decisions happen</li>
-            <li>Delivering precise P90 regression benchmarks to Amplitude EPD: "3.89% home load deterioration, 10.44% P90 general screens" &#8212; deeply technically engaged, not just coordinating</li>
-            <li>Relaying feedback from the Lending team (Jo&#227;o) to Amplitude &#8212; acting as an internal amplifier between Nubank product stakeholders and Amplitude's technical team</li>
-            <li>"The current 1fps recording is already compromising session understanding on their end" &#8212; advocating internally for higher fidelity, not for pulling back</li>
-          </ul>
+      <div class="person-card pc-watch">
+        <div class="pc-head">
+          <div><div class="pc-name">Ligia Alvarenga</div><div class="pc-role">Title unknown — Outreach engaged score: 22 (highest at Nubank)</div></div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge b-amber">Watch List — Investigate Urgently</span></div>
         </div>
-        <div class="champion-risk"><strong>Risk factors:</strong> Lu&#237;s is an execution champion, not an influence champion. His advocacy is valuable inside engineering but unlikely to reach Bruno or procurement independently. Use him to accelerate the Technical Success Plan, not to move the commercial needle.</div>
-      </div>
-
-      <div class="champion-card secondary">
-        <div class="champion-badge">Watch List &#8212; Investigate Urgently</div>
-        <h3>Ligia Alvarenga</h3>
-        <div class="champion-title">Title unknown &#8212; Outreach engaged score: 22 (highest at Nubank)</div>
-        <div class="champion-signals">
-          <strong>Why this person:</strong>
-          <ul>
-            <li>Outreach engaged score of <strong>22</strong> &#8212; dramatically higher than all other Nubank contacts (next highest is 6 for Bruno, Elisa, Carlos Novello)</li>
-            <li>Last engaged April 15, 2026 &#8212; actively in motion today</li>
-            <li>Stage: SAL in Outreach (Luiz Gustavo as owner)</li>
-            <li>Not in Salesforce &#8212; no title, no meeting history surfaced in any source</li>
-          </ul>
-        </div>
-        <div class="champion-risk"><strong>Risk factors:</strong> Score of 22 with zero context is either a champion hiding in plain sight or a data artifact. Pull her email history from Outreach before the next Nubank touchpoint.</div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- SECTION 3: THE AHA MOMENT -->
-  <section class="content-section">
-    <button class="collapsible" onclick="toggleSection(this, 'aha-moment')">The AHA Moment That Landed</button>
-    <div class="collapsible-content" id="aha-moment">
-      <div class="aha-card">
-        <div class="aha-moment-quote">"He said seeing copy is more valuable than solving more FPS." &#8212; Jo&#227;o, Nubank Lending team, first structured Session Replay feedback, relayed via Lu&#237;s Jaeger in #nubank-alphas, April 15, 2026</div>
-        <div class="aha-context"><strong>What triggered it:</strong> Jo&#227;o watched actual Session Replay recordings of Nubank's lending flows &#8212; specifically screens where customers enter principal amounts and select installment counts. The SR feed was at 1fps for performance reasons. Rather than asking for higher frame rate, his feedback was the opposite of what the team expected: he wanted the text/copy &#8212; the data fields customers were reading and entering &#8212; to be visible, not the visual smoothness of the replay. He also asked specifically about selective masking to allow copy on particular screens rather than globally masking everything. This was the first time a Nubank end-user watched SR footage and articulated a specific product intelligence need from it.</div>
-        <div class="aha-why"><strong>Why it landed:</strong> This moment reframes SR from a UX debugging tool into a decision-context intelligence tool. For a lending product, understanding what information a customer was weighing when they chose a loan principal or installment plan is worth more than animation quality. Jo&#227;o's instinct was analytically sophisticated in a way that validates SR's value proposition for financial product teams. And it connects directly to Elisa's job: she controls the masking policy that determines whether that text is visible or redacted. She is the person who can make this use case real &#8212; or block it.</div>
-        <div class="aha-followthrough"><strong>How to reinforce it:</strong> (1) Reference this insight by name in the Week 1 email &#8212; Elisa will recognize it immediately and feel seen. (2) In the Week 2 working session, use Jo&#227;o's feedback as the design brief for the masking policy. (3) In the co-authored Technical Success Plan, make "lending flow text visibility" one of the named success criteria &#8212; defined by Nubank, not by Amplitude. Secondary AHA to use with executives: Bruno Simioni described Amplitude SDK as "foundational data" for Nubank's Databricks AI models &#8212; this positions Amplitude as AI infrastructure, not a visualization layer.</div>
+        <p style="font-size:.85rem;color:#374151;margin-bottom:8px;">Outreach engaged score of 22 — dramatically higher than all other Nubank contacts (next highest is 6 for Bruno, Elisa, and Carlos Novello). Last engaged April 15, 2026. Stage: SAL in Outreach (Luiz Gustavo as owner). Not in Salesforce — no title, no meeting history surfaced in any source.</p>
+        <ul class="signal-list">
+          <li>Score of 22 with last engagement today — actively in motion at the moment the renewal is closing.</li>
+          <li>Owned by Luiz Gustavo in Outreach — an AE-side signal, not just a marketing contact.</li>
+        </ul>
+        <hr class="div">
+        <p style="font-size:.75rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Risk Factors</p>
+        <ul class="risk-list">
+          <li>Score of 22 with zero context is either a hidden champion or a data artifact — pull her email history from Outreach before the next Nubank touchpoint.</li>
+          <li>No title means no safe way to reference or introduce her in any external communication until verified.</li>
+        </ul>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- SECTION 4: STAKEHOLDER MAP -->
-  <section class="content-section">
-    <button class="collapsible" onclick="toggleSection(this, 'stakeholder-map')">Stakeholder Map</button>
-    <div class="collapsible-content" id="stakeholder-map">
-      <table class="stakeholder-table">
+  <!-- 3. AHA Moment -->
+  <div class="section t-indigo" id="s3">
+    <div class="sec-hdr" onclick="toggleSec('s3')">
+      <div class="sec-left"><div class="sec-num">3</div><div><div class="sec-title">The AHA Moment That Landed</div><div class="sec-sub">What resonated, with whom, and why it matters</div></div></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="sec-body">
+      <div class="callout callout-blue">
+        <div class="callout-icon">⚡</div>
+        <div><div class="callout-title">João (Lending Team) — "Seeing Copy Is More Valuable Than Solving More FPS"</div><div class="callout-body">João watched actual Session Replay recordings of Nubank's lending flows — specifically screens where customers enter principal amounts and select installment counts. The SR feed was at 1fps for performance reasons. Rather than asking for higher frame rate, his feedback was the opposite of what the team expected: he wanted the <strong>text/copy</strong> — the data fields customers were reading and entering — to be visible, not the visual smoothness of the replay. He also asked specifically about selective masking to allow copy on particular screens rather than globally masking everything. This was the first time a Nubank end-user watched SR footage and articulated a specific product intelligence need from it.<br><br><em>Source: relayed by Luís Jaeger in #nubank-alphas, April 15, 2026. João's full name and title are unknown — verify before citing in outreach.</em></div></div>
+      </div>
+      <div class="callout callout-green">
+        <div class="callout-icon">🧠</div>
+        <div><div class="callout-title">Why It Landed — SR as Decision-Context Intelligence</div><div class="callout-body">This moment reframes SR from a UX debugging tool into a decision-context intelligence tool. For a lending product, understanding what information a customer was weighing when they chose a loan principal or installment plan is worth more than animation quality. João's instinct was analytically sophisticated in a way that validates SR's value proposition for financial product teams. And it connects directly to Elisa's job: she controls the masking policy that determines whether that text is visible or redacted. She is the person who can make this use case real — or block it.</div></div>
+      </div>
+      <div class="callout callout-amber">
+        <div class="callout-icon">🎯</div>
+        <div><div class="callout-title">How to Reinforce It Across the 3-Spark Arc</div><div class="callout-body">(1) Reference this insight by name in the Week 1 email — Elisa will recognize it immediately and feel seen as the person who can unlock it. (2) In the Week 2 working session, use João's feedback as the design brief for the masking policy — "lending flow text visibility" becomes the primary design criterion. (3) In the co-authored Technical Success Plan, make "lending flow text visibility" one of the named success criteria, defined by Nubank, not by Amplitude.<br><br><strong>Secondary AHA for executives:</strong> Bruno Simioni described Amplitude SDK as "foundational data" feeding Nubank's Databricks AI models — this positions Amplitude as AI infrastructure, not a visualization layer. Use with Eric Young (new CTO) once the renewal closes.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Stakeholder Map -->
+  <div class="section t-teal" id="s4">
+    <div class="sec-hdr" onclick="toggleSec('s4')">
+      <div class="sec-left"><div class="sec-num">4</div><div><div class="sec-title">Stakeholder Map</div><div class="sec-sub">Who's in the room, what they control, and how to move them</div></div></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="sec-body">
+      <table class="tbl" style="margin-bottom:16px">
         <thead>
-          <tr>
-            <th>Name</th>
-            <th>Title</th>
-            <th>Role in Deal</th>
-            <th>Sentiment</th>
-            <th>Notes</th>
-          </tr>
+          <tr><th>Name</th><th>Title</th><th>Role in Deal</th><th>Sentiment</th><th>Next Step</th></tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Elisa Buonanni</td>
+          <tr style="background:#F0F5FF">
+            <td><strong>Elisa Buonanni</strong></td>
             <td>Technical Lead, Engineering*</td>
-            <td>Technical Champion</td>
-            <td><span class="sentiment-badge positive">Positive</span></td>
-            <td>SR evaluation owner; controls masking policy and rollout sequencing; email confirmed; *title unconfirmed in SF/Outreach</td>
+            <td><span class="badge b-blue">Technical Champion</span></td>
+            <td><span class="badge b-green">Positive</span></td>
+            <td>Spark 1 email Day 3–5 post-close. She's the arc for SR expansion.</td>
           </tr>
           <tr>
-            <td>Lu&#237;s Jaeger</td>
+            <td><strong>Luís Jaeger</strong></td>
             <td>Engineering Lead, SR Alpha</td>
-            <td>Secondary Champion</td>
-            <td><span class="sentiment-badge positive">Positive</span></td>
-            <td>Primary eng POC in #nubank-alphas; internal amplifier between Lending team and Amplitude EPD; relays precise P90 benchmarks</td>
+            <td><span class="badge b-purple">Secondary Champion</span></td>
+            <td><span class="badge b-green">Positive</span></td>
+            <td>Use for Technical Success Plan co-build. Get João's full identity from him now.</td>
           </tr>
           <tr>
-            <td>Bruno Simioni</td>
+            <td><strong>Bruno Simioni</strong></td>
             <td>Sr. Director, Engineering*</td>
             <td>Technical Economic Buyer</td>
-            <td><span class="sentiment-badge neutral">Neutral</span></td>
-            <td>Attended Mar 23 Frustration Analytics demo; keeping SR separate from renewal deliberately; framed Amplitude SDK as AI data foundation; no exec relationship above him &#8212; flagged risk; *title unconfirmed</td>
+            <td><span class="badge b-gray">Neutral</span></td>
+            <td>No direct action pre-close. Frame Amplitude as AI infrastructure for Eric Young outreach post-close.</td>
           </tr>
           <tr>
-            <td>Jo&#227;o (Lending)</td>
-            <td>Unknown &#8212; Lending team</td>
-            <td>End User / AHA Signal</td>
-            <td><span class="sentiment-badge positive">Positive</span></td>
-            <td>First structured SR feedback; "seeing copy is more valuable than solving more FPS"; requesting selective masking. Full name and title unknown &#8212; urgent to identify and add to Outreach</td>
+            <td><strong>João (Lending)</strong></td>
+            <td>Unknown — Lending team</td>
+            <td>End User / AHA Source</td>
+            <td><span class="badge b-green">Positive</span></td>
+            <td>Get full name and title from Luís Jaeger before referencing in outreach. Add to Outreach.</td>
           </tr>
           <tr>
-            <td>Fernando Duarte</td>
-            <td>Engineering</td>
-            <td>Technical User</td>
-            <td><span class="sentiment-badge neutral">Neutral</span></td>
-            <td>Attended Feb 4 "Non-Sampling AI Platform" session; member of #nubank-alphas; SR alpha coordination</td>
-          </tr>
-          <tr>
-            <td>Juliana Spirandelli</td>
+            <td><strong>Juliana Spirandelli</strong></td>
             <td>Procurement Lead</td>
             <td>Commercial Signatory</td>
-            <td><span class="sentiment-badge neutral">Neutral</span></td>
-            <td>Firm on 1-year / $6 CPM; required for deal close but not a champion development target</td>
+            <td><span class="badge b-gray">Neutral</span></td>
+            <td>Firm on 1-year / $6 CPM. Required for deal close — not a champion development target.</td>
           </tr>
           <tr>
-            <td>Carlos Novello</td>
+            <td><strong>Carlos Novello</strong></td>
             <td>Procurement</td>
             <td>Gatekeeper</td>
-            <td><span class="sentiment-badge neutral">Neutral</span></td>
-            <td>Attends all procurement calls alongside Juliana; Outreach score: 6 (Marco Patino as owner)</td>
+            <td><span class="badge b-gray">Neutral</span></td>
+            <td>Attends all procurement calls alongside Juliana. Outreach score: 6 (Marco Patino as owner).</td>
           </tr>
           <tr>
-            <td>Ligia Alvarenga</td>
+            <td><strong>Ligia Alvarenga</strong></td>
             <td>Unknown</td>
-            <td>Unknown</td>
-            <td><span class="sentiment-badge unknown">Unknown</span></td>
-            <td>Outreach engaged score: 22 &#8212; highest at Nubank. Investigate immediately.</td>
+            <td><span class="badge b-amber">Investigate Urgently</span></td>
+            <td><span class="badge b-gray">Unknown</span></td>
+            <td>Pull full Outreach email history immediately. Score of 22 with no context is a critical gap.</td>
           </tr>
           <tr>
-            <td>Eric Young</td>
+            <td><strong>Eric Young</strong></td>
             <td>Chief Technology Officer</td>
             <td>Executive Target (cold)</td>
-            <td><span class="sentiment-badge unknown">Unknown</span></td>
-            <td>New CTO (hired Aug 2025); ex-SVP Engineering at Snap. No Amplitude contact on record. High-value warm-up target given Snap's product analytics culture.</td>
+            <td><span class="badge b-gray">Unknown</span></td>
+            <td>Post-renewal only. No prior Amplitude contact. High-value warm-up given Snap analytics culture.</td>
+          </tr>
+          <tr>
+            <td><strong>Fernando Duarte</strong></td>
+            <td>Engineering</td>
+            <td>Technical User</td>
+            <td><span class="badge b-gray">Neutral</span></td>
+            <td>Member of #nubank-alphas. SR alpha coordination — no direct action needed now.</td>
           </tr>
         </tbody>
       </table>
-    </div>
-  </section>
-
-  <!-- SECTION 5: INDUSTRY & EXTERNAL INTELLIGENCE -->
-  <section class="content-section">
-    <button class="collapsible" onclick="toggleSection(this, 'industry-intel')">Industry &amp; External Intelligence</button>
-    <div class="collapsible-content" id="industry-intel">
-
-      <div class="intel-card">
-        <div class="intel-card-title">Record Financial Performance &#8212; FY2025</div>
-        <p>Nubank posted $16.3B revenue (+45% YoY), $2.9B net income, and an efficiency ratio below 20% for the first time. 131M customers, ROE of 33%. This is a company with no financial pressure to reduce tooling spend &#8212; the $6 CPM counter is a procurement tactic, not a distress signal. The $900K gap is smaller than Nubank's Q4 net income growth in a single month.</p>
-      </div>
-
-      <div class="intel-card">
-        <div class="intel-card-title">U.S. National Bank Charter &#8212; OCC Conditional Approval (Jan 2026)</div>
-        <p>Nubank received conditional OCC approval for a U.S. national bank charter. Co-founder Cristina Junqueira named inaugural U.S. CEO. As they stand up U.S. operations with a new customer base, their need for product analytics tooling in a market where behavioral data expectations are mature will grow. This is a second-order expansion opportunity beyond the current renewal.</p>
-      </div>
-
-      <div class="intel-card">
-        <div class="intel-card-title">New CTO: Eric Young (ex-Snap Engineering SVP, hired Aug 2025)</div>
-        <p>Snap was one of the most product-analytics-mature consumer tech companies &#8212; deep A/B testing culture, engagement loop instrumentation, behavioral segmentation at scale. Eric Young came from that environment. Fresh CTOs evaluate tooling fit within the first 12 months. Amplitude should be in front of him before the renewal closes. His lens will be "what does this platform enable for product intelligence at scale" &#8212; not "what does it cost per event."</p>
-      </div>
-
-      <div class="intel-card">
-        <div class="intel-card-title">AI Strategy: nuFormer + Databricks "Jeannie" + PIX with AI</div>
-        <p>Nubank has built nuFormer (proprietary transformer for financial transaction sequences, 4.4% relative churn reduction in production), deployed AI agents for 131M customers, and surpassed 10M MAU for PIX with AI. Their Databricks "Jeannie" platform uses Amplitude SDK events as input data for credit underwriting, churn prediction, and customer service. <strong>Amplitude is not a visualization layer at Nubank &#8212; it is AI infrastructure.</strong> This framing anchors every exec conversation above Bruno.</p>
-      </div>
-
-      <div class="intel-card">
-        <div class="intel-card-title">Data Democratization Thesis &#8212; Harvard Business School</div>
-        <p>Nubank is publicly documented as building toward "democratizing data access for any internal team." Analytics Engineers are a first-class function across all domains, processing ~7TB of data daily. They've implemented CUPED for their in-house experimentation platform. This is a company whose identity is built on data access &#8212; the political cost of losing Amplitude is structurally higher than the $900K pricing gap suggests.</p>
-      </div>
-
-      <div class="intel-card">
-        <div class="intel-card-title">Leadership Transition Window (2025)</div>
-        <p>Four executives departed in 2025: COO Youssef Lahrech, CPO Jag Duggal, CTO Vitor Olivier, CLO Elita Ariaz. New bench includes Eric Young (CTO), Ethan Eismann (inaugural CDO &#8212; signals customer experience as board priority), Roberto Campos Neto (Vice Chairman). New leadership transitions are the highest-probability moments to establish executive-level Amplitude relationships that don't exist today.</p>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- SECTION 6: AMPLITUDE PROOF POINTS -->
-  <section class="content-section">
-    <button class="collapsible" onclick="toggleSection(this, 'proof-points')">Amplitude Proof Points</button>
-    <div class="collapsible-content" id="proof-points">
-
-      <div class="proof-point">
-        <div class="proof-point-label">Session Replay &#8212; Financial Services Decision-Context Use Case</div>
-        <p>SR in lending-product contexts is specifically valuable for understanding decision-making behavior: what information did the customer see before committing to a loan principal or term? Nubank's Lending team independently arrived at this insight. Amplitude SR's selective masking capability allows financial data fields (principal amounts, installment counts) to remain visible for internal analytics while PII (names, account numbers) is redacted. This is the direct technical answer to Jo&#227;o's feedback &#8212; cite it by name with Elisa.</p>
-      </div>
-
-      <div class="proof-point">
-        <div class="proof-point-label">SDK as Behavioral Data Layer for AI/ML Pipelines</div>
-        <p>Bruno Simioni explicitly described Amplitude's SDK as "foundational data" feeding Nubank's internal AI models. Frame Amplitude to Eric Young as the behavioral event infrastructure that makes their Databricks models better &#8212; comparable to how engineering-led orgs frame Segment or Snowplow. This is an AI infrastructure conversation, not a product analytics upsell.</p>
-      </div>
-
-      <div class="proof-point">
-        <div class="proof-point-label">Frustration Analytics &#8212; Live Production Reference</div>
-        <p>On February 7, Nubank launched a different login feature. Amplitude detected user frustration signals (rage clicks, dead clicks) in real time. Evandro used this as a live reference story in a partner demo: Amplitude surfaced a real product quality issue at Nubank before their internal systems flagged it. The Mar 23 Frustration Analytics demo brought Bruno Simioni in personally &#8212; use this story to demonstrate that SR + Analytics together is more powerful than either alone.</p>
-      </div>
-
-      <div class="proof-point">
-        <div class="proof-point-label">Experimentation &#8212; Complement to Nubank's CUPED Platform</div>
-        <p>Nubank has built a sophisticated in-house experimentation platform with CUPED. Amplitude's experimentation layer is additive, not competitive: it connects behavioral product analytics (what users do between experiments) to experiment outcomes &#8212; the behavioral context that explains why an experiment won or lost. Position this as the layer that makes their CUPED results interpretable, not a replacement for their tooling.</p>
-      </div>
-
-      <div class="proof-point">
-        <div class="proof-point-label">Nubank as Amplitude Marquee Reference &#8212; LATAM Fintech</div>
-        <p>Evandro Pacolla used Nubank as a reference account in a live partner demo (Rappi, Feb 20): "What do you think leads Nubank and Mercado Livre to prefer Amplitude?" Nubank's brand validates Amplitude in LATAM fintech. Internally, this should reinforce to Nubank that Amplitude views them as a strategic partnership &#8212; language that aligns with Bruno's preference for a "foundational" vendor relationship over a transactional one.</p>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- SECTION 7: VERIFY BEFORE YOU USE -->
-  <section class="content-section">
-    <button class="collapsible" onclick="toggleSection(this, 'verify-section')">Verify Before You Use</button>
-    <div class="collapsible-content" id="verify-section">
-      <div class="section-body">
-        <h4>What is inferred, not confirmed</h4>
-        <ul>
-          <li><strong>Elisa Buonanni's title</strong> is from SE Notes written by Jeff Dubois (Apr 13). It does not appear in Salesforce or Outreach. Do not use in external materials without confirming directly.</li>
-          <li><strong>Bruno Simioni's title</strong> ("Sr. Director of Engineering") is inferred from meeting context. Not confirmed in Salesforce field data. Verify via LinkedIn before any exec briefing doc.</li>
-          <li><strong>Jo&#227;o's identity</strong> is known only by first name, relayed by Lu&#237;s Jaeger in #nubank-alphas on April 15. His feedback is the strongest organic product signal in this dataset &#8212; but it is third-hand. Confirm the source before citing it in outreach to Elisa.</li>
-          <li><strong>Eric Young's openness to Amplitude</strong> is inferred entirely from his Snap background. No meeting, email, or contact record exists. Do not assume familiarity before first outreach.</li>
-          <li><strong>Ligia Alvarenga's engagement score of 22</strong> could reflect email opens, link clicks, or sequence behavior &#8212; not necessarily deep product intent. Treat as a signal to investigate, not a confirmed champion.</li>
-        </ul>
-        <h4>Sources powering this brief</h4>
-        <ul>
-          <li>Granola: 10+ meeting notes, Feb&#8211;Apr 2026</li>
-          <li>Salesforce: Account 001j000000bAcQqAAK; Opportunity 006Uw00000AR1qIAT</li>
-          <li>Outreach: Account 193; 112 Kaia meeting recordings reviewed</li>
-          <li>Slack: #nubank-pod, #nubank-alphas, group DMs (Apr 2026)</li>
-          <li>Google Drive SE Notes: Jeff Dubois, last updated Apr 13, 2026</li>
-          <li>Zoom: 17 meeting records, Feb 12&#8211;Apr 15, 2026</li>
-          <li>Web: Nu Holdings FY2025 Earnings, Building Nubank engineering blog, Harvard Business School case study, BusinessWire press releases</li>
-        </ul>
+      <div class="callout callout-amber">
+        <div class="callout-icon">⚠️</div>
+        <div>
+          <div class="callout-title">Two parallel paths — do not conflate</div>
+          <div class="callout-body">The renewal (Juliana / Carlos / Bruno) and the SR expansion (Elisa / Luís) are deliberately being kept separate by Bruno Simioni. Running champion development through Elisa does not advance the renewal close — it advances the post-renewal expansion. Make sure the Spark sequence starts <em>after</em> the renewal closes on April 30 so there is zero appearance of commercial pressure on the SR evaluation.</div>
+        </div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <script>
-    function toggleSection(btn, id) {
-      const el = document.getElementById(id);
-      el.classList.toggle('open');
-      btn.classList.toggle('open');
+  <!-- 5. Industry Intelligence -->
+  <div class="section t-amber" id="s5">
+    <div class="sec-hdr" onclick="toggleSec('s5')">
+      <div class="sec-left"><div class="sec-num">5</div><div><div class="sec-title">Industry &amp; External Intelligence</div><div class="sec-sub">Nubank signals, leadership transitions, and challenger ammunition</div></div></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="sec-body">
+      <div class="stat-row">
+        <div class="stat-card"><div class="stat-n">131M</div><div class="stat-l">customers globally (FY2025)</div><div class="stat-s">Largest digital bank in the world</div></div>
+        <div class="stat-card"><div class="stat-n">$16.3B</div><div class="stat-l">FY2025 revenue (+45% YoY)</div><div class="stat-s">Efficiency ratio below 20% for first time</div></div>
+        <div class="stat-card"><div class="stat-n">33%</div><div class="stat-l">return on equity (FY2025)</div><div class="stat-s">Net income: $2.9B — no financial distress</div></div>
+      </div>
+      <div class="callout callout-blue" style="margin-bottom:16px">
+        <div class="callout-icon">🤖</div>
+        <div><div class="callout-title">The Challenger Reframe — Amplitude Is AI Infrastructure at Nubank</div><div class="callout-body">Nubank's Databricks "Jeannie" platform uses Amplitude SDK events as input data for credit underwriting, churn prediction, and customer service AI. They've built nuFormer (proprietary transformer for financial transaction sequences, 4.4% relative churn reduction in production) and surpassed 10M MAU for PIX with AI. <strong>Amplitude is not a visualization layer at Nubank — it is the behavioral data foundation for their AI models.</strong> Use this framing with Eric Young and any exec above Bruno. It reframes the $900K CPM gap as a negotiation over the price of AI infrastructure, not analytics tooling.</div></div>
+      </div>
+      <div class="sig-strip">
+        <div class="sig-item"><div class="sig-ico">🏛️</div><div><strong>U.S. National Bank Charter — OCC Conditional Approval (Jan 2026)</strong><span>Co-founder Cristina Junqueira named inaugural U.S. CEO. As Nubank stands up U.S. operations with a new customer base, their need for product analytics in a market where behavioral data expectations are mature will grow. Second-order expansion opportunity beyond current renewal.</span></div></div>
+        <div class="sig-item"><div class="sig-ico">👤</div><div><strong>New CTO: Eric Young (ex-SVP Engineering, Snap — hired Aug 2025)</strong><span>Snap was one of the most product-analytics-mature consumer tech companies. Eric Young came from that environment. Fresh CTOs evaluate tooling fit within the first 12 months. His lens will be "what does this platform enable for product intelligence at scale" — not "what does it cost per event." Get in front of him before the window closes.</span></div></div>
+        <div class="sig-item"><div class="sig-ico">📉</div><div><strong>Leadership Transition Window (2025) — 4 Executive Departures</strong><span>COO Youssef Lahrech, CPO Jag Duggal, CTO Vitor Olivier, CLO Elita Ariaz all departed in 2025. New bench includes Eric Young (CTO), Ethan Eismann (inaugural CDO — signals customer experience as board priority), Roberto Campos Neto (Vice Chairman). Leadership transitions are the highest-probability moments to establish exec-level Amplitude relationships that don't exist today.</span></div></div>
+        <div class="sig-item"><div class="sig-ico">📊</div><div><strong>Data Democratization Thesis — Harvard Business School Case Study</strong><span>Nubank is publicly documented as building toward "democratizing data access for any internal team." Analytics Engineers are a first-class function, processing ~7TB of data daily. They've implemented CUPED for their in-house experimentation platform. The political cost of losing Amplitude is structurally higher than the $900K gap suggests — their identity is built on data access.</span></div></div>
+        <div class="sig-item"><div class="sig-ico">⏰</div><div><strong>AWS Marketplace Processing Deadline — End of This Week</strong><span>The renewal mechanism is an AWS ISV order form (2P Brazil). AWS processing deadlines are hard stops. This is not a typical "close date" — it is a logistical cliff. Priority #1 is getting Juliana and Carlos to sign before the window closes.</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Proof Points -->
+  <div class="section t-teal" id="s6">
+    <div class="sec-hdr" onclick="toggleSec('s6')">
+      <div class="sec-left"><div class="sec-num">6</div><div><div class="sec-title">Amplitude Proof Points — Financial Services &amp; AI Infrastructure</div><div class="sec-sub">Best analogs by persona and use case</div></div></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="sec-body">
+      <table class="tbl" style="margin-bottom:16px">
+        <thead><tr><th>Use Case / Story</th><th>Relevance to Nubank</th><th>Key Message</th></tr></thead>
+        <tbody>
+          <tr class="proof-best"><td><strong>SR — Lending Flow Text Visibility ★</strong></td><td>João's feedback is the brief — cite it by name with Elisa</td><td style="color:#065F46;font-weight:600">Selective masking unlocks decision-context intelligence without compromising privacy</td></tr>
+          <tr class="proof-best"><td><strong>Frustration Analytics — Nubank Live Reference ★</strong></td><td>Feb 7 login feature launch — Amplitude detected rage clicks in real time before Nubank's internal systems flagged it</td><td style="color:#065F46;font-weight:600">SR + Analytics together surfaced a real production quality issue at Nubank. Use with Bruno.</td></tr>
+          <tr><td>SDK as AI/ML Behavioral Data Layer</td><td>Bruno's "foundational data" framing — use with Eric Young</td><td>Amplitude SDK events are the behavioral inputs for Nubank's Databricks credit and churn models</td></tr>
+          <tr><td>Experimentation — CUPED Complement</td><td>Nubank has a sophisticated in-house CUPED platform</td><td>Amplitude adds the behavioral context that explains why an experiment won or lost — not a replacement</td></tr>
+          <tr><td>Nubank as LATAM Fintech Reference</td><td>Evandro used Nubank as a reference in a Rappi partner demo (Feb 20)</td><td>Amplitude views Nubank as a strategic partnership — language that aligns with Bruno's "foundational vendor" preference</td></tr>
+        </tbody>
+      </table>
+      <div class="callout callout-blue">
+        <div class="callout-icon">💡</div>
+        <div><div class="callout-title">The Frustration Analytics Story Is Amplitude's Best Live Reference at Nubank</div><div class="callout-body">On February 7, Nubank launched a different login feature. Amplitude detected user frustration signals (rage clicks, dead clicks) in real time. Evandro used this as a live reference story in a partner demo: Amplitude surfaced a real product quality issue at Nubank before their internal systems flagged it. The Mar 23 Frustration Analytics demo brought Bruno Simioni in personally. Use this story to demonstrate that SR + Analytics together is more powerful than either alone — and that Nubank has already seen it in production.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. Verify Before You Use -->
+  <div class="section t-red" id="s7">
+    <div class="sec-hdr" onclick="toggleSec('s7')">
+      <div class="sec-left"><div class="sec-num">7</div><div><div class="sec-title">Verify Before You Use</div><div class="sec-sub">What is inferred vs. confirmed — full detail in Validation Homework above</div></div></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="sec-body">
+      <div class="callout callout-red" style="margin-bottom:16px">
+        <div class="callout-icon">🚨</div>
+        <div><div class="callout-title">Read this before any customer-facing communication</div><div class="callout-body">Full homework checklist lives in the <strong>Validation Homework</strong> accordion above. Expand it for item-by-item action steps and sourcing notes. Summary of what's confirmed vs. inferred is below.</div></div>
+      </div>
+      <table class="tbl">
+        <thead><tr><th>Claim</th><th>Source</th><th>Confidence</th><th>Action Needed</th></tr></thead>
+        <tbody>
+          <tr><td>Elisa Buonanni title "Technical Lead, Engineering"</td><td>SE Notes, Jeff Dubois (Apr 13)</td><td><span class="conf conf-med"><span class="conf-dot"></span>Medium</span></td><td>Confirm via LinkedIn before external use</td></tr>
+          <tr><td>João's identity — first name only</td><td>#nubank-alphas, relayed by Luís Jaeger (Apr 15)</td><td><span class="conf conf-low"><span class="conf-dot"></span>Low</span></td><td>Get full name and title from Luís before citing</td></tr>
+          <tr><td>Ligia Alvarenga engagement score of 22</td><td>Outreach (Apr 15)</td><td><span class="conf conf-low"><span class="conf-dot"></span>Low–Med</span></td><td>Pull full email history — score source unknown</td></tr>
+          <tr><td>Bruno Simioni title "Sr. Director, Engineering"</td><td>Meeting context inference</td><td><span class="conf conf-med"><span class="conf-dot"></span>Medium</span></td><td>Verify via LinkedIn before any exec doc</td></tr>
+          <tr><td>Eric Young — no prior Amplitude contact</td><td>Absence of Salesforce/Outreach record</td><td><span class="conf conf-med"><span class="conf-dot"></span>Medium</span></td><td>Run full search to confirm before first outreach</td></tr>
+          <tr><td>P90 regression 10.44% on general screens</td><td>Luís Jaeger, #nubank-alphas (Apr 2026)</td><td><span class="conf conf-high"><span class="conf-dot"></span>High</span></td><td>Use as-is in technical docs — direct engineering measurement</td></tr>
+          <tr><td>Amplitude SDK feeds Databricks "Jeannie"</td><td>Bruno Simioni, meeting notes (Feb–Apr 2026)</td><td><span class="conf conf-high"><span class="conf-dot"></span>High</span></td><td>Confirmed — use in exec positioning</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:.78rem;color:#9CA3AF;margin-top:14px"><strong>Sources powering this brief:</strong> Granola (10+ meeting notes, Feb–Apr 2026) · Salesforce: Account 001j000000bAcQqAAK; Opportunity 006Uw00000AR1qIAT · Outreach: Account 193; 112 Kaia meeting recordings reviewed · Slack: #nubank-pod, #nubank-alphas, group DMs (Apr 2026) · Google Drive SE Notes: Jeff Dubois, last updated Apr 13, 2026 · Zoom: 17 meeting records, Feb 12–Apr 15, 2026 · Web: Nu Holdings FY2025 Earnings, Building Nubank engineering blog, Harvard Business School case study, BusinessWire press releases</p>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p><strong>Champion Spark — Nubank</strong> · April 15, 2026 · Confidential — Internal Use Only</p>
+    <p style="margin-top:6px">Sources: Granola · Salesforce (Opp 006Uw00000AR1qIAT) · Outreach Account 193 · Slack #nubank-pod · #nubank-alphas · Zoom (17 recordings) · SE Notes Jeff Dubois Apr 13, 2026 · Nu Holdings FY2025 Earnings · Harvard Business School Nubank Case Study</p>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+// ── Toggle timeline panel ──
+function togglePanel(id) {
+  const node = document.getElementById('n-' + id);
+  const panel = document.getElementById('p-' + id);
+  const isOpen = panel.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.tl-panel').forEach(p => p.classList.remove('open'));
+  document.querySelectorAll('.tl-node').forEach(n => n.classList.remove('active'));
+  // Open clicked (unless it was already open)
+  if (!isOpen) {
+    panel.classList.add('open');
+    node.classList.add('active');
+    panel.scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+}
+
+// ── Toggle collapsible section ──
+function toggleSec(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+// ── Toggle Validation Homework accordion ──
+function toggleHW() {
+  document.getElementById('hw').classList.toggle('open');
+}
+
+// ── Toggle checkbox item checked state ──
+function toggleCheck(cbId) {
+  const item = document.getElementById(cbId);
+  const chk = item.querySelector('input[type=checkbox]');
+  if (chk.checked) {
+    item.classList.add('checked');
+  } else {
+    item.classList.remove('checked');
+  }
+}
+
+// ── Keyboard accessibility ──
+document.querySelectorAll('.tl-node, .sec-hdr, .hw-sec-hdr').forEach(el => {
+  el.setAttribute('tabindex','0');
+  el.setAttribute('role','button');
+  el.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
+  });
+});
+
+// ── ICS generation ──
+function downloadICS(spark) {
+  const pad = n => String(n).padStart(2,'0');
+  function dt(y,m,d,h,mi){ return `${y}${pad(m)}${pad(d)}T${pad(h)}${pad(mi)}00Z`; }
+
+  const configs = {
+    validate: {
+      file: 'validation-homework-nubank',
+      summary: 'Champion Spark: Validation Homework — Nubank / Elisa Buonanni',
+      start: dt(2026,4,16,14,0),
+      end:   dt(2026,4,16,14,30),
+      desc:  'Complete 5 validation items before sending Spark 1:\\n1. Confirm Elisa Buonanni title via LinkedIn\\n2. Get João full name + title from Luís Jaeger (#nubank-alphas)\\n3. Pull Ligia Alvarenga full Outreach email history\\n4. Verify Bruno Simioni title via LinkedIn\\n5. Confirm Eric Young has zero prior Amplitude contact in SF/Outreach',
+      location: 'Internal prep'
+    },
+    spark1: {
+      file: 'champion-spark-1-nubank-elisa-buonanni',
+      summary: 'Champion Spark 1: Send Lending Signal POV → Elisa Buonanni (Nubank)',
+      start: dt(2026,5,4,14,0),
+      end:   dt(2026,5,4,14,15),
+      desc:  'Send personalized email to Elisa Buonanni — Day 3-5 after renewal closes April 30.\\nSubject: "Something your Lending team showed us that reframed how we think about SR fidelity"\\nReference João\'s "seeing copy is more valuable than solving more FPS" insight.\\nNo ask — build credibility only.\\nMonitor for response within 5 business days before sending Spark 2 invite.',
+      location: 'Email / Outreach'
+    },
+    spark2: {
+      file: 'champion-spark-2-nubank-elisa-buonanni',
+      summary: 'Champion Spark 2: Co-Design Masking Policy — 45 min w/ Elisa Buonanni (Nubank)',
+      start: dt(2026,5,11,15,0),
+      end:   dt(2026,5,11,15,45),
+      desc:  '45-min co-creation working session with Elisa Buonanni.\\nPrerequisite: Elisa responded to Spark 1.\\nPrepare in advance: draft masking taxonomy for lending flows (visible fields, masked fields, P90 acceptance threshold).\\nGoal: Elisa edits the draft taxonomy — her decisions become the spec her engineering team owns.\\nTake detailed notes on specific choices — these feed the Technical Success Plan in Spark 3.',
+      location: 'Zoom / Google Meet'
+    },
+    spark3: {
+      file: 'champion-spark-3-nubank-elisa-buonanni',
+      summary: 'Champion Spark 3: Deliver SR Technical Success Plan — Nubank / Elisa Buonanni',
+      start: dt(2026,5,18,15,0),
+      end:   dt(2026,5,18,15,30),
+      desc:  'Deliver co-authored Nubank Session Replay Technical Success Plan via Google Doc.\\nPrerequisite: Spark 2 working session completed.\\nElisa Buonanni listed as co-author in the document header.\\nDocument covers: (1) masking policy for lending flows, (2) P90 performance acceptance criteria, (3) phased rollout from alpha to 1% to full fleet, (4) success metrics Nubank engineering owns independently.\\nFrame clearly: "We built this together so your team owns the criteria, not us."\\nSuccess: Elisa shares it with Luís and Bruno without being asked.',
+      location: 'Google Drive (shared doc)'
     }
+  };
 
-    function showWeek(n) {
-      document.querySelectorAll('.week-content').forEach(el => el.classList.add('hidden'));
-      document.querySelectorAll('.timeline-week').forEach(el => el.classList.remove('active'));
-      document.getElementById('week-' + n).classList.remove('hidden');
-      document.querySelectorAll('.timeline-week')[n - 1].classList.add('active');
-    }
-  </script>
+  const c = configs[spark];
+  const uid = `champion-spark-nubank-${spark}-${Date.now()}@amplitude.com`;
+  const now = dt(2026,4,15,12,0);
 
+  const ics = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Champion Spark//Amplitude//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'BEGIN:VEVENT',
+    `UID:${uid}`,
+    `DTSTAMP:${now}`,
+    `DTSTART:${c.start}`,
+    `DTEND:${c.end}`,
+    `SUMMARY:${c.summary}`,
+    `DESCRIPTION:${c.desc}`,
+    `LOCATION:${c.location}`,
+    'STATUS:CONFIRMED',
+    'END:VEVENT',
+    'END:VCALENDAR'
+  ].join('\r\n');
+
+  const blob = new Blob([ics], {type:'text/calendar;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${c.file}.ics`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+</script>
 </body>
 </html>
