@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Champion Spark — UPS</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#F0F2F7;color:#1A1D2E;line-height:1.65}
+a{color:#1B6AFF;text-decoration:none}
+a:hover{text-decoration:underline}
+p{margin-bottom:.85em}
+p:last-child{margin-bottom:0}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(135deg,#0B0E27 0%,#1A2560 60%,#0D3B8C 100%);color:#fff;padding:48px 40px 40px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-80px;right:-80px;width:320px;height:320px;background:radial-gradient(circle,rgba(27,106,255,.25) 0%,transparent 70%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:4px 12px;font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px;color:#93C5FD}
+.hero-badge .dot{width:7px;height:7px;background:#F59E0B;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.3)}}
+.hero h1{font-size:2rem;font-weight:800;letter-spacing:-.03em;margin-bottom:6px}
+.hero-subtitle{color:#93C5FD;font-size:1rem;margin-bottom:28px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px}
+.hero-chip{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:6px 14px;font-size:.8rem;color:#E0E7FF}
+.hero-chip span{color:#93C5FD;font-weight:600;margin-right:4px}
+.hero-sf-link{display:inline-flex;align-items:center;gap:6px;background:rgba(0,161,224,.18);border:1px solid rgba(0,161,224,.45);border-radius:8px;padding:6px 14px;font-size:.8rem;color:#7DD3FC;font-weight:600;text-decoration:none;transition:background .15s,border-color .15s,color .15s}
+.hero-sf-link:hover{background:rgba(0,161,224,.30);border-color:rgba(0,161,224,.70);color:#fff;text-decoration:none}
+.hero-sf-link svg{flex-shrink:0;opacity:.85}
+.hero-attribution{margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.1);display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-size:.75rem;color:rgba(255,255,255,.45)}
+.hero-attribution .ha-account{font-weight:700;color:rgba(255,255,255,.7)}
+.hero-attribution .ha-sep{color:rgba(255,255,255,.2)}
+.hero-attribution .ha-ai{color:rgba(255,255,255,.5)}
+.hero-attribution .ha-ai strong{color:#93C5FD;font-weight:600}
+
+/* ── MAIN ── */
+.page{max-width:1000px;margin:0 auto;padding:32px 24px 64px}
+
+/* ── SECTION HEADER ── */
+.section-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#9CA3AF;margin:36px 0 12px}
+
+/* ── TIMELINE WRAPPER ── */
+.timeline-wrapper{background:#fff;border-radius:16px;padding:36px 32px 0;box-shadow:0 1px 3px rgba(0,0,0,.07),0 4px 16px rgba(0,0,0,.04);margin-bottom:16px}
+
+/* ── TIMELINE TRACK ── */
+.tl-track{display:flex;align-items:flex-start;position:relative;padding-bottom:0;overflow-x:auto;padding:0 0 8px}
+.tl-track::after{content:'';position:absolute;top:28px;left:56px;right:56px;height:2px;background:linear-gradient(90deg,#E0E7FF 0%,#C7D2FE 50%,#E0E7FF 100%);z-index:0}
+
+.tl-node{flex:1;display:flex;flex-direction:column;align-items:center;position:relative;z-index:1;cursor:pointer;min-width:160px;padding:0 8px 32px}
+.tl-circle{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.35rem;margin-bottom:12px;transition:transform .2s,box-shadow .2s;border:3px solid transparent;position:relative;z-index:1}
+.tl-node:hover .tl-circle{transform:scale(1.08)}
+.tl-node.active .tl-circle{transform:scale(1.1)}
+
+.tl-node.type-spark1 .tl-circle{background:#EFF6FF;border-color:#3B82F6;color:#2563EB}
+.tl-node.type-spark1.active .tl-circle{background:#DBEAFE;box-shadow:0 0 0 6px rgba(59,130,246,.15)}
+.tl-node.type-spark2 .tl-circle{background:#F5F3FF;border-color:#7C3AED;color:#6D28D9}
+.tl-node.type-spark2.active .tl-circle{background:#EDE9FE;box-shadow:0 0 0 6px rgba(124,58,237,.15)}
+.tl-node.type-spark3 .tl-circle{background:#ECFDF5;border-color:#10B981;color:#059669}
+.tl-node.type-spark3.active .tl-circle{background:#D1FAE5;box-shadow:0 0 0 6px rgba(16,185,129,.15)}
+
+.tl-week{display:inline-flex;align-items:center;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:20px;margin-bottom:6px}
+.type-spark1  .tl-week{background:#DBEAFE;color:#1D4ED8}
+.type-spark2  .tl-week{background:#EDE9FE;color:#5B21B6}
+.type-spark3  .tl-week{background:#D1FAE5;color:#065F46}
+
+.tl-title{font-size:.88rem;font-weight:700;color:#1A1D2E;text-align:center;line-height:1.3;margin-bottom:4px}
+.tl-desc{font-size:.73rem;color:#9CA3AF;text-align:center;line-height:1.3}
+
+.tl-expand-hint{font-size:.68rem;color:#C4B5FD;margin-top:6px;display:flex;align-items:center;gap:3px}
+.tl-expand-hint svg{transition:transform .25s}
+.tl-node.active .tl-expand-hint svg{transform:rotate(180deg)}
+.type-spark1 .tl-expand-hint{color:#93C5FD}
+.type-spark2 .tl-expand-hint{color:#C4B5FD}
+.type-spark3 .tl-expand-hint{color:#6EE7B7}
+
+/* ── TIMELINE DETAIL PANELS ── */
+.tl-panels{border-top:1px solid #F3F4F6}
+.tl-panel{display:none;padding:28px 0 32px;border-bottom:1px solid #F3F4F6;animation:fadeSlide .25s ease}
+.tl-panel:last-child{border-bottom:none}
+.tl-panel.open{display:block}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+
+.panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.panel-header-left{display:flex;align-items:center;gap:12px}
+.panel-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.panel-spark1  .panel-icon{background:#DBEAFE}
+.panel-spark2  .panel-icon{background:#EDE9FE}
+.panel-spark3  .panel-icon{background:#D1FAE5}
+.panel-title{font-size:1.05rem;font-weight:800;color:#111827;letter-spacing:-.02em}
+.panel-subtitle{font-size:.78rem;color:#6B7280;margin-top:2px}
+.cal-btn{display:inline-flex;align-items:center;gap:7px;padding:8px 16px;border-radius:8px;font-size:.8rem;font-weight:700;cursor:pointer;border:none;transition:all .15s}
+.cal-btn-spark1{background:#DBEAFE;color:#1D4ED8}
+.cal-btn-spark2{background:#EDE9FE;color:#5B21B6}
+.cal-btn-spark3{background:#D1FAE5;color:#065F46}
+.cal-btn:hover{filter:brightness(.93);transform:translateY(-1px)}
+.cal-btn:active{transform:translateY(0)}
+
+/* ── PANEL CONTENT COMPONENTS ── */
+.arc-strip{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.arc-tag{display:inline-flex;align-items:center;gap:5px;font-size:.75rem;font-weight:600;padding:4px 10px;border-radius:6px}
+.arc-tag-commit{background:#DBEAFE;color:#1D4ED8}
+.arc-tag-format{background:#F3F4F6;color:#374151}
+.arc-tag-build{background:#D1FAE5;color:#065F46}
+blockquote{border-left:4px solid #1B6AFF;background:#F0F5FF;border-radius:0 10px 10px 0;padding:14px 18px;margin:16px 0;font-style:italic;color:#1E3A8A;font-size:.95rem;line-height:1.6}
+blockquote cite{display:block;font-style:normal;font-size:.75rem;color:#6B7280;margin-top:8px;font-weight:500}
+.callout{border-radius:10px;padding:14px 18px;margin:14px 0;display:flex;gap:10px;font-size:.875rem}
+.callout-icon{flex-shrink:0;font-size:1.1rem;margin-top:1px}
+.callout-blue{background:#EFF6FF;border-left:4px solid #3B82F6}
+.callout-green{background:#F0FDF4;border-left:4px solid #22C55E}
+.callout-amber{background:#FFFBEB;border-left:4px solid #F59E0B}
+.callout-red{background:#FFF1F2;border-left:4px solid #F43F5E}
+.callout-title{font-weight:700;font-size:.85rem;margin-bottom:3px;color:#1A1D2E}
+.callout-body{color:#374151}
+.email-box{background:#F8F9FF;border:1px solid #E0E7FF;border-radius:10px;padding:16px;margin:14px 0}
+.email-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#6366F1;margin-bottom:8px}
+.email-body{font-size:.85rem;color:#374151;line-height:1.6;font-style:italic}
+.why-works{background:#F0FDF4;border-left:3px solid #22C55E;border-radius:0 8px 8px 0;padding:10px 14px;margin-top:14px;font-size:.84rem;color:#166534}
+.why-works strong{display:block;font-weight:700;margin-bottom:3px}
+.checklist{list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.checklist li{display:flex;align-items:flex-start;gap:10px;font-size:.875rem;color:#374151;padding:10px 12px;background:#FAFBFF;border:1px solid #E8ECFF;border-radius:8px}
+.checklist li::before{content:'☐';font-size:1rem;color:#6366F1;flex-shrink:0;margin-top:1px}
+.checklist li strong{font-weight:600;display:block;margin-bottom:2px;color:#1A1D2E}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+@media(max-width:640px){.two-col{grid-template-columns:1fr}}
+
+/* ── HW CONFIDENCE BADGES ── */
+.conf{display:inline-flex;align-items:center;gap:5px;border-radius:6px;padding:3px 10px;font-size:.72rem;font-weight:700;letter-spacing:.02em}
+.conf-high{background:#ECFDF5;color:#065F46}
+.conf-med{background:#FFFBEB;color:#92400E}
+.conf-low{background:#FEF2F2;color:#991B1B}
+.conf-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.conf-high .conf-dot{background:#10B981}
+.conf-med .conf-dot{background:#F59E0B}
+.conf-low .conf-dot{background:#EF4444}
+.hw-item{border:1px solid #E5E7EB;border-radius:12px;margin-bottom:14px;overflow:hidden}
+.hw-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #F3F4F6;gap:10px;flex-wrap:wrap}
+.hw-head-left{display:flex;align-items:center;gap:9px}
+.hw-num{width:26px;height:26px;background:#1A1D2E;color:#fff;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0}
+.hw-title{font-size:.9rem;font-weight:700;color:#111827}
+.hw-body{padding:14px 16px;font-size:.875rem;color:#374151}
+.hw-body p{margin-bottom:8px}
+.hw-body ul{padding-left:18px}
+.hw-body li{margin-bottom:5px;color:#374151}
+
+/* ── COLLAPSIBLE SECTIONS ── */
+.section{background:#fff;border-radius:12px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.07),0 4px 16px rgba(0,0,0,.04);overflow:hidden;transition:box-shadow .2s}
+.section:hover{box-shadow:0 2px 8px rgba(0,0,0,.10),0 8px 24px rgba(0,0,0,.06)}
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;cursor:pointer;user-select:none;border-bottom:2px solid transparent;transition:background .15s,border-color .2s}
+.sec-hdr:hover{background:#F8F9FF}
+.section.open .sec-hdr{border-bottom-color:#E8ECFF}
+.sec-left{display:flex;align-items:center;gap:12px}
+.sec-num{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0}
+.t-blue  .sec-num{background:#EEF2FF;color:#4F46E5}
+.t-teal  .sec-num{background:#F0FDFA;color:#0D9488}
+.t-purple.sec-num,.t-purple .sec-num{background:#F5F3FF;color:#7C3AED}
+.t-amber .sec-num{background:#FFFBEB;color:#D97706}
+.t-indigo .sec-num{background:#EEF2FF;color:#3730A3}
+.t-rose  .sec-num{background:#FFF1F2;color:#E11D48}
+.t-red   .sec-num{background:#FEF2F2;color:#DC2626}
+.sec-title{font-size:.95rem;font-weight:700;color:#1A1D2E}
+.sec-sub{font-size:.75rem;color:#6B7280;margin-top:1px}
+.chevron{width:18px;height:18px;color:#9CA3AF;transition:transform .25s cubic-bezier(.4,0,.2,1);flex-shrink:0}
+.section.open .chevron{transform:rotate(180deg)}
+.sec-body{padding:0 22px;max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.4,0,.2,1),padding .25s}
+.section.open .sec-body{max-height:9999px;padding:22px 22px 26px}
+
+/* ── TABLES ── */
+.tbl{width:100%;border-collapse:collapse;font-size:.85rem}
+.tbl th{background:#F8F9FF;color:#4B5563;font-weight:600;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;padding:9px 13px;text-align:left;border-bottom:2px solid #E5E7EB}
+.tbl td{padding:11px 13px;border-bottom:1px solid #F3F4F6;vertical-align:top;color:#374151}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:#FAFBFF}
+.kv td{padding:9px 12px;border-bottom:1px solid #F3F4F6;vertical-align:top;font-size:.875rem}
+.kv td:first-child{font-weight:600;color:#6B7280;font-size:.75rem;text-transform:uppercase;letter-spacing:.04em;width:190px;white-space:nowrap}
+.kv tr:last-child td{border-bottom:none}
+.alert{color:#DC2626;font-weight:700}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;gap:4px;border-radius:6px;padding:2px 8px;font-size:.7rem;font-weight:600;white-space:nowrap}
+.b-blue{background:#EEF2FF;color:#4F46E5}
+.b-purple{background:#F5F3FF;color:#7C3AED}
+.b-green{background:#ECFDF5;color:#065F46}
+.b-amber{background:#FFFBEB;color:#B45309}
+.b-gray{background:#F3F4F6;color:#6B7280}
+.b-red{background:#FEF2F2;color:#991B1B}
+
+/* ── STAT ROW ── */
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:18px}
+.stat-card{background:#F8F9FF;border:1px solid #E0E7FF;border-radius:10px;padding:14px;text-align:center}
+.stat-n{font-size:1.7rem;font-weight:800;color:#1B6AFF;line-height:1.1;margin-bottom:5px}
+.stat-l{font-size:.75rem;color:#6B7280;line-height:1.4}
+.stat-s{font-size:.65rem;color:#9CA3AF;margin-top:5px}
+
+/* ── PERSON CARD ── */
+.person-card{border:1px solid #E5E7EB;border-radius:12px;padding:18px;margin-bottom:14px;position:relative;overflow:hidden}
+.person-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%}
+.pc-primary::before{background:#4F46E5}
+.pc-secondary::before{background:#7C3AED}
+.pc-watch::before{background:#F59E0B}
+.pc-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.pc-name{font-size:1rem;font-weight:700;color:#111827}
+.pc-role{font-size:.78rem;color:#6B7280;margin-top:2px}
+.signal-list{list-style:none;margin-top:8px}
+.signal-list li{display:flex;gap:8px;font-size:.85rem;color:#374151;padding:3px 0}
+.signal-list li::before{content:'→';color:#1B6AFF;font-weight:700;flex-shrink:0}
+.risk-list{list-style:none;margin-top:8px}
+.risk-list li{display:flex;gap:8px;font-size:.85rem;color:#374151;padding:3px 0}
+.risk-list li::before{content:'⚠';color:#F59E0B;flex-shrink:0}
+hr.div{border:none;border-top:1px solid #F3F4F6;margin:14px 0}
+
+/* ── SIGNAL STRIP ── */
+.sig-strip{display:flex;flex-direction:column;gap:9px}
+.sig-item{display:flex;align-items:flex-start;gap:11px;padding:11px 13px;background:#FAFBFF;border:1px solid #E8ECFF;border-radius:8px;font-size:.85rem}
+.sig-item strong{display:block;font-weight:700;color:#1A1D2E;margin-bottom:2px}
+.sig-item span{color:#6B7280}
+.sig-ico{font-size:1.1rem;flex-shrink:0;margin-top:1px}
+
+/* ── PROOF TABLE ── */
+.proof-best td{background:#F0F5FF!important}
+.proof-best td:first-child{border-left:3px solid #1B6AFF}
+
+/* ── VALIDATION HOMEWORK SECTION ── */
+.hw-section{background:#FFFBEB;border:2px solid #FDE68A;border-radius:12px;margin-bottom:16px;overflow:hidden;box-shadow:0 1px 4px rgba(245,158,11,.12)}
+.hw-section:hover{box-shadow:0 2px 10px rgba(245,158,11,.18)}
+.hw-sec-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;cursor:pointer;user-select:none;border-bottom:2px solid transparent;transition:background .15s,border-color .2s}
+.hw-sec-hdr:hover{background:#FEF3C7}
+.hw-section.open .hw-sec-hdr{border-bottom-color:#FDE68A}
+.hw-sec-left{display:flex;align-items:center;gap:12px}
+.hw-sec-icon{width:36px;height:36px;background:#FEF3C7;border:2px solid #F59E0B;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.hw-sec-title{font-size:.95rem;font-weight:700;color:#92400E}
+.hw-sec-sub{font-size:.75rem;color:#B45309;margin-top:1px}
+.hw-section .hw-chevron{width:18px;height:18px;color:#D97706;transition:transform .25s cubic-bezier(.4,0,.2,1);flex-shrink:0}
+.hw-section.open .hw-chevron{transform:rotate(180deg)}
+.hw-sec-body{padding:0 22px;max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.4,0,.2,1),padding .25s}
+.hw-section.open .hw-sec-body{max-height:9999px;padding:20px 22px 24px}
+.cb-item{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:#fff;border:1px solid #FDE68A;border-radius:10px;margin-bottom:10px;transition:background .2s,border-color .2s,opacity .2s}
+.cb-item:last-child{margin-bottom:0}
+.cb-item input[type=checkbox]{width:17px;height:17px;margin-top:3px;flex-shrink:0;cursor:pointer;accent-color:#D97706}
+.cb-content{flex:1;cursor:pointer}
+.cb-title{font-weight:700;font-size:.88rem;color:#92400E;display:flex;align-items:center;gap:8px;margin-bottom:3px;transition:color .2s}
+.cb-detail{font-size:.8rem;color:#6B7280;line-height:1.5}
+.cb-detail ul{padding-left:16px;margin-top:4px}
+.cb-detail li{margin-bottom:3px}
+.cb-item.checked{background:#FEF9EE;border-color:#FCD34D;opacity:.65}
+.cb-item.checked .cb-title{color:#B45309;text-decoration:line-through}
+.cb-item.checked .cb-detail{text-decoration:line-through;color:#9CA3AF}
+
+/* ── FOOTER ── */
+.footer{text-align:center;color:#9CA3AF;font-size:.75rem;margin-top:36px;padding-top:20px;border-top:1px solid #E5E7EB}
+
+@media(max-width:640px){
+  .hero{padding:28px 18px}
+  .hero h1{font-size:1.5rem}
+  .page{padding:16px 12px 48px}
+  .timeline-wrapper{padding:24px 16px 0}
+  .tl-node{min-width:120px}
+  .tl-circle{width:44px;height:44px;font-size:1.1rem}
+  .tl-track::after{top:22px;left:44px;right:44px}
+  .kv td:first-child{width:130px;white-space:normal}
+  .stat-row{grid-template-columns:1fr 1fr}
+}
+@media print{
+  body{background:#fff}
+  .hero{background:#0B0E27!important;-webkit-print-color-adjust:exact}
+  .section{box-shadow:none;border:1px solid #E5E7EB}
+  .sec-body{max-height:none!important;padding:20px 22px!important}
+  .tl-panel{display:block!important}
+  .chevron{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HERO ══ -->
+<div class="hero">
+  <div class="hero-badge"><span class="dot"></span>Champion Spark &nbsp;·&nbsp; Active Deal</div>
+  <h1>UPS</h1>
+  <div class="hero-subtitle">Champion Identification &amp; Relationship Development Brief</div>
+  <div class="hero-meta">
+    <div class="hero-chip"><span>ACV</span>TBD</div>
+    <div class="hero-chip"><span>Stage</span>2 — Qualification</div>
+    <div class="hero-chip"><span>SE Score</span>N/A</div>
+    <div class="hero-chip"><span>Close</span>Dec 12, 2026</div>
+    <div class="hero-chip"><span>AE</span>David Kim</div>
+    <div class="hero-chip"><span>SE</span>Shessvy Kelly</div>
+    <div class="hero-chip"><span>Prepared</span>May 14, 2026</div>
+    <a class="hero-sf-link" href="https://amplitude.my.salesforce.com/006Uw00000HJ9sGIAT" target="_blank" rel="noopener">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z"/></svg>
+      View in Salesforce
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+    </a>
+  </div>
+  <div class="hero-attribution">
+    <span class="ha-account">UPS</span>
+    <span class="ha-sep">·</span>
+    <span>Generated May 14, 2026 at 9:47 AM CDT</span>
+    <span class="ha-sep">·</span>
+    <span class="ha-ai">Champion Spark built for <strong>Jeff Dubois</strong> by Amplitude AI</span>
+  </div>
+</div>
+
+<!-- ══ PAGE ══ -->
+<div class="page">
+
+  <div class="section-label">Champion Relationship Timeline — Milin Shah · click any node to expand</div>
+
+  <!-- ══ TIMELINE ══ -->
+  <div class="timeline-wrapper">
+    <div class="tl-track">
+
+      <div class="tl-node type-spark1" id="n-spark1" onclick="togglePanel('spark1')">
+        <div class="tl-circle">⚡</div>
+        <div class="tl-week">Week 1</div>
+        <div class="tl-title">The Selection Bias Problem in SMB Analytics</div>
+        <div class="tl-desc">Insight tied to his known thought leadership — no ask</div>
+        <div class="tl-expand-hint">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          details
+        </div>
+      </div>
+
+      <div class="tl-node type-spark2" id="n-spark2" onclick="togglePanel('spark2')">
+        <div class="tl-circle">🎬</div>
+        <div class="tl-week">Week 2</div>
+        <div class="tl-title">Build the First-Shipment Funnel Together</div>
+        <div class="tl-desc">30-min working session on real UPS.com behavioral data</div>
+        <div class="tl-expand-hint">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          details
+        </div>
+      </div>
+
+      <div class="tl-node type-spark3" id="n-spark3" onclick="togglePanel('spark3')">
+        <div class="tl-circle">🗺️</div>
+        <div class="tl-week">Week 3–4</div>
+        <div class="tl-title">The One UPS Data Strategy Framework</div>
+        <div class="tl-desc">Co-authored benchmark Milin can present internally</div>
+        <div class="tl-expand-hint">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          details
+        </div>
+      </div>
+
+    </div><!-- /tl-track -->
+
+    <!-- ══ DETAIL PANELS ══ -->
+    <div class="tl-panels">
+
+      <!-- SPARK 1 PANEL -->
+      <div class="tl-panel panel-spark1" id="p-spark1">
+        <div class="panel-header">
+          <div class="panel-header-left">
+            <div class="panel-icon">⚡</div>
+            <div>
+              <div class="panel-title">Spark 1 — The Selection Bias Problem in SMB Analytics</div>
+              <div class="panel-subtitle">Week 1 · Email / No ask — send May 19–21</div>
+            </div>
+          </div>
+          <button class="cal-btn cal-btn-spark1" onclick="downloadICS('spark1')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Add to Calendar
+          </button>
+        </div>
+        <div class="arc-strip">
+          <span class="arc-tag arc-tag-format">📧 Email</span>
+          <span class="arc-tag arc-tag-commit">Zero commitment required</span>
+          <span class="arc-tag arc-tag-build">Builds on onsite AHA moment</span>
+        </div>
+        <p style="font-size:.875rem;color:#374151;">Milin was featured on FullStory's <em>Data Heroes</em> podcast specifically discussing <strong>selection bias in behavioral analytics</strong> — the trap of measuring only users who completed an action while ignoring those who started and disappeared. The SMB shipper drop-off problem UPS showed on the 13th is exactly this trap. Lead with his own intellectual frame, not Amplitude's product.</p>
+        <p style="font-size:.875rem;color:#374151;">Send Tuesday or Wednesday of the week of May 19 — enough breathing room after the onsite to feel natural. Keep it under 100 words. The goal is a reply, not a meeting.</p>
+        <div class="email-box">
+          <div class="email-label">Suggested Subject Line</div>
+          <div class="email-body">The thing about SMB drop-off data that's harder to see</div>
+        </div>
+        <div class="email-box">
+          <div class="email-label">Opening Draft</div>
+          <div class="email-body">Milin — you've written publicly about selection bias being the silent killer of behavioral data. What we saw in Wednesday's session is a version of that same trap in the SMB funnel: UPS measures shippers who complete a first booking, but the cohort that researched on UPS.com, visited a Store, and then vanished — that's the one that decides whether SMB is a real growth engine. I pulled a short data story on how a comparable logistics platform solved the attribution side of this problem. No ask — just context before you go back into the capability assessment.</div>
+        </div>
+        <p style="font-size:.8rem;color:#6B7280;">Note: Verify the FullStory Data Heroes podcast reference is confirmed UPS Milin (see Validation Homework #2) before sending. If uncertain, remove the podcast reference and lead directly with the SMB drop-off observation from the onsite.</p>
+        <div class="why-works"><strong>Why this builds trust, not pipeline pressure</strong>It acknowledges Milin's existing intellectual framework rather than imposing Amplitude's. It references the specific problem space he was already thinking about — selection bias, SMB retention — and treats him as a practitioner, not a prospect. The "no ask" framing respects his 3-month capability assessment timeline.</div>
+      </div><!-- /spark1 panel -->
+
+      <!-- SPARK 2 PANEL -->
+      <div class="tl-panel panel-spark2" id="p-spark2">
+        <div class="panel-header">
+          <div class="panel-header-left">
+            <div class="panel-icon">🎬</div>
+            <div>
+              <div class="panel-title">Spark 2 — Build the First-Shipment Funnel Together</div>
+              <div class="panel-subtitle">Week 2 · 30-min working session · send invite May 22–24</div>
+            </div>
+          </div>
+          <button class="cal-btn cal-btn-spark2" onclick="downloadICS('spark2')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Add to Calendar
+          </button>
+        </div>
+        <div class="arc-strip">
+          <span class="arc-tag arc-tag-format">🎥 Zoom / 30 min</span>
+          <span class="arc-tag arc-tag-commit">30 minutes of his time</span>
+          <span class="arc-tag arc-tag-build">Produces a shareable artifact</span>
+        </div>
+        <p style="font-size:.875rem;color:#374151;">The onsite showed the art of the possible. This session goes deeper on <em>Milin's</em> specific question: which SMB acquisition sources produce shippers worth retaining, and where in the first-shipment journey do high-intent shippers disappear? Shessvy brings a pre-built UPS.com journey analysis. Milin plays the role of expert, not audience — he validates or tears apart the data framing.</p>
+        <div class="email-box">
+          <div class="email-label">Invite / Hook Line</div>
+          <div class="email-body">30 min: Build the SMB first-shipment funnel together — I'll bring the pre-built version, you tell me if the framing is right.</div>
+        </div>
+        <div class="email-box">
+          <div class="email-label">Outreach Body</div>
+          <div class="email-body">Milin — the demo on the 13th showed what's possible with the SMB journey. I want to take 30 minutes to go specifically into your cohort: who completes a first shipment, what their prior UPS.com journey looked like, and which acquisition sources produce the shippers worth retaining vs. the ones who churn after one package. Tell me which of the three use cases is most urgent for the next 60 days and I'll bring a pre-built version you can validate or dismantle. You're the expert — I just want to show you what the data actually says.</div>
+        </div>
+        <div class="callout callout-blue">
+          <div class="callout-icon">🔧</div>
+          <div>
+            <div class="callout-title">Pre-session prep (Shessvy)</div>
+            <div class="callout-body">Before this session, build a UPS.com-flavored Pathfinder analysis showing paths from first web visit to first completed shipment, segmented by UTM source. Include one "winning" segment (e.g., organic search high-LTV) and one "leaking" segment (e.g., paid social low-retention). The goal is to have something real to react to — not a blank-canvas demo.</div>
+          </div>
+        </div>
+        <div class="why-works"><strong>Why co-creation beats a second demo</strong>Inviting Milin to validate (not just watch) positions him as the expert with Amplitude as a tool he's wielding. When he corrects or improves the framing, he's already owning the analytical lens. That ownership makes him more likely to defend it internally during the capability assessment.</div>
+      </div><!-- /spark2 panel -->
+
+      <!-- SPARK 3 PANEL -->
+      <div class="tl-panel panel-spark3" id="p-spark3">
+        <div class="panel-header">
+          <div class="panel-header-left">
+            <div class="panel-icon">🗺️</div>
+            <div>
+              <div class="panel-title">Spark 3 — The One UPS Data Strategy Framework</div>
+              <div class="panel-subtitle">Week 3–4 · Co-authored artifact Milin can present to Paige</div>
+            </div>
+          </div>
+          <button class="cal-btn cal-btn-spark3" onclick="downloadICS('spark3')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Add to Calendar
+          </button>
+        </div>
+        <div class="arc-strip">
+          <span class="arc-tag arc-tag-format">📄 Google Doc + 45-min session</span>
+          <span class="arc-tag arc-tag-commit">45 min + async review</span>
+          <span class="arc-tag arc-tag-build">Builds Milin's internal credibility</span>
+        </div>
+        <p style="font-size:.875rem;color:#374151;">Paige's quote — "We've always talked about one UPS, we've never really been able to do it" — gives Milin a framework problem to solve. This session produces a simple document: three questions UPS Digital should be able to answer about every SMB customer, and what the technical measurement layer would need to look like to answer them. Not an Amplitude pitch deck — a first-principles measurement framework with Milin's name on it.</p>
+        <p style="font-size:.875rem;color:#374151;">The artifact is designed to be shared: Milin can bring it into the capability assessment as his own framing for what the future state analytics stack needs to do, independent of which vendor wins.</p>
+        <div class="email-box">
+          <div class="email-label">Session Invite / Hook Line</div>
+          <div class="email-body">45 min: Co-author the One UPS measurement framework — something you'd actually use in the capability assessment, not something I'd want you to share</div>
+        </div>
+        <div class="email-box">
+          <div class="email-label">Outreach Body</div>
+          <div class="email-body">Milin — one thing Paige said on the 13th stuck with me: "We've always talked about one UPS, we've never really been able to do it." The measurement layer is exactly where that vision either becomes real or stays a slogan. I'd like to spend 45 minutes working with you on a simple framework: three questions UPS Digital should be able to answer about every SMB customer, and what it would take technically to answer them. Not an Amplitude sales document — something you'd actually use to frame scope for the capability assessment. If it's useful, it's yours. If it's not, we learned something together.</div>
+        </div>
+        <div class="callout callout-green">
+          <div class="callout-icon">🏆</div>
+          <div>
+            <div class="callout-title">The artifact Milin owns</div>
+            <div class="callout-body">Draft the framework as a short Google Doc with three sections: (1) The three questions every UPS Digital SMB initiative must be able to answer, (2) What the data layer needs to support them (warehouse-native, identity-stitched, cross-channel), (3) A maturity scoring rubric showing where UPS sits today vs. target state. Milin's name goes on it first. Amplitude's name, if anywhere, goes in the footer as "analytical support."</div>
+          </div>
+        </div>
+        <div class="why-works"><strong>Why ownership changes the dynamic</strong>When Milin presents a framework he co-authored — not a vendor's RFP response — to Paige Miller and the capability assessment team, he becomes Amplitude's internal advocate by default. The framework is vendor-agnostic in language but built around the capabilities Amplitude delivers. He owns the vision; Amplitude becomes the natural fit.</div>
+      </div><!-- /spark3 panel -->
+
+    </div><!-- /tl-panels -->
+  </div><!-- /timeline-wrapper -->
+
+  <!-- ══ VALIDATION HOMEWORK ══ -->
+  <div class="hw-section" id="hw">
+    <div class="hw-sec-hdr" onclick="toggleHW()">
+      <div class="hw-sec-left">
+        <div class="hw-sec-icon">⚠️</div>
+        <div>
+          <div class="hw-sec-title">Validation Homework — Trust But Verify</div>
+          <div class="hw-sec-sub">5 items to complete before Spark 1 goes out · Check each off as done</div>
+        </div>
+      </div>
+      <svg class="hw-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="hw-sec-body">
+
+      <div class="cb-item" id="cb1">
+        <input type="checkbox" id="chk1" onchange="toggleCheck('cb1')"/>
+        <div class="cb-content" onclick="document.getElementById('chk1').click()">
+          <div class="cb-title">Confirm Milin Shah's engagement level at the 5/13 onsite <span class="conf conf-med"><span class="conf-dot"></span>Medium confidence</span></div>
+          <div class="cb-detail">The onsite Granola notes confirm Milin attended but he is not directly quoted — most quotes come from Paige Miller and Matt Stanley. His Outreach engagement score updated same-day (5/13, score: 3) which is a positive signal but not enough to confirm he was an active participant vs. observer. Verify before building the champion arc around him.<ul><li>Ask Shessvy or David Kim: "What was Milin's energy in the room? Did he lean in during any specific demo moment?"</li><li>If Milin was quiet, reconsider Matt Standley as primary champion</li></ul></div>
+        </div>
+      </div>
+
+      <div class="cb-item" id="cb2">
+        <input type="checkbox" id="chk2" onchange="toggleCheck('cb2')"/>
+        <div class="cb-content" onclick="document.getElementById('chk2').click()">
+          <div class="cb-title">Verify the FullStory Data Heroes podcast reference is confirmed UPS Milin Shah <span class="conf conf-high"><span class="conf-dot"></span>High confidence</span></div>
+          <div class="cb-detail">FullStory's X post references "Milin Shah, Director of Data Strategy and MarTech Enablement at UPS." His current title is "Director, Digital Experience – Insights, MarTech and Data Strategy" — slightly different wording, same person, same company. Confirm before including the reference in Spark 1 outreach to avoid awkwardness.<ul><li>Cross-check LinkedIn (linkedin.com/in/milin-shah/) for podcast appearance or published data strategy writing</li><li>If uncertain, remove podcast reference from Spark 1 and lead directly with the SMB observation from the onsite</li></ul></div>
+        </div>
+      </div>
+
+      <div class="cb-item" id="cb3">
+        <input type="checkbox" id="chk3" onchange="toggleCheck('cb3')"/>
+        <div class="cb-content" onclick="document.getElementById('chk3').click()">
+          <div class="cb-title">Clarify whether Milin or Paige Miller owns the analytics tool budget <span class="conf conf-med"><span class="conf-dot"></span>Medium confidence</span></div>
+          <div class="cb-detail">Paige Miller (AI Incubation Lab) appears to be the executive sponsor and controls budget ("we finally got some money back"). Milin's role is likely to influence and recommend, not approve. The champion arc depends on this: if Paige owns budget, Milin needs to be positioned as the internal champion who sells Paige — not a standalone decision-maker.<ul><li>Ask David Kim: "Who owns the analytics tool line item in the UPS Digital budget — Paige's org or Milin's?"</li><li>If Paige owns it, add a 4th arc touchpoint focused on giving Milin materials to socialize upward</li></ul></div>
+        </div>
+      </div>
+
+      <div class="cb-item" id="cb4">
+        <input type="checkbox" id="chk4" onchange="toggleCheck('cb4')"/>
+        <div class="cb-content" onclick="document.getElementById('chk4').click()">
+          <div class="cb-title">Investigate why the prior two UPS opportunities closed lost <span class="conf conf-low"><span class="conf-dot"></span>Low confidence — critical to understand</span></div>
+          <div class="cb-detail">Two prior Amplitude opps at this account were closed lost: $700K in March 2024 (AE: Josh Lieppe) and $250K in February 2026 (AE: Adam Yapkowitz). This is the third attempt. Understanding the prior loss reasons is essential — Kaushal specifically said he evaluated Amplitude in 2022-23 and asked "what's changed."<ul><li>Pull Salesforce notes on both closed-lost opportunities (IDs: 0065b00000w96vcAAA and 006Uw00000JtyodIAB)</li><li>Ask Adam Yapkowitz: "What were the specific blockers in the Feb 2026 eval — was Milin involved?"</li><li>If Milin was involved in a prior loss, that changes the Spark 1 framing significantly</li></ul></div>
+        </div>
+      </div>
+
+      <div class="cb-item" id="cb5">
+        <input type="checkbox" id="chk5" onchange="toggleCheck('cb5')"/>
+        <div class="cb-content" onclick="document.getElementById('chk5').click()">
+          <div class="cb-title">Confirm DoorDash / Shopify customer references are approved for external use <span class="conf conf-med"><span class="conf-dot"></span>Medium confidence</span></div>
+          <div class="cb-detail">The Proof Points section uses DoorDash and Shopify as best-fit analogs for UPS. Before mentioning these companies to Milin, verify their current Amplitude customer status, any NDA restrictions, and whether a reference call is possible.<ul><li>Search Glean for "DoorDash case study Amplitude" and "Shopify reference"</li><li>Check Amplitude customer reference program or ask your CSM</li><li>If DoorDash is not referenceable, substitute with a Target or Booking.com reference for the cross-channel attribution story</li></ul></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ COLLAPSIBLE SECTIONS ══ -->
+  <div class="section-label" style="margin-top:28px">Account Context — click to expand</div>
+
+  <!-- 1. Account Snapshot -->
+  <div class="section t-blue" id="s1">
+    <div class="sec-hdr" onclick="toggleSec('s1')">
+      <div class="sec-left"><div class="sec-num">1</div><div><div class="sec-title">Account Snapshot</div><div class="sec-sub">Deal vitals, stack &amp; pressure points</div></div></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="sec-body">
+      <div class="stat-row">
+        <div class="stat-card"><div class="stat-n">$89.7B</div><div class="stat-l">2026 Revenue Target</div><div class="stat-s">UPS 4Q 2025 Earnings</div></div>
+        <div class="stat-card"><div class="stat-n">28.9%</div><div class="stat-l">U.S. Volume from SMBs (Q4 2024)</div><div class="stat-s">Primary growth segment</div></div>
+        <div class="stat-card"><div class="stat-n">3rd</div><div class="stat-l">Amplitude Evaluation at UPS</div><div class="stat-s">Prior losses: 2024 ($700K), Feb 2026 ($250K)</div></div>
+        <div class="stat-card"><div class="stat-n">~Aug '26</div><div class="stat-l">Business Capability Assessment</div><div class="stat-s">POC readiness decision follows</div></div>
+      </div>
+      <table class="tbl kv">
+        <tr><td>Industry</td><td>Freight &amp; Logistics Services</td></tr>
+        <tr><td>AE / SE</td><td>David Kim / Shessvy Kelly</td></tr>
+        <tr><td>SF Stage</td><td><span class="badge b-blue">2 — Qualification</span></td></tr>
+        <tr><td>Close Date</td><td>December 12, 2026</td></tr>
+        <tr><td>Primary Competition</td><td>Adobe CJA migration — $2M, 18-month timeline (same-vendor upgrade)</td></tr>
+        <tr><td>Budget Signal</td><td>"We finally got some money back" — Paige Miller, AI Incubation Lab (5/13)</td></tr>
+        <tr><td>Timeline Gate</td><td>Business capability assessment (~3 months, complete ~Aug 2026); POC decision follows</td></tr>
+        <tr><td>Franchise Blocker</td><td>UPS Store franchise data sharing constraints — limits "One UPS" cross-channel stitching in near term</td></tr>
+      </table>
+      <div class="callout callout-amber" style="margin-top:16px">
+        <div class="callout-icon">⚡</div>
+        <div>
+          <div class="callout-title">Strategic Context: The SMB Pivot is UPS's Existential Bet</div>
+          <div class="callout-body">UPS is actively removing Amazon delivery volume from its network and repositioning around SMBs (28.9% of U.S. volume), B2B shipments, and Healthcare logistics. This means UPS Digital urgently needs to understand which digital channels and experiences actually convert high-LTV SMB shippers — not just anonymous web visitors. This is Amplitude's core use case. The analytics conversation is not a nice-to-have; it's directly tied to UPS's three-year strategic plan.</div>
+        </div>
+      </div>
+      <p style="margin-top:16px;font-size:.875rem"><strong>Current Tech Stack:</strong></p>
+      <table class="tbl" style="margin-top:8px">
+        <thead><tr><th>Category</th><th>Tool</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Digital Analytics</td><td>Adobe Analytics</td><td><span class="badge b-red">Contract renewal decision pending — displacement target</span></td></tr>
+          <tr><td>CDP / Activation</td><td>BlueConic</td><td><span class="badge b-amber">Selected 2 years ago; review in ~6-8 months</span></td></tr>
+          <tr><td>Experimentation</td><td>Adobe Target</td><td><span class="badge b-gray">Tied to Adobe relationship</span></td></tr>
+          <tr><td>Session Replay</td><td>QuantumMetric</td><td><span class="badge b-gray">Replaced FullStory (discontinued)</span></td></tr>
+          <tr><td>Data Collection</td><td>Tealium</td><td><span class="badge b-gray">Tag management in use</span></td></tr>
+          <tr><td>Data Warehouse</td><td>Azure Databricks</td><td><span class="badge b-green">Primary — warehouse-native approach strongly preferred</span></td></tr>
+          <tr><td>Identity</td><td>C360 (Customer 360)</td><td><span class="badge b-gray">Enterprise unified ID; Encrypted UPS ID as secondary</span></td></tr>
+          <tr><td>Marketing Automation</td><td>Marketo</td><td><span class="badge b-gray">Lead gen / demand gen</span></td></tr>
+          <tr><td>CRM</td><td>Salesforce</td><td><span class="badge b-gray">Enterprise CRM</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 2. Champion Hypothesis -->
+  <div class="section t-purple" id="s2">
+    <div class="sec-hdr" onclick="toggleSec('s2')">
+      <div class="sec-left"><div class="sec-num">2</div><div><div class="sec-title">Champion Hypothesis</div><div class="sec-sub">Primary and secondary candidates with supporting evidence</div></div></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="sec-body">
+      <div class="person-card pc-primary">
+        <div class="pc-head">
+          <div>
+            <div class="pc-name">Milin Shah</div>
+            <div class="pc-role">Director, Digital Experience – Insights, MarTech &amp; Data Strategy · UPS · mshah@ups.com</div>
+          </div>
+          <span class="badge b-blue">Primary Champion</span>
+        </div>
+        <p style="font-size:.875rem;color:#374151;margin-bottom:10px">Milin owns the exact three pillars Amplitude touches: <strong>Insights</strong> (analytics), <strong>MarTech</strong> (activation), and <strong>Data Strategy</strong> (architecture). He is not just a stakeholder — he is the person whose job description is to make the "One UPS" analytics vision real. If Amplitude wins, Milin is the one who championed it. If Adobe wins, Milin defended the status quo. This deal is personal for him in the best way possible.</p>
+        <ul class="signal-list">
+          <li>Highest Outreach engagement score (3) among named UPS prospects — at SAL stage as of 5/13/26</li>
+          <li>Featured on FullStory's <em>Data Heroes</em> podcast on selection bias in behavioral analytics — signals thought leadership, practitioner credibility, and public voice</li>
+          <li>UPS replaced FullStory with QuantumMetric under his watch — he has already led a behavioral analytics vendor transition and knows the cost of getting it wrong</li>
+          <li>Based in Alpharetta, GA — UPS HQ proximity means decision-influencing access to Paige Miller and the executive team</li>
+          <li>Zoom call attendee for the onsite (mshah@ups.com confirmed) — active participant, not just an invitee</li>
+          <li>LinkedIn profile describes ability to "understand the nuts and bolts of complex technology and market it internally" — exactly the champion profile needed</li>
+        </ul>
+        <hr class="div"/>
+        <p style="font-size:.8rem;color:#6B7280"><strong>Champion risk to verify:</strong> Milin is not directly quoted in the onsite meeting notes — primary quotes came from Paige and Matt. Confirm with Shessvy/David Kim whether he was vocal or primarily observing. His engagement score updated same-day 5/13, which is a positive signal. See Validation Homework #1.</p>
+      </div>
+
+      <div class="person-card pc-secondary">
+        <div class="pc-head">
+          <div>
+            <div class="pc-name">Matt Standley</div>
+            <div class="pc-role">Digital Analytics &amp; MarTech · 22 Years at UPS</div>
+          </div>
+          <span class="badge b-purple">Secondary Champion</span>
+        </div>
+        <p style="font-size:.875rem;color:#374151;margin-bottom:10px">Matt is the institutional memory of UPS's digital analytics history. His transparency at the onsite — "my view of Amplitude is very narrow, I'm curious to see the big picture" — signals genuine intellectual honesty, not defensiveness. 22 years at UPS means his endorsement carries weight with IT, architecture, and the executive team when it comes to legacy vendor decisions.</p>
+        <ul class="signal-list">
+          <li>Self-disclosed curiosity about Amplitude's full platform beyond analytics — open mind going in</li>
+          <li>22 years of institutional credibility makes him the most trusted technical validator for a vendor change decision</li>
+          <li>At SAL stage in Outreach — meaningfully engaged post-onsite</li>
+          <li>Direct peer to Milin in the digital analytics/martech org — if both align, the internal recommendation is significantly stronger</li>
+        </ul>
+      </div>
+
+      <div class="person-card pc-watch">
+        <div class="pc-head">
+          <div>
+            <div class="pc-name">Paige Miller</div>
+            <div class="pc-role">AI Incubation Lab &amp; Tech Strategy · UPS</div>
+          </div>
+          <span class="badge b-amber">Executive Sponsor — Keep Warm, Do Not Champion-ize</span>
+        </div>
+        <p style="font-size:.875rem;color:#374151;margin-bottom:10px">Paige controls the vision ("One UPS") and the budget ("we finally got some money back"). Do <strong>not</strong> try to make Paige a technical champion — she is the executive mobilizer. Keep her warm through David Kim and Adam Yapkowitz. The Milin/Matt champion arc feeds Paige, not the other way around.</p>
+        <ul class="risk-list">
+          <li>Her 3-month business capability assessment is the primary timeline gate — any POC scope depends on its output (~August 2026)</li>
+          <li>UPS AI governance team is directing toward WatsonX as primary AI platform — monitor for conflict with Amplitude AI story positioning</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. AHA Moment -->
+  <div class="section t-indigo" id="s3">
+    <div class="sec-hdr" onclick="toggleSec('s3')">
+      <div class="sec-left"><div class="sec-num">3</div><div><div class="sec-title">The AHA Moment That Landed</div><div class="sec-sub">Pathfinder + cross-channel attribution — the One UPS unlock</div></div></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="sec-body">
+      <blockquote>
+        "We've always talked about one UPS of this company. We've never really been able to do it."
+        <cite>— Paige Miller, AI Incubation Lab · UPS Onsite, May 13, 2026</cite>
+      </blockquote>
+      <p style="font-size:.875rem;color:#374151">The AHA moment was the <strong>Pathfinder + Cross-Channel Attribution demo</strong> — specifically the moment the team saw how Amplitude could connect SMB shipper behavior across UPS.com, the UPS Store, and the app into a single user journey, then segment by acquisition source to identify which channels produce the highest-LTV shippers and where high-intent users disappear.</p>
+      <p style="font-size:.875rem;color:#374151">For Milin, this was visceral: he owns MarTech &amp; Data Strategy, and UPS currently stitches this data manually with a 2-day offline delay and no person-level view. Seeing it happen in near real-time, warehouse-native, without copying data into another vendor's cloud — that is the precise gap his job title exists to close.</p>
+      <div class="callout callout-blue">
+        <div class="callout-icon">💡</div>
+        <div>
+          <div class="callout-title">The specific unlock Amplitude demonstrated</div>
+          <div class="callout-body">UPS has SMB shippers who research on UPS.com, visit a UPS Store, and then either book in the app or drop off entirely. Nobody at UPS can currently see that full cross-channel journey. Amplitude showed that view in 90 minutes using a custom UPS.com demo environment with real behavioral data. That capability is exactly what Adobe Analytics' separate web/app data model cannot deliver — and Milin knows it because FullStory couldn't either.</div>
+        </div>
+      </div>
+      <div class="callout callout-green">
+        <div class="callout-icon">🤖</div>
+        <div>
+          <div class="callout-title">Mohamed's AI signal — secondary but important for Milin's internal case</div>
+          <div class="callout-body">Mohamed (AI team, 3 years at UPS) specifically called out agentic analytics and predictive friction detection as areas of interest. He is not a primary champion candidate, but he is an internal AI advocate who can help Milin build the business case — especially given UPS's active AI governance work. Make Amplitude's AI story accessible to Mohamed through Milin's champion arc, not as a separate track.</div>
+        </div>
+      </div>
+      <p style="font-size:.875rem;color:#374151;margin-top:14px"><strong>Why this moment matters for the champion arc specifically:</strong> Milin was featured on FullStory's Data Heroes podcast specifically discussing selection bias in digital analytics data — the trap of measuring only users who completed an action. The SMB shipper drop-off funnel is exactly this problem. When you reconnect with Milin through his own intellectual frame (selection bias → SMB retention) rather than Amplitude's product frame (analytics platform), you give him intellectual ownership of the insight. That ownership makes him far more likely to carry it into the capability assessment as his own strategic perspective.</p>
+    </div>
+  </div>
+
+  <!-- 4. Stakeholder Map -->
+  <div class="section t-teal" id="s4">
+    <div class="sec-hdr" onclick="toggleSec('s4')">
+      <div class="sec-left"><div class="sec-num">4</div><div><div class="sec-title">Stakeholder Map</div><div class="sec-sub">12 contacts from the 5/13 onsite — roles, interests, and how to move them</div></div></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="sec-body">
+      <table class="tbl">
+        <thead><tr><th>Name</th><th>Title</th><th>Primary Focus at Onsite</th><th>Signal / Role</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Paige Miller</strong></td><td>AI Incubation Lab / Tech Strategy</td><td>Executive sponsor; owns "One UPS" vision and budget; tech stack rationalization</td><td><span class="badge b-green">Executive air cover</span></td></tr>
+          <tr><td><strong>Milin Shah</strong></td><td>Director, Digital Experience – Insights, MarTech &amp; Data Strategy</td><td>Data strategy, tool rationalization, vendor evaluation leadership</td><td><span class="badge b-blue">Primary champion target</span></td></tr>
+          <tr><td><strong>Matt Standley</strong></td><td>Digital Analytics &amp; MarTech (22 yrs)</td><td>Wants full platform picture beyond analytics; 22 yrs institutional credibility</td><td><span class="badge b-purple">Secondary champion</span></td></tr>
+          <tr><td><strong>Kaushal</strong></td><td>MarTech Capabilities (7+ yrs)</td><td>Evaluated Amplitude 2022-23; wants evidence of what's changed</td><td><span class="badge b-amber">Skeptic — needs "what's new" narrative</span></td></tr>
+          <tr><td><strong>Mohamed Kader</strong></td><td>AI Team (3 yrs)</td><td>Agentic analytics, predictive friction detection</td><td><span class="badge b-blue">AI use case advocate</span></td></tr>
+          <tr><td><strong>Jamie Lopez</strong></td><td>Application Architect / Solutions Architect, Commercial Technology</td><td>Vendor evaluation, POC architecture, solution review</td><td><span class="badge b-green">Technical validator for POC</span></td></tr>
+          <tr><td><strong>Jill Mulcay</strong></td><td>Marketing Manager, Digital Marketing Operations</td><td>Person-level buyer intent from external platforms arriving at UPS properties</td><td><span class="badge b-blue">MarOps use case owner</span></td></tr>
+          <tr><td><strong>Farhan Pervez</strong></td><td>Director of Apps Development</td><td>Architecture fit, Azure/Databricks integration</td><td><span class="badge b-gray">Technical gatekeeper</span></td></tr>
+          <tr><td><strong>Lexi Wertz</strong></td><td>Digital Experience (5 yrs)</td><td>Real-time personalization and on-the-fly segmentation</td><td><span class="badge b-blue">Power user candidate</span></td></tr>
+          <tr><td><strong>Jennifer Griffith</strong></td><td>Area Sales Manager</td><td>Field sales / SMB shipper context</td><td><span class="badge b-gray">Observer</span></td></tr>
+          <tr><td><strong>David Massey</strong></td><td>Adjunct Professor, SCAD</td><td>Design / UX research lens</td><td><span class="badge b-gray">Observer / Design angle</span></td></tr>
+          <tr><td><strong>Brandon Ngo</strong></td><td>Unknown</td><td>Attended onsite</td><td><span class="badge b-gray">Needs title confirmation</span></td></tr>
+        </tbody>
+      </table>
+      <div class="callout callout-amber" style="margin-top:14px">
+        <div class="callout-icon">⚠️</div>
+        <div>
+          <div class="callout-title">Kaushal: the prior-eval skeptic who matters most</div>
+          <div class="callout-body">Kaushal was involved in the 2022-23 Amplitude evaluation and specifically asked "what's changed." He is not hostile — he's rigorous. Make sure Milin has a clear, prepared answer to "what's new since 2023" before any next meeting. Key delta narrative: warehouse-native approach (new), Statsig acquisition / experimentation platform (new), Amplitude AI / Global Agent (new), and CDP composability with BlueConic (new integration story). If Kaushal becomes an internal skeptic during the capability assessment, it could block Milin's champion arc. Pre-arm Milin with the "what's changed" narrative in Spark 2.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Industry Intelligence -->
+  <div class="section t-amber" id="s5">
+    <div class="sec-hdr" onclick="toggleSec('s5')">
+      <div class="sec-left"><div class="sec-num">5</div><div><div class="sec-title">Industry &amp; External Intelligence</div><div class="sec-sub">Market context, account signals, and challenger ammunition</div></div></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="sec-body">
+      <div class="sig-strip">
+        <div class="sig-item">
+          <span class="sig-ico">📦</span>
+          <div><strong>The SMB Pivot is Real, Urgent, and Underpinned by Analytics</strong><span>UPS is actively removing Amazon delivery volume and pivoting to SMBs (28.9% of U.S. volume in Q4 2024), B2B, and Healthcare. UPS expects revenue per package to increase 6.5% in 2026. The digital team must demonstrate which acquisition channels and customer journeys convert high-value SMB shippers — this is not a vanity analytics project. Amplitude's SMB funnel use case is directly tied to the company's three-year financial targets.</span></div>
+        </div>
+        <div class="sig-item">
+          <span class="sig-ico">💰</span>
+          <div><strong>Adobe CJA = $2M / 18 Months — The Real Competitive Frame</strong><span>UPS is not evaluating Amplitude against Mixpanel or GA4. The real alternative is a full migration to Adobe Customer Journey Analytics at $2M and 18 months within an existing vendor relationship. Amplitude's value proposition is: faster time-to-insight (weeks, not 18 months), warehouse-native without data movement costs, and no same-vendor lock-in risk. The challenger frame: staying Adobe means betting $2M on a 2024 roadmap. Amplitude lets UPS own the data layer independently.</span></div>
+        </div>
+        <div class="sig-item">
+          <span class="sig-ico">🏭</span>
+          <div><strong>Warehouse-Native is Not Just a Preference — It's a Cost Filter</strong><span>"Every vendor that is now a CDP — the cost of copying over that data" was a direct objection in the room. UPS runs on Azure Databricks and has been burned by data movement costs before. Amplitude's zero-copy, warehouse-native approach is not a feature differentiator at UPS — it is a pre-condition for even being considered. Every conversation must reinforce this.</span></div>
+        </div>
+        <div class="sig-item">
+          <span class="sig-ico">🤖</span>
+          <div><strong>AI Governance is in Formation — Position Correctly</strong><span>UPS's AI governance team is directing toward WatsonX as the primary enterprise AI platform, but policy explicitly permits SaaS vendor AI tools. Amplitude's AI story (Global Agent, agentic analytics, predictive friction detection) should be positioned as a SaaS analytics AI layer — not an enterprise AI platform competitor. Mohamed's enthusiasm for agentic analytics gives Milin internal justification to include it in the capability assessment scope.</span></div>
+        </div>
+        <div class="sig-item">
+          <span class="sig-ico">🔄</span>
+          <div><strong>Third Evaluation — The Narrative Needs to Be Different This Time</strong><span>Two prior Amplitude opportunities at this account closed lost: $700K in March 2024 and $250K in February 2026. The May 13 onsite is a strong re-engagement signal but this is not a first impression. Kaushal was in the room for the 2022-23 eval. The current deal needs either a different problem frame (SMB pivot is new), different stakeholders as champions, or a demonstrably different product story. All three may be true now — but the team must verify what specifically caused prior losses before repeating the same approach.</span></div>
+        </div>
+        <div class="sig-item">
+          <span class="sig-ico">🏪</span>
+          <div><strong>UPS Store Franchise Data Walls: The Hidden Scope Constraint</strong><span>"Data share has been the biggest challenge with the UPS store footprint" — franchise data protection is a legal and contractual barrier to connecting in-store (UPS Store franchise) data with corporate digital data. Any POC scope must treat this constraint as a given, not a future problem to solve. Position Amplitude's warehouse-native approach as the architecture that makes in-store data integration possible <em>when</em> the franchise governance question is resolved — not as a vendor that can fix the governance problem itself.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Proof Points -->
+  <div class="section t-teal" id="s6">
+    <div class="sec-hdr" onclick="toggleSec('s6')">
+      <div class="sec-left"><div class="sec-num">6</div><div><div class="sec-title">Amplitude Proof Points</div><div class="sec-sub">Best customer analogs by persona and use case — verify before use</div></div></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="sec-body">
+      <p style="font-size:.875rem;color:#374151;margin-bottom:12px">Best-fit customer analogs for Milin Shah's champion conversation, prioritized by logistics/SMB/omnichannel use case match:</p>
+      <table class="tbl">
+        <thead><tr><th>Customer</th><th>Vertical</th><th>Use Case Match</th><th>Relevance to Milin</th></tr></thead>
+        <tbody>
+          <tr class="proof-best"><td><strong>DoorDash</strong></td><td>Delivery / Logistics</td><td>Behavioral analytics for delivery and merchant journeys; experimentation at scale</td><td>Closest logistics analog — cross-channel journey + SMB (merchant) segment analytics mirrors UPS's SMB pivot</td></tr>
+          <tr class="proof-best"><td><strong>Shopify</strong></td><td>SMB Platform</td><td>Product analytics for millions of SMB merchants; cohort analysis, acquisition-to-retention funnels</td><td>SMB acquisition and retention analytics at scale — maps directly to UPS's SMB growth objective</td></tr>
+          <tr><td><strong>Target</strong></td><td>Retail / Omnichannel</td><td>Cross-channel attribution, warehouse-native analytics, digital + physical touchpoint stitching</td><td>Omnichannel identity stitching story — mirrors UPS's web + store + app challenge</td></tr>
+          <tr><td><strong>Walmart</strong></td><td>Retail / Enterprise</td><td>Enterprise-scale product analytics, multi-business-unit rollout</td><td>Enterprise complexity with multiple BUs and disparate data — mirrors UPS's fragmented BU challenge directly</td></tr>
+          <tr><td><strong>Booking.com</strong></td><td>Travel / Digital Commerce</td><td>Cross-channel attribution at billion-visit scale; multi-touch funnel analysis</td><td>Scale match: UPS.com handles 1B+ visits/month — Booking.com-scale is a credible reference point for Farhan's architecture concerns</td></tr>
+        </tbody>
+      </table>
+      <div class="callout callout-blue" style="margin-top:14px">
+        <div class="callout-icon">🎯</div>
+        <div>
+          <div class="callout-title">Lead with DoorDash for Milin — if referenceable</div>
+          <div class="callout-body">DoorDash is the closest analog: logistics delivery business, SMB merchant segment (equivalent to UPS's SMB shipper), cross-channel behavioral data, experimentation at scale. If Amplitude has a DoorDash case study or reference contact, this is the one to put in front of Milin in Spark 1. Verify current customer and reference status before using. See Validation Homework #5.</div>
+        </div>
+      </div>
+      <div class="callout callout-amber" style="margin-top:10px">
+        <div class="callout-icon">🔧</div>
+        <div>
+          <div class="callout-title">For Kaushal's "what's changed" objection</div>
+          <div class="callout-body">The product delta since Kaushal's 2022-23 eval is substantial. Lead with: (1) Statsig acquisition — native experimentation without a third vendor, (2) Warehouse-native / Databricks-first architecture — zero-copy, no data movement cost, (3) Amplitude AI / Global Agent — natural language analytics any UPS analyst can use without SQL, (4) CDP composability — works alongside BlueConic rather than replacing it. Have Milin ready with this narrative before any broader stakeholder meeting.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. Verify Before You Use -->
+  <div class="section t-red" id="s7">
+    <div class="sec-hdr" onclick="toggleSec('s7')">
+      <div class="sec-left"><div class="sec-num">7</div><div><div class="sec-title">Verify Before You Use</div><div class="sec-sub">Summary of Validation Homework — full detail in the amber section above</div></div></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="sec-body">
+      <div class="sig-strip">
+        <div class="sig-item">
+          <span class="sig-ico">☐</span>
+          <div><strong>Milin Shah's engagement level at the 5/13 onsite</strong><span>He attended but is not directly quoted in meeting notes. Confirm with Shessvy or David Kim that he was an active participant, not just an observer, before building a 3-week arc around him. If he was primarily observing, consider Matt Standley as primary champion.</span></div>
+        </div>
+        <div class="sig-item">
+          <span class="sig-ico">☐</span>
+          <div><strong>FullStory Data Heroes podcast reference</strong><span>High confidence but confirm before using in outreach. The X post wording differs slightly from his current title. Verify via LinkedIn or by asking the account team who met him in person.</span></div>
+        </div>
+        <div class="sig-item">
+          <span class="sig-ico">☐</span>
+          <div><strong>Budget ownership — Milin vs. Paige Miller</strong><span>Paige appears to own the budget ("we finally got some money back"). Confirm with David Kim whether Milin has direct budget authority or whether he recommends to Paige. This changes the framing of Spark 3 significantly.</span></div>
+        </div>
+        <div class="sig-item">
+          <span class="sig-ico">☐</span>
+          <div><strong>Prior closed-lost context</strong><span>Two prior losses ($700K/2024, $250K/Feb 2026) at this account. Pull Salesforce notes on both and ask Adam Yapkowitz what blocked the Feb 2026 deal. If Milin was involved in a prior loss, the champion arc requires a "different this time" narrative hook.</span></div>
+        </div>
+        <div class="sig-item">
+          <span class="sig-ico">☐</span>
+          <div><strong>DoorDash and Shopify reference availability</strong><span>Both are used as proof point analogs in this brief. Verify their current Amplitude customer status and reference program eligibility before mentioning them to Milin. Check Glean or your CSM.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p><strong>Champion Spark — UPS</strong> · May 14, 2026 · Confidential — Internal Use Only</p>
+    <p style="margin-top:6px">Sources: Granola (UPS Onsite 5/13/26, UPS Prep Sync 5/11/26, UPS Prep 5/7/26) · Salesforce (Opp: 006Uw00000HJ9sGIAT) · Outreach (Account ID: 9712) · Slack #ZC:UPS|Land · Web: UPS 4Q 2025 Earnings, FullStory Data Heroes, Supply Chain Dive, Digital Commerce 360</p>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+function togglePanel(id) {
+  const node = document.getElementById('n-' + id);
+  const panel = document.getElementById('p-' + id);
+  const isOpen = panel.classList.contains('open');
+  document.querySelectorAll('.tl-panel').forEach(p => p.classList.remove('open'));
+  document.querySelectorAll('.tl-node').forEach(n => n.classList.remove('active'));
+  if (!isOpen) {
+    panel.classList.add('open');
+    node.classList.add('active');
+    panel.scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+}
+
+function toggleSec(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+function toggleHW() {
+  document.getElementById('hw').classList.toggle('open');
+}
+
+function toggleCheck(cbId) {
+  const item = document.getElementById(cbId);
+  const chk = item.querySelector('input[type=checkbox]');
+  if (chk.checked) {
+    item.classList.add('checked');
+  } else {
+    item.classList.remove('checked');
+  }
+}
+
+document.querySelectorAll('.tl-node, .sec-hdr, .hw-sec-hdr').forEach(el => {
+  el.setAttribute('tabindex','0');
+  el.setAttribute('role','button');
+  el.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
+  });
+});
+
+function downloadICS(spark) {
+  const pad = n => String(n).padStart(2,'0');
+
+  const configs = {
+    spark1: {
+      file: 'champion-spark-1-ups-milin-shah',
+      summary: 'Champion Spark 1: Selection Bias Insight Email → Milin Shah (UPS)',
+      start: '20260520T140000Z',
+      end:   '20260520T141500Z',
+      desc:  'Send Milin Shah the Selection Bias insight email — no ask, reference his FullStory Data Heroes podcast and the SMB drop-off problem from the 5/13 onsite.',
+      location: 'Email / Outreach'
+    },
+    spark2: {
+      file: 'champion-spark-2-ups-milin-shah',
+      summary: 'Champion Spark 2: Build SMB First-Shipment Funnel — 30 min w/ Milin Shah (UPS)',
+      start: '20260527T150000Z',
+      end:   '20260527T153000Z',
+      desc:  '30-min working session with Milin Shah to co-build the UPS SMB first-shipment funnel in Amplitude. Shessvy brings pre-built Pathfinder analysis; Milin validates or tears apart the data framing.',
+      location: 'Zoom'
+    },
+    spark3: {
+      file: 'champion-spark-3-ups-milin-shah',
+      summary: 'Champion Spark 3: One UPS Data Strategy Framework — 45 min w/ Milin Shah (UPS)',
+      start: '20260603T150000Z',
+      end:   '20260603T154500Z',
+      desc:  'Co-author The One UPS Data Strategy Framework with Milin Shah — a vendor-agnostic measurement framework he can present internally during the capability assessment. His name goes on it first.',
+      location: 'Zoom'
+    }
+  };
+
+  const c = configs[spark];
+  const uid = `champion-spark-ups-${spark}-${Date.now()}@amplitude.com`;
+  const now = new Date().toISOString().replace(/[-:]/g,'').split('.')[0] + 'Z';
+
+  const ics = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Champion Spark//Amplitude//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'BEGIN:VEVENT',
+    `UID:${uid}`,
+    `DTSTAMP:${now}`,
+    `DTSTART:${c.start}`,
+    `DTEND:${c.end}`,
+    `SUMMARY:${c.summary}`,
+    `DESCRIPTION:${c.desc}`,
+    `LOCATION:${c.location}`,
+    'STATUS:CONFIRMED',
+    'END:VEVENT',
+    'END:VCALENDAR'
+  ].join('\r\n');
+
+  const blob = new Blob([ics], {type:'text/calendar;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${c.file}.ics`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
