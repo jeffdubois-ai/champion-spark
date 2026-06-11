@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LATAM +1 SE — Business Case · Amplitude 2026</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0a0a0f;color:#e2e8f0;line-height:1.55;padding-top:50px;padding-bottom:68px;font-size:14px}
+
+/* ── sticky nav ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,15,.97);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid #1e293b;display:flex;align-items:center;height:50px;padding:0 28px;overflow-x:auto;gap:4px;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+.nav-brand{font-size:12px;font-weight:800;color:#fff;padding-right:16px;border-right:1px solid #1e293b;margin-right:6px;white-space:nowrap;flex-shrink:0}
+nav a{color:#64748b;text-decoration:none;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;padding:5px 12px;height:34px;display:flex;align-items:center;white-space:nowrap;border-radius:6px;transition:color .15s,background .15s;flex-shrink:0;cursor:pointer}
+nav a:hover{color:#e2e8f0;background:rgba(255,255,255,.06)}
+nav a.active{color:#60a5fa;background:rgba(59,130,246,.14);font-weight:700}
+
+/* ── progress bar ── */
+#progress-bar{position:fixed;top:50px;left:0;height:2px;background:linear-gradient(to right,#3b82f6,#7c3aed);transition:width .3s ease;z-index:99}
+
+/* ── slides ── */
+.slide{display:none;max-width:1300px;margin:0 auto;padding:32px 32px 20px}
+.slide.active{display:block;animation:fadeUp .22s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── section label ── */
+.section-label{font-size:12px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.7px;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.section-label::after{content:'';flex:1;height:1px;background:#1e293b}
+
+/* ── fixed footer ── */
+#slide-footer{position:fixed;bottom:0;left:0;right:0;height:58px;background:rgba(10,10,15,.97);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid #1e293b;display:flex;align-items:center;justify-content:space-between;padding:0 28px;z-index:100}
+.footer-btn{background:#0f172a;border:1px solid #1e293b;color:#94a3b8;font-size:13px;font-weight:600;padding:8px 20px;border-radius:8px;cursor:pointer;transition:all .15s;letter-spacing:.2px}
+.footer-btn:hover:not(:disabled){background:#1e293b;color:#fff;border-color:#334155}
+.footer-btn:disabled{opacity:.25;cursor:not-allowed}
+.footer-btn.primary{background:linear-gradient(135deg,#1d4ed8,#7c3aed);border-color:transparent;color:#fff}
+.footer-btn.primary:hover:not(:disabled){opacity:.9}
+.footer-center{display:flex;flex-direction:column;align-items:center;gap:3px}
+.footer-counter{font-size:11px;font-weight:600;color:#475569;letter-spacing:.4px}
+.footer-title{font-size:13px;font-weight:700;color:#94a3b8}
+.footer-dots{display:flex;gap:5px;margin-top:2px}
+.footer-dot{width:6px;height:6px;border-radius:50%;background:#1e293b;transition:background .2s,transform .2s;cursor:pointer}
+.footer-dot.active{background:#3b82f6;transform:scale(1.3)}
+
+/* ── grids ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+
+/* ── kpi cards ── */
+.kpi{background:#0f172a;border:1px solid #1e293b;border-radius:10px;padding:17px 20px}
+.kpi.r{border-color:#7f1d1d}.kpi.g{border-color:#166534}.kpi.b{border-color:#1e3a5f}.kpi.a{border-color:#78350f}.kpi.p{border-color:#3b0764}.kpi.t{border-color:#134e4a}
+.kpi-label{font-size:11px;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px}
+.kpi-val{font-size:30px;font-weight:800;line-height:1}
+.kpi.r .kpi-val{color:#f87171}.kpi.g .kpi-val{color:#4ade80}.kpi.b .kpi-val{color:#60a5fa}.kpi.a .kpi-val{color:#fbbf24}.kpi.p .kpi-val{color:#c4b5fd}.kpi.t .kpi-val{color:#5eead4}
+.kpi-sub{font-size:12px;color:#475569;margin-top:6px;line-height:1.45}
+
+/* ── cards ── */
+.card{background:#0f172a;border:1px solid #1e293b;border-radius:12px;padding:20px 24px}
+.card.warn{border-color:#7f1d1d;background:#0c0808}
+.card.info{border-color:#1e3a5f;background:#07101c}
+
+/* ── tables ── */
+table{width:100%;border-collapse:collapse}
+thead th{font-size:11px;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:.4px;padding:9px 14px;background:#0f172a;border-bottom:1px solid #1e293b;text-align:left}
+thead th.r{text-align:right}
+tbody tr{border-bottom:1px solid #0a0a0f}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:rgba(255,255,255,.015)}
+tbody td{font-size:13px;padding:9px 14px;color:#cbd5e1}
+tbody td.acct{font-weight:600;color:#f1f5f9;font-size:13px}
+tbody td.arr{text-align:right;font-weight:700;color:#e2e8f0;font-size:13px}
+tbody td.arr.sm{color:#64748b}
+tbody td.muted{font-size:12px;color:#64748b}
+.grp-row td{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:6px 14px;background:#070710;color:#475569}
+tr.total-row td{font-weight:800;color:#fff;background:#0f172a;border-top:1px solid #334155;font-size:13px}
+tr.alert-row td{color:#fca5a5;background:rgba(248,113,113,.04)}
+
+/* ── stage badges ── */
+.sb{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;white-space:nowrap}
+.s0,.s1{background:#1e293b;color:#94a3b8}.s2{background:#1e3a2e;color:#86efac}.s3{background:#78350f;color:#fde68a}.s4{background:#3b0764;color:#ddd6fe}.s5{background:#1e3a5f;color:#93c5fd}.s6{background:#14532d;color:#4ade80}
+
+/* ── se pills ── */
+.se{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px}
+.se-ev{background:#78350f;color:#fde68a}
+.se-bm{background:#1e3a5f;color:#93c5fd}
+.se-ag{background:#134e4a;color:#5eead4}
+.se-bp{background:#3b0764;color:#c4b5fd}
+
+/* ── scorecard ── */
+.scorecard{border:1px solid #1e293b;border-radius:12px;overflow:hidden}
+.sc-hdr{display:grid;grid-template-columns:220px 1fr 1fr;background:#0a0f1a;border-bottom:1px solid #1e293b}
+.sc-hdr-cell{padding:11px 16px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#475569}
+.sc-hdr-cell.latam{background:#1a0a2e;color:#c4b5fd;border-left:1px solid #2d1065}
+.sc-hdr-cell.east{background:#0a1020;color:#60a5fa;border-left:1px solid #1e3a5f}
+.sc-row{display:grid;grid-template-columns:220px 1fr 1fr;border-bottom:1px solid #0a0a0f}
+.sc-row:last-child{border-bottom:none}
+.sc-metric{padding:11px 16px;font-size:13px;color:#64748b;display:flex;align-items:center}
+.sc-val{padding:11px 16px;font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.sc-val.latam{background:#0d0617;color:#c4b5fd;border-left:1px solid #1e0d3b}
+.sc-val.east{background:#060d18;color:#60a5fa;border-left:1px solid #0d1a2e}
+.sc-val.latam.bad{color:#f87171}.sc-val.east.good{color:#4ade80}.sc-val.latam.warn{color:#fbbf24}
+.tag{font-size:11px;font-weight:600;padding:2px 7px;border-radius:4px;white-space:nowrap}
+.tag-r{background:#7f1d1d;color:#fca5a5}.tag-g{background:#166534;color:#86efac}.tag-a{background:#78350f;color:#fde68a}.tag-b{background:#1e3a5f;color:#93c5fd}
+
+/* ── collapsible expand ── */
+.expand-btn{display:flex;align-items:center;gap:8px;width:100%;padding:10px 16px;background:#0a0a0f;border:none;border-top:1px solid #1e293b;color:#60a5fa;font-size:12px;font-weight:600;cursor:pointer;transition:background .15s;text-align:left}
+.expand-btn:hover{background:#0f172a}
+.expand-btn .chevron{transition:transform .2s;font-style:normal;font-size:11px}
+.expand-btn.open .chevron{transform:rotate(90deg)}
+.expandable{display:none}
+.expandable.open{display:block}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════ NAV ══════════════════════ -->
+<nav id="main-nav">
+  <span class="nav-brand">LATAM SE · Business Case</span>
+  <a data-slide="0">Executive Summary</a>
+  <a data-slide="1">LATAM vs. East Majors</a>
+  <a data-slide="2">Pipeline</a>
+  <a data-slide="3">Capacity</a>
+  <a data-slide="4">Key Person Risk</a>
+  <a data-slide="5">ROI</a>
+  <a data-slide="6">Hire Timeline</a>
+  <a data-slide="7">The Ask</a>
+</nav>
+<div id="progress-bar"></div>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 0 — EXECUTIVE SUMMARY
+════════════════════════════════════════════════════ -->
+<div class="slide" data-index="0">
+
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;gap:24px;flex-wrap:wrap">
+    <div>
+      <div style="font-size:26px;font-weight:800;color:#fff;margin-bottom:6px">
+        LATAM +1 SE — Business Case
+        <span style="display:inline-block;background:#1e3a5f;color:#60a5fa;font-size:12px;font-weight:700;padding:3px 11px;border-radius:20px;margin-left:8px;vertical-align:middle">2026</span>
+      </div>
+      <div style="font-size:13px;color:#64748b;margin-bottom:3px">Prepared for <strong style="color:#94a3b8">Brian Ivanovick</strong>, VP Sales Engineering · <strong style="color:#94a3b8">Nate Crook</strong>, Chief Commercial Officer</div>
+      <div style="font-size:13px;color:#475569">Prepared by <strong style="color:#94a3b8">Jeff Dubois</strong>, Director of Solutions Engineering &amp; <strong style="color:#94a3b8">Evandro Pacolla</strong>, Principal SE, LATAM · June 2026</div>
+    </div>
+    <div style="background:linear-gradient(135deg,#1d4ed8,#7c3aed);border-radius:12px;padding:17px 26px;text-align:center;flex-shrink:0">
+      <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">The Ask</div>
+      <div style="font-size:34px;font-weight:800;color:#fff;line-height:1">+1 SE</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.5);margin-top:5px">LATAM · H2 2026</div>
+    </div>
+  </div>
+
+  <div class="g4" style="margin-bottom:22px">
+    <div class="kpi r">
+      <div class="kpi-label">Open Pipeline · 1 SE</div>
+      <div class="kpi-val">$11.5M</div>
+      <div class="kpi-sub">121 opps · 4 AEs · 10+ countries · 2 languages</div>
+    </div>
+    <div class="kpi p">
+      <div class="kpi-label">SE Time Per Active POC — No Overtime</div>
+      <div class="kpi-val">~72 min</div>
+      <div class="kpi-sub">Per month, per deal, at a standard 40-hr week · 27 active S3/S4 deals · benchmark: 8–12 hrs</div>
+    </div>
+    <div class="kpi a">
+      <div class="kpi-label">Q3/Q4 Pipeline — Zero SE Capacity</div>
+      <div class="kpi-val">$1.55M</div>
+      <div class="kpi-sub">Itaú $550K · Bradesco $500K · BCP Peru $500K advancing to S4 with no SE available</div>
+    </div>
+    <div class="kpi g">
+      <div class="kpi-label">Estimated ROI of the Hire</div>
+      <div class="kpi-val">5–7×</div>
+      <div class="kpi-sub">~$1M incremental New ARR vs ~$150–200K annual SE cost</div>
+    </div>
+  </div>
+
+  <div style="background:linear-gradient(135deg,#0f2847 0%,#1a0a2e 50%,#0f1a0a 100%);border:2px solid #3b82f6;border-radius:14px;padding:26px 30px;position:relative;overflow:hidden">
+    <div style="position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(99,102,241,.15),transparent 70%);pointer-events:none"></div>
+    <div style="position:absolute;bottom:-60px;left:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(74,222,128,.08),transparent 70%);pointer-events:none"></div>
+    <div style="font-size:16px;font-weight:800;color:#fff;margin-bottom:11px">The situation in one paragraph</div>
+    <div style="font-size:14px;color:#94a3b8;line-height:1.8;max-width:960px">
+      LATAM is one of Amplitude's fastest-growing regions — <strong style="color:#e2e8f0">$11.5M in active pipeline, 121 opportunities, 4 AEs</strong> — and it is covered by a single Solutions Engineer. Evandro Pacolla is supporting active POCs across Brazil, Mexico, Argentina, Colombia, Peru, Uruguay, Chile, Ecuador, El Salvador, and the Dominican Republic — in two languages — with <strong style="color:#f87171">~72 minutes of available SE time per active deal per month at a standard 40-hour week</strong>, against a benchmark of 8–12 hours. That is not a prioritization problem — it is a math problem. Comparable well-staffed Amplitude teams cover every active deal with dedicated SE attention. The difference is not product, market, or talent — it is SE coverage. One additional hire corrects the ratio, protects a key person operating at unsustainable load, and positions Amplitude to capture the <strong style="color:#fbbf24">$1.55M in mega-deals</strong> (Itaú, Bradesco, BCP Peru) advancing to S4 in Q3/Q4 with no capacity to receive them.
+    </div>
+    <div style="margin-top:16px;font-size:14px;font-weight:700;color:#fff">The ask: +1 SE in LATAM, H2 2026.</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 1 — PIPELINE REALITY
+════════════════════════════════════════════════════ -->
+<div class="slide" data-index="1">
+  <div class="section-label">§ 2 — LATAM Pipeline Reality</div>
+
+  <div class="g4" style="margin-bottom:18px">
+    <div class="kpi p">
+      <div class="kpi-label">S3 + S4 — Active Technical Evals</div>
+      <div class="kpi-val">27 opps</div>
+      <div class="kpi-sub">$3.86M New ARR · primary SE focus below ↓</div>
+    </div>
+    <div class="kpi g">
+      <div class="kpi-label">S0–S2 — Future Pipeline</div>
+      <div class="kpi-val">82 opps</div>
+      <div class="kpi-sub">$6.28M New ARR · expandable below ↓</div>
+    </div>
+    <div class="kpi b">
+      <div class="kpi-label">S5 + S6 — Late Stage</div>
+      <div class="kpi-val">12 opps</div>
+      <div class="kpi-sub">$1.35M New ARR in proposal / negotiation</div>
+    </div>
+    <div class="kpi a">
+      <div class="kpi-label">Total Open Pipeline</div>
+      <div class="kpi-val">$11.5M</div>
+      <div class="kpi-sub">121 opportunities · 4 AEs · 10+ countries · 1 SE</div>
+    </div>
+  </div>
+
+  <!-- Focus banner -->
+  <div style="background:#1a0a2e;border:1px solid #3b0764;border-radius:10px;padding:12px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px">
+    <span style="font-size:15px">🔬</span>
+    <div>
+      <span style="font-size:13px;font-weight:700;color:#c4b5fd">Primary SE Focus: S3 &amp; S4 Active Technical Evaluations</span>
+      <span style="font-size:12px;color:#64748b;margin-left:10px">These are the deals in active POC / technical evaluation where SE time is most critical and most scarce. S0–S2 future pipeline is expandable below each panel.</span>
+    </div>
+  </div>
+
+  <div class="g2">
+
+    <!-- ── Portuguese ── -->
+    <div style="background:#0a140f;border:1px solid #166534;border-radius:12px;overflow:hidden">
+      <div style="padding:14px 20px;border-bottom:1px solid #166534;display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-size:16px;font-weight:800;color:#4ade80">🇧🇷 Portuguese Speaking</div>
+          <div style="font-size:12px;color:#475569;margin-top:2px">Brazil · primary territory · AEs: Coutinho, Amorim, Rocha, Limão</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:19px;font-weight:800;color:#fff">$2.97M</div>
+          <div style="font-size:11px;color:#475569">S3/S4 · 18 deals</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid #0f2018">
+        <div style="padding:11px 16px;text-align:center;border-right:1px solid #0f2018"><div style="font-size:20px;font-weight:800;color:#fff">18</div><div style="font-size:11px;color:#475569">S3/S4 opps</div></div>
+        <div style="padding:11px 16px;text-align:center;border-right:1px solid #0f2018"><div style="font-size:20px;font-weight:800;color:#fff">$2.97M</div><div style="font-size:11px;color:#475569">New ARR S3/S4</div></div>
+        <div style="padding:11px 16px;text-align:center"><div style="font-size:20px;font-weight:800;color:#4ade80">44</div><div style="font-size:11px;color:#475569">S0–S2 future opps</div></div>
+      </div>
+      <table>
+        <thead><tr><th>Account</th><th>AE</th><th>Stage</th><th class="r">New ARR</th><th class="r">Close</th></tr></thead>
+        <tbody>
+          <tr><td class="acct">Grupo Smart Fit</td><td class="muted">Amorim</td><td><span class="sb s3">S3</span></td><td class="arr">$491K</td><td class="muted" style="text-align:right">Sep/26</td></tr>
+          <tr><td class="acct">Porto Seguro</td><td class="muted">Coutinho</td><td><span class="sb s4">S4</span></td><td class="arr">$400K</td><td class="muted" style="text-align:right">Aug/26</td></tr>
+          <tr><td class="acct">Banco Inter</td><td class="muted">Coutinho</td><td><span class="sb s3">S3</span></td><td class="arr">$400K</td><td class="muted" style="text-align:right">Oct/26</td></tr>
+          <tr><td class="acct">Hospital Albert Einstein</td><td class="muted">Amorim</td><td><span class="sb s3">S3</span></td><td class="arr">$334K</td><td class="muted" style="text-align:right">Dec/26</td></tr>
+          <tr><td class="acct">Serasa Experian</td><td class="muted">Amorim</td><td><span class="sb s4">S4</span></td><td class="arr">$268K</td><td class="muted" style="text-align:right">Jul/26</td></tr>
+          <tr><td class="acct">Localiza</td><td class="muted">Coutinho</td><td><span class="sb s4">S4</span></td><td class="arr">$235K</td><td class="muted" style="text-align:right">Aug/26</td></tr>
+          <tr><td class="acct">Arezzo</td><td class="muted">Coutinho</td><td><span class="sb s4">S4</span></td><td class="arr">$235K</td><td class="muted" style="text-align:right">Dec/26</td></tr>
+          <tr><td class="acct">Afya Educational</td><td class="muted">Amorim</td><td><span class="sb s3">S3</span></td><td class="arr">$150K</td><td class="muted" style="text-align:right">Aug/26</td></tr>
+          <tr><td class="acct">Veste S/A</td><td class="muted">Coutinho</td><td><span class="sb s4">S4</span></td><td class="arr">$144K</td><td class="muted" style="text-align:right">Oct/26</td></tr>
+          <tr><td class="acct">Azul Airlines</td><td class="muted">Coutinho</td><td><span class="sb s3">S3</span></td><td class="arr">$138K</td><td class="muted" style="text-align:right">Dec/26</td></tr>
+          <tr><td class="acct">Claro Brasil</td><td class="muted">Amorim</td><td><span class="sb s3">S3</span></td><td class="arr">$111K</td><td class="muted" style="text-align:right">Aug/26</td></tr>
+          <tr><td class="acct">Sem Parar</td><td class="muted">Rocha</td><td><span class="sb s3">S3</span></td><td class="arr">$108K</td><td class="muted" style="text-align:right">Dec/26</td></tr>
+          <tr><td class="acct">PagSeguro</td><td class="muted">Limão</td><td><span class="sb s3">S3</span></td><td class="arr">$80K</td><td class="muted" style="text-align:right">Sep/26</td></tr>
+          <tr><td class="acct">La Moda</td><td class="muted">Rocha</td><td><span class="sb s3">S3</span></td><td class="arr">$68K</td><td class="muted" style="text-align:right">Sep/26</td></tr>
+          <tr><td class="acct">Kavak · Koin · Melhor Envio</td><td class="muted">multi</td><td><span class="sb s3">S3</span></td><td class="arr sm">~$50K</td><td class="muted" style="text-align:right">—</td></tr>
+        </tbody>
+      </table>
+      <!-- S0-S2 expand -->
+      <button class="expand-btn" id="btn-pt-s012" onclick="toggleExpand('pt-s012','btn-pt-s012')">
+        <span class="chevron">▶</span> Show 44 S0–S2 future deals &nbsp;·&nbsp; $4.22M New ARR
+      </button>
+      <div class="expandable" id="pt-s012">
+        <table>
+          <thead><tr><th>Account</th><th>AE</th><th>Stage</th><th class="r">New ARR</th></tr></thead>
+          <tbody>
+            <tr class="grp-row"><td colspan="4">🔥 Mega deals (&gt;$250K) — advancing to S3/S4 in Q3–Q4</td></tr>
+            <tr><td class="acct">Itaú Unibanco</td><td class="muted">Limão</td><td><span class="sb s2">S2</span></td><td class="arr" style="color:#fbbf24">$550K</td></tr>
+            <tr><td class="acct">Banco Bradesco</td><td class="muted">Limão</td><td><span class="sb s2">S2</span></td><td class="arr" style="color:#fbbf24">$500K</td></tr>
+            <tr><td class="acct">Fleury</td><td class="muted">Limão</td><td><span class="sb s2">S2</span></td><td class="arr">$300K</td></tr>
+            <tr><td class="acct">Sicoob</td><td class="muted">Limão</td><td><span class="sb s2">S2</span></td><td class="arr">$300K</td></tr>
+            <tr><td class="acct">B3</td><td class="muted">Limão</td><td><span class="sb s2">S2</span></td><td class="arr">$300K</td></tr>
+            <tr><td class="acct">99Taxi</td><td class="muted">Limão</td><td><span class="sb s2">S2</span></td><td class="arr">$250K</td></tr>
+            <tr><td class="acct">Movida</td><td class="muted">Coutinho</td><td><span class="sb s2">S2</span></td><td class="arr">$250K</td></tr>
+            <tr><td class="acct">Banco BV</td><td class="muted">Limão</td><td><span class="sb s0">S0</span></td><td class="arr">$250K</td></tr>
+            <tr class="grp-row"><td colspan="4">Mid-market deals ($50–250K) · 28 additional S1/S2 opps</td></tr>
+            <tr><td class="acct">C&amp;A Brasil · Koin · MadeiraMadeira · Inter Super App · Aché Lab.</td><td class="muted">multi</td><td><span class="sb s1">S1/2</span></td><td class="arr sm">$720K</td></tr>
+            <tr><td class="acct">Nstech · FTD Educação · Raizen · Melhor Envio · Banco Rendimento + others</td><td class="muted">multi</td><td><span class="sb s2">S2</span></td><td class="arr sm">$502K</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── Spanish ── -->
+    <div style="background:#0a0f1a;border:1px solid #1e3a5f;border-radius:12px;overflow:hidden">
+      <div style="padding:14px 20px;border-bottom:1px solid #1e3a5f;display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-size:16px;font-weight:800;color:#60a5fa">🌎 Spanish Speaking</div>
+          <div style="font-size:12px;color:#475569;margin-top:2px">MX · AR · CL · CO · PE · UY · EC · DO · SV</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:19px;font-weight:800;color:#fff">$892K</div>
+          <div style="font-size:11px;color:#475569">S3/S4 · 9 deals · 7 countries</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid #0f1a2e">
+        <div style="padding:11px 16px;text-align:center;border-right:1px solid #0f1a2e"><div style="font-size:20px;font-weight:800;color:#fff">9</div><div style="font-size:11px;color:#475569">S3/S4 opps</div></div>
+        <div style="padding:11px 16px;text-align:center;border-right:1px solid #0f1a2e"><div style="font-size:20px;font-weight:800;color:#fff">$892K</div><div style="font-size:11px;color:#475569">New ARR S3/S4</div></div>
+        <div style="padding:11px 16px;text-align:center"><div style="font-size:20px;font-weight:800;color:#60a5fa">38</div><div style="font-size:11px;color:#475569">S0–S2 future opps</div></div>
+      </div>
+      <table>
+        <thead><tr><th>Account</th><th>Country</th><th>Stage</th><th class="r">New ARR</th><th class="r">Close</th></tr></thead>
+        <tbody>
+          <tr><td class="acct">BCP</td><td class="muted">🇵🇪 Peru</td><td><span class="sb s3">S3</span></td><td class="arr">$500K</td><td class="muted" style="text-align:right">Nov/26</td></tr>
+          <tr><td class="acct">Banco Macro</td><td class="muted">🇦🇷 Argentina</td><td><span class="sb s3">S3</span></td><td class="arr">$100K</td><td class="muted" style="text-align:right">Aug/26</td></tr>
+          <tr><td class="acct">Coca-Cola FEMSA</td><td class="muted">🇲🇽 Mexico</td><td><span class="sb s4">S4</span></td><td class="arr">$95K</td><td class="muted" style="text-align:right">Dec/26</td></tr>
+          <tr><td class="acct">NaranjaX</td><td class="muted">🇦🇷 Argentina</td><td><span class="sb s4">S4</span></td><td class="arr">$84K</td><td class="muted" style="text-align:right">Jun/26</td></tr>
+          <tr><td class="acct">Habi</td><td class="muted">🇨🇴 Colombia</td><td><span class="sb s4">S4</span></td><td class="arr">$80K</td><td class="muted" style="text-align:right">Sep/26</td></tr>
+          <tr><td class="acct">Banco Hipotecario</td><td class="muted">🇸🇻 El Salvador</td><td><span class="sb s4">S4</span></td><td class="arr sm">$50K</td><td class="muted" style="text-align:right">Jul/26</td></tr>
+          <tr><td class="acct">Tuboleta</td><td class="muted">🇨🇴 Colombia</td><td><span class="sb s3">S3</span></td><td class="arr sm">$30K</td><td class="muted" style="text-align:right">Aug/26</td></tr>
+          <tr><td class="acct">Copec · Bold.co · Altitude by Volaris</td><td class="muted">multi</td><td><span class="sb s4">S4</span></td><td class="arr sm">$26K</td><td class="muted" style="text-align:right">—</td></tr>
+        </tbody>
+      </table>
+      <!-- S0-S2 expand -->
+      <button class="expand-btn" id="btn-es-s012" onclick="toggleExpand('es-s012','btn-es-s012')">
+        <span class="chevron">▶</span> Show 38 S0–S2 future deals &nbsp;·&nbsp; $2.06M New ARR
+      </button>
+      <div class="expandable" id="es-s012">
+        <table>
+          <thead><tr><th>Account</th><th>Country</th><th>Stage</th><th class="r">New ARR</th></tr></thead>
+          <tbody>
+            <tr class="grp-row"><td colspan="4">🔥 Mega deals (&gt;$150K)</td></tr>
+            <tr><td class="acct">Grupo Elektra</td><td class="muted">🇲🇽 Mexico</td><td><span class="sb s1">S1</span></td><td class="arr" style="color:#fbbf24">$400K</td></tr>
+            <tr><td class="acct">YPF SA</td><td class="muted">🇦🇷 Argentina</td><td><span class="sb s1">S1</span></td><td class="arr">$250K</td></tr>
+            <tr><td class="acct">Michelin Mexico</td><td class="muted">🇲🇽 Mexico</td><td><span class="sb s0">S0</span></td><td class="arr">$250K</td></tr>
+            <tr><td class="acct">IZZI</td><td class="muted">🇲🇽 Mexico</td><td><span class="sb s2">S2</span></td><td class="arr">$215K</td></tr>
+            <tr><td class="acct">LATAM Airlines</td><td class="muted">🇪🇨 Ecuador</td><td><span class="sb s2">S2</span></td><td class="arr">$200K</td></tr>
+            <tr><td class="acct">Banco Provincia</td><td class="muted">🇦🇷 Argentina</td><td><span class="sb s1">S1</span></td><td class="arr">$200K</td></tr>
+            <tr><td class="acct">Banco Falabella</td><td class="muted">🇨🇱 Chile</td><td><span class="sb s2">S2</span></td><td class="arr">$150K</td></tr>
+            <tr><td class="acct">Galicia Seguros</td><td class="muted">🇦🇷 Argentina</td><td><span class="sb s1">S1</span></td><td class="arr">$100K</td></tr>
+            <tr class="grp-row"><td colspan="4">Mid-market · 22 additional S1/S2 opps across 9 countries</td></tr>
+            <tr><td class="acct">SURA Colombia · ALPHA · Bidcom · Claro Pay · MACH · RBI (3) + others</td><td class="muted">multi</td><td><span class="sb s2">S2</span></td><td class="arr sm">$295K</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- end g2 -->
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 2 — SE CAPACITY CRISIS
+════════════════════════════════════════════════════ -->
+<div class="slide" data-index="2">
+  <div class="section-label">§ 3 — SE Capacity Crisis</div>
+
+  <div class="g2" style="margin-bottom:16px">
+    <div class="card">
+      <div style="font-size:14px;font-weight:700;color:#f8fafc;margin-bottom:16px">⏱ 40-Hour Weekly Breakdown</div>
+      <div style="display:flex;height:30px;border-radius:6px;overflow:hidden;margin-bottom:16px">
+        <div style="width:12%;background:#7c3aed;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff">Train.</div>
+        <div style="width:12%;background:#be185d;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff">Travel</div>
+        <div style="width:15%;background:#0891b2;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff">Mktg</div>
+        <div style="width:15%;background:#16a34a;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff">Farm</div>
+        <div style="width:25%;background:#d97706;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff">Qual S0–S2</div>
+        <div style="width:21%;background:#dc2626;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff">POC S3+</div>
+      </div>
+      <table>
+        <thead><tr><th>Activity</th><th class="r">%</th><th class="r">Hrs/wk</th><th class="r">Hrs/mo</th></tr></thead>
+        <tbody>
+          <tr><td><span style="color:#c4b5fd">●</span> Training &amp; Enablement</td><td style="text-align:right">12%</td><td style="text-align:right">4.8h</td><td style="text-align:right">19h</td></tr>
+          <tr><td><span style="color:#f9a8d4">●</span> Travel (multi-country LATAM)</td><td style="text-align:right">12%</td><td style="text-align:right">4.8h</td><td style="text-align:right">19h</td></tr>
+          <tr><td><span style="color:#67e8f9">●</span> Marketing &amp; Events</td><td style="text-align:right">15%</td><td style="text-align:right">6h</td><td style="text-align:right">24h</td></tr>
+          <tr><td><span style="color:#4ade80">●</span> Farming (existing accounts)</td><td style="text-align:right">15%</td><td style="text-align:right">6h</td><td style="text-align:right">24h</td></tr>
+          <tr><td><span style="color:#fbbf24">●</span> New deal qualification (S0–S2)</td><td style="text-align:right">25%</td><td style="text-align:right">10h</td><td style="text-align:right">40h</td></tr>
+          <tr class="alert-row"><td><strong><span style="color:#f87171">●</span> POC support (S3/S4/S5)</strong></td><td style="text-align:right;font-weight:700">20%</td><td style="text-align:right;font-weight:700">8h</td><td style="text-align:right;font-weight:700">32h</td></tr>
+          <tr class="total-row"><td><strong>Total</strong></td><td style="text-align:right">100%</td><td style="text-align:right">40h</td><td style="text-align:right">160h</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card warn">
+      <div style="font-size:14px;font-weight:700;color:#f87171;margin-bottom:16px">🚨 Demand vs. Capacity — The POC Coverage Gap</div>
+      <table>
+        <thead><tr><th>Metric</th><th class="r">1 SE (today)</th><th class="r">2 SEs (+1 hire)</th></tr></thead>
+        <tbody>
+          <tr><td>Available hrs/month for POC</td><td style="text-align:right">32h</td><td style="text-align:right;color:#4ade80">64h</td></tr>
+          <tr><td>Active deals in S3/S4</td><td style="text-align:right;color:#f87171;font-weight:700">27 deals</td><td style="text-align:right;color:#4ade80;font-weight:700">27 deals</td></tr>
+          <tr><td>Avg SE time per active POC/mo</td><td style="text-align:right;color:#f87171;font-weight:700">~72 min</td><td style="text-align:right;color:#fbbf24;font-weight:700">~2.4h</td></tr>
+          <tr><td>Ideal SE time per POC (benchmark)</td><td style="text-align:right">8–12h/mo</td><td style="text-align:right">8–12h/mo</td></tr>
+          <tr class="alert-row"><td><strong>Coverage deficit per POC</strong></td><td style="text-align:right;font-weight:700">−6.8 to −10.8h</td><td style="text-align:right;font-weight:700;color:#fbbf24">−5.6 to −9.6h</td></tr>
+          <tr><td>POCs with real SE coverage</td><td style="text-align:right;color:#f87171;font-weight:700">~3–4 of 27</td><td style="text-align:right;color:#fbbf24;font-weight:700">~6–8 of 27</td></tr>
+          <tr><td>Time per S0–S2 deal/month</td><td style="text-align:right;color:#f87171">~29 min</td><td style="text-align:right;color:#fbbf24">~58 min</td></tr>
+          <tr class="total-row"><td><strong>POCs executable with quality</strong></td><td style="text-align:right;color:#f87171;font-weight:700">2–4</td><td style="text-align:right;color:#4ade80;font-weight:700">5–8</td></tr>
+        </tbody>
+      </table>
+      <div style="margin-top:14px;padding:12px 16px;background:#1a0808;border-radius:8px;font-size:13px;color:#fca5a5;line-height:1.6">
+        <strong>Bottom line:</strong> 32 hrs/month ÷ 27 active S3/S4 deals = <strong>1 hour 12 minutes per deal per month</strong>. A well-run POC requires 8–12 monthly SE hours. Only 2–4 POCs receive real attention. The remaining 23 are effectively unsupported.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 3 — KEY PERSON RISK
+════════════════════════════════════════════════════ -->
+<div class="slide" data-index="3">
+  <div class="section-label">§ 4 — Key Person Risk: The Hidden Cost of Inaction</div>
+
+  <div style="background:linear-gradient(135deg,#160808 0%,#1a0505 100%);border:2px solid #dc2626;border-radius:14px;padding:26px 30px;position:relative;overflow:hidden">
+    <div style="position:absolute;top:-80px;right:-80px;width:250px;height:250px;background:radial-gradient(circle,rgba(220,38,38,.12),transparent 70%);pointer-events:none"></div>
+
+    <div style="font-size:17px;font-weight:800;color:#fff;margin-bottom:7px">⚠️ $11.5M in pipeline depends on a single person operating at unsustainable capacity</div>
+    <div style="font-size:13px;color:#94a3b8;margin-bottom:22px">Evandro Pacolla is the only Solutions Engineer covering all of LATAM. There is no backup, no coverage model, no continuity plan.</div>
+
+    <div class="g3" style="margin-bottom:22px">
+      <div style="background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.2);border-radius:10px;padding:18px">
+        <div style="font-size:11px;font-weight:700;color:#f87171;text-transform:uppercase;letter-spacing:.5px;margin-bottom:9px">Operating at</div>
+        <div style="font-size:34px;font-weight:800;color:#fff;margin-bottom:5px">5–8×</div>
+        <div style="font-size:13px;color:#94a3b8;line-height:1.55">above healthy SE load. Zero slack in the schedule. Every escalation, every marketing event, every new deal discovery cancels something else.</div>
+      </div>
+      <div style="background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.2);border-radius:10px;padding:18px">
+        <div style="font-size:11px;font-weight:700;color:#f87171;text-transform:uppercase;letter-spacing:.5px;margin-bottom:9px">Backfill Timeline</div>
+        <div style="font-size:34px;font-weight:800;color:#fff;margin-bottom:5px">90–120d</div>
+        <div style="font-size:13px;color:#94a3b8;line-height:1.55">minimum to hire a bilingual LATAM SE replacement — then another 3–6 months to ramp. Zero SE coverage for an entire quarter.</div>
+      </div>
+      <div style="background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.2);border-radius:10px;padding:18px">
+        <div style="font-size:11px;font-weight:700;color:#f87171;text-transform:uppercase;letter-spacing:.5px;margin-bottom:9px">Revenue at Risk</div>
+        <div style="font-size:34px;font-weight:800;color:#fff;margin-bottom:5px">$11.5M</div>
+        <div style="font-size:13px;color:#94a3b8;line-height:1.55">in open pipeline held by one person — across 10+ countries, 2 languages, and 4 AEs whose quotas depend on him.</div>
+      </div>
+    </div>
+
+    <div style="font-size:12px;font-weight:700;color:#f87171;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">If Evandro leaves — what happens next</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px">
+      <div style="background:rgba(0,0,0,.35);border:1px solid rgba(220,38,38,.2);border-radius:8px;padding:15px;text-align:center">
+        <div style="font-size:15px;font-weight:800;color:#f87171;margin-bottom:6px">Day 0</div>
+        <div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:5px">Zero SE coverage</div>
+        <div style="font-size:12px;color:#64748b;line-height:1.5">All 27 active POCs immediately unsupported across every territory</div>
+      </div>
+      <div style="background:rgba(0,0,0,.35);border:1px solid rgba(220,38,38,.2);border-radius:8px;padding:15px;text-align:center">
+        <div style="font-size:15px;font-weight:800;color:#fbbf24;margin-bottom:6px">Week 1–4</div>
+        <div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:5px">Pipeline stalls</div>
+        <div style="font-size:12px;color:#64748b;line-height:1.5">S3/S4 deals lose momentum. AEs can't answer technical questions or advance evaluations.</div>
+      </div>
+      <div style="background:rgba(0,0,0,.35);border:1px solid rgba(220,38,38,.2);border-radius:8px;padding:15px;text-align:center">
+        <div style="font-size:15px;font-weight:800;color:#fbbf24;margin-bottom:6px">Month 1–3</div>
+        <div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:5px">Deals are lost</div>
+        <div style="font-size:12px;color:#64748b;line-height:1.5">Prospects choose competitors. Itaú, Bradesco, BCP hit S4 with no SE support.</div>
+      </div>
+      <div style="background:rgba(0,0,0,.35);border:1px solid rgba(220,38,38,.2);border-radius:8px;padding:15px;text-align:center">
+        <div style="font-size:15px;font-weight:800;color:#64748b;margin-bottom:6px">Month 3–4+</div>
+        <div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:5px">Backfill begins</div>
+        <div style="font-size:12px;color:#64748b;line-height:1.5">New SE hired after 90–120 day search. Ramp to full productivity takes another quarter.</div>
+      </div>
+    </div>
+
+    <div style="background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.2);border-radius:8px;padding:15px 20px;font-size:14px;color:#94a3b8;line-height:1.7">
+      <strong style="color:#fbbf24">This hire also protects Evandro.</strong> Hiring a second SE reduces his load, lets him do deep, high-quality work on the right deals, and gives him a teammate to grow with. The fastest way to lose Evandro is to keep him at 5–8× capacity indefinitely. <strong style="color:#e2e8f0">Retaining a great SE costs far less than replacing one.</strong>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 4 — LATAM vs. EAST MAJORS COMPARISON
+════════════════════════════════════════════════════ -->
+<div class="slide" data-index="4">
+  <div class="section-label">§ 1 — LATAM vs. East Majors Comparison</div>
+
+  <div class="scorecard" style="margin-bottom:22px">
+    <div class="sc-hdr">
+      <div class="sc-hdr-cell">Metric</div>
+      <div class="sc-hdr-cell latam">🌎 LATAM (Evandro)</div>
+      <div class="sc-hdr-cell east">🇺🇸 East Majors (Brian Wagner)</div>
+    </div>
+    <div class="sc-row">
+      <div class="sc-metric">SE : AE ratio</div>
+      <div class="sc-val latam bad">1 : 4 <span class="tag tag-r">Understaffed</span></div>
+      <div class="sc-val east good">1 : 2 <span class="tag tag-g">Benchmark</span></div>
+    </div>
+    <div class="sc-row">
+      <div class="sc-metric">SEs on team</div>
+      <div class="sc-val latam bad">1 SE <span class="tag tag-r">Single point of failure</span></div>
+      <div class="sc-val east good">3 SEs — Bethany, Aaron, Brittany</div>
+    </div>
+    <div class="sc-row">
+      <div class="sc-metric">Active S3/S4 deals</div>
+      <div class="sc-val latam bad">27 deals — 1 SE <span class="tag tag-r">27 per SE</span></div>
+      <div class="sc-val east good">22 deals — 3 SEs <span class="tag tag-g">~7 per SE</span></div>
+    </div>
+    <div class="sc-row">
+      <div class="sc-metric">Avg POC hrs / deal / month</div>
+      <div class="sc-val latam bad">~72 min <span class="tag tag-r">Critical</span></div>
+      <div class="sc-val east good">~6.5 hrs <span class="tag tag-g">5.4× more</span></div>
+    </div>
+    <div class="sc-row">
+      <div class="sc-metric">Total open pipeline</div>
+      <div class="sc-val latam">$11.5M — 1 SE <span class="tag tag-r">More pipeline</span></div>
+      <div class="sc-val east">$10.8M — 3 SEs</div>
+    </div>
+    <div class="sc-row">
+      <div class="sc-metric">Closed Won New ARR (2026 YTD)</div>
+      <div class="sc-val latam warn">$531K · 27 deals</div>
+      <div class="sc-val east good">$1.89M · 26 deals <span class="tag tag-g">3.5× more</span></div>
+    </div>
+    <div class="sc-row">
+      <div class="sc-metric">S3/S4 deals with SE assigned</div>
+      <div class="sc-val latam bad">~40% of deals <span class="tag tag-r">No capacity</span></div>
+      <div class="sc-val east good">85%+ assigned</div>
+    </div>
+    <div class="sc-row">
+      <div class="sc-metric">Geographic complexity</div>
+      <div class="sc-val latam bad">10+ countries · 2 languages · 1 SE</div>
+      <div class="sc-val east good">1 country · 1 language · 3 SEs</div>
+    </div>
+  </div>
+
+  <div class="g3">
+    <div style="background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.2);border-radius:10px;padding:20px">
+      <div style="font-size:11px;font-weight:700;color:#f87171;text-transform:uppercase;letter-spacing:.5px;margin-bottom:9px">SE time gap per POC / month</div>
+      <div style="font-size:32px;font-weight:800;color:#fff;margin-bottom:7px">5.4×</div>
+      <div style="font-size:13px;color:#94a3b8;line-height:1.55">East Majors SEs each get ~6.5 hours per active deal. Evandro gets 72 minutes. That 5.4× gap in attention is the closed won gap.</div>
+    </div>
+    <div style="background:rgba(74,222,128,.07);border:1px solid rgba(74,222,128,.2);border-radius:10px;padding:20px">
+      <div style="font-size:11px;font-weight:700;color:#4ade80;text-transform:uppercase;letter-spacing:.5px;margin-bottom:9px">Closed Won gap (2026 YTD)</div>
+      <div style="font-size:32px;font-weight:800;color:#fff;margin-bottom:7px">3.5×</div>
+      <div style="font-size:13px;color:#94a3b8;line-height:1.55">East Majors: $1.89M won on 26 deals. LATAM: $531K on 27 deals — with a <em>larger</em> total pipeline. The gap is SE coverage, not deal quality.</div>
+    </div>
+    <div style="background:rgba(96,165,250,.07);border:1px solid rgba(96,165,250,.2);border-radius:10px;padding:20px">
+      <div style="font-size:11px;font-weight:700;color:#60a5fa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:9px">Geographic complexity</div>
+      <div style="font-size:32px;font-weight:800;color:#fff;margin-bottom:7px">10+</div>
+      <div style="font-size:13px;color:#94a3b8;line-height:1.55">East Majors' 3 SEs cover 1 country in 1 language. Evandro covers 10+ countries across 2 languages with travel overhead every month.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 5 — HIRE TIMELINE
+════════════════════════════════════════════════════ -->
+<div class="slide" data-index="5">
+  <div class="section-label">§ 6 — Why Now: The Hiring Timeline</div>
+
+  <div style="margin-bottom:22px;font-size:14px;color:#64748b">Three mega-deals — <strong style="color:#fbbf24">Itaú $550K · Bradesco $500K · BCP Peru $500K</strong> — are advancing to S4 in Q3/Q4. The hire must start now to have anyone in seat when they arrive.</div>
+
+  <!-- Path A -->
+  <div style="background:#0a140f;border:1px solid #166534;border-radius:12px;padding:24px 28px;margin-bottom:14px">
+    <div style="font-size:13px;font-weight:700;color:#4ade80;text-transform:uppercase;letter-spacing:.5px;margin-bottom:22px">✅ Path A — Approve Now (July 2026)</div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative">
+      <div style="position:absolute;top:22px;left:10%;right:10%;height:2px;background:#166534;z-index:0"></div>
+      <div style="text-align:center;position:relative;z-index:1">
+        <div style="width:46px;height:46px;background:#166534;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:11px;font-weight:800;color:#fff">JUL</div>
+        <div style="font-size:12px;font-weight:700;color:#4ade80">Approval</div>
+        <div style="font-size:11px;color:#475569;margin-top:3px">HC approved</div>
+      </div>
+      <div style="text-align:center;position:relative;z-index:1">
+        <div style="width:46px;height:46px;background:#166534;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:11px;font-weight:800;color:#fff">AUG</div>
+        <div style="font-size:12px;font-weight:700;color:#4ade80">Search</div>
+        <div style="font-size:11px;color:#475569;margin-top:3px">JD posted · interviews</div>
+      </div>
+      <div style="text-align:center;position:relative;z-index:1">
+        <div style="width:46px;height:46px;background:#166534;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:11px;font-weight:800;color:#fff">SEP</div>
+        <div style="font-size:12px;font-weight:700;color:#4ade80">Hire</div>
+        <div style="font-size:11px;color:#475569;margin-top:3px">Offer accepted · start</div>
+      </div>
+      <div style="text-align:center;position:relative;z-index:1">
+        <div style="width:46px;height:46px;background:#166534;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:11px;font-weight:800;color:#fff">OCT</div>
+        <div style="font-size:12px;font-weight:700;color:#4ade80">Ramping</div>
+        <div style="font-size:11px;color:#475569;margin-top:3px">Paired with Evandro</div>
+      </div>
+      <div style="text-align:center;position:relative;z-index:1">
+        <div style="width:46px;height:46px;background:#16a34a;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:22px">✅</div>
+        <div style="font-size:12px;font-weight:700;color:#4ade80">In Coverage</div>
+        <div style="font-size:11px;color:#4ade80;margin-top:3px">Itaú · Bradesco · BCP covered</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Path B -->
+  <div style="background:#150808;border:1px solid #7f1d1d;border-radius:12px;padding:24px 28px;margin-bottom:22px">
+    <div style="font-size:13px;font-weight:700;color:#f87171;text-transform:uppercase;letter-spacing:.5px;margin-bottom:22px">❌ Path B — Wait 90 Days (Approve October 2026)</div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative">
+      <div style="position:absolute;top:22px;left:10%;right:10%;height:2px;background:#7f1d1d;z-index:0"></div>
+      <div style="text-align:center;position:relative;z-index:1">
+        <div style="width:46px;height:46px;background:#1e293b;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:11px;font-weight:800;color:#64748b">OCT</div>
+        <div style="font-size:12px;font-weight:700;color:#64748b">Approval</div>
+        <div style="font-size:11px;color:#475569;margin-top:3px">3 months later</div>
+      </div>
+      <div style="text-align:center;position:relative;z-index:1">
+        <div style="width:46px;height:46px;background:#1e293b;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:11px;font-weight:800;color:#64748b">NOV</div>
+        <div style="font-size:12px;font-weight:700;color:#64748b">Search</div>
+        <div style="font-size:11px;color:#475569;margin-top:3px">JD posted</div>
+      </div>
+      <div style="text-align:center;position:relative;z-index:1">
+        <div style="width:46px;height:46px;background:#1e293b;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:11px;font-weight:800;color:#64748b">JAN</div>
+        <div style="font-size:12px;font-weight:700;color:#64748b">Hire</div>
+        <div style="font-size:11px;color:#475569;margin-top:3px">Q1 2027 at earliest</div>
+      </div>
+      <div style="text-align:center;position:relative;z-index:1">
+        <div style="width:46px;height:46px;background:#7f1d1d;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:22px">❌</div>
+        <div style="font-size:12px;font-weight:700;color:#f87171">Itaú S4</div>
+        <div style="font-size:11px;color:#f87171;margin-top:3px">Oct — no SE available</div>
+      </div>
+      <div style="text-align:center;position:relative;z-index:1">
+        <div style="width:46px;height:46px;background:#7f1d1d;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:22px">❌</div>
+        <div style="font-size:12px;font-weight:700;color:#f87171">Bradesco S4</div>
+        <div style="font-size:11px;color:#f87171;margin-top:3px">Nov — no SE available</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:#0f172a;border:1px solid #78350f;border-radius:10px;padding:16px 20px;font-size:14px;color:#94a3b8;line-height:1.7">
+    <strong style="color:#fbbf24">The cost of waiting 90 days:</strong> BCP Peru ($500K) is already in S3. Itaú ($550K) and Bradesco ($500K) advance in Q3. Together that's <strong style="color:#fff">$1.55M in New ARR</strong> that needs SE support at exactly the moment no SE is available.
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 6 — ROI
+════════════════════════════════════════════════════ -->
+<div class="slide" data-index="6">
+  <div class="section-label">§ 5 — Return on Investment</div>
+
+  <div class="g4" style="margin-bottom:22px">
+    <div class="kpi p">
+      <div class="kpi-label">New ARR at risk · S3/S4</div>
+      <div class="kpi-val">$3.86M</div>
+      <div class="kpi-sub">+20% win rate improvement with SE = +$772K incremental</div>
+    </div>
+    <div class="kpi g">
+      <div class="kpi-label">Future pipeline · S0–S2</div>
+      <div class="kpi-val">$6.28M</div>
+      <div class="kpi-sub">Better qualification → faster S2→S3 conversion</div>
+    </div>
+    <div class="kpi a">
+      <div class="kpi-label">Conservative (+10% win rate)</div>
+      <div class="kpi-val">~$1M</div>
+      <div class="kpi-sub">Incremental New ARR vs ~$150–200K/year SE cost</div>
+    </div>
+    <div class="kpi b">
+      <div class="kpi-label">Estimated ROI · Year 1</div>
+      <div class="kpi-val">5–7×</div>
+      <div class="kpi-sub">Every $1 invested returns $5–7 in New ARR</div>
+    </div>
+  </div>
+
+  <div class="card info" style="margin-bottom:18px">
+    <div style="font-size:14px;font-weight:700;color:#60a5fa;margin-bottom:14px">Key Assumptions</div>
+    <div class="g3" style="font-size:13px;color:#94a3b8;line-height:1.65">
+      <div><strong style="color:#e2e8f0">POC capacity:</strong> Each SE can run 5–8 quality POCs per month. Two SEs provide 64 hrs/month for POC work — enough to cover all 27 active deals with meaningful attention, plus capacity to properly qualify the 82 S0–S2 deals.</div>
+      <div><strong style="color:#e2e8f0">Imminent pipeline:</strong> Itaú ($550K) + Bradesco ($500K) + BCP Peru ($500K) = $1.55M advancing to S3/S4 in Q3/Q4. One SE cannot support all three simultaneously. If the hire is not approved now, this window closes.</div>
+      <div><strong style="color:#e2e8f0">Benchmarks:</strong> SE-supported regions at Amplitude typically see significantly higher ARR per AE than unsupported ones. East Majors closes 3.5× more ARR on a comparable pipeline with properly staffed SE coverage.</div>
+    </div>
+  </div>
+
+  <div style="background:#0f172a;border:1px solid #1e293b;border-radius:12px;padding:20px 24px">
+    <div style="font-size:14px;font-weight:700;color:#94a3b8;margin-bottom:14px">Pipeline Coverage Comparison</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid #1e293b;border-radius:8px;overflow:hidden">
+      <div style="padding:16px 18px;background:#0c0808;border-right:1px solid #1e293b;text-align:center">
+        <div style="font-size:11px;font-weight:700;color:#f87171;text-transform:uppercase;letter-spacing:.4px;margin-bottom:7px">LATAM Today</div>
+        <div style="font-size:28px;font-weight:800;color:#f87171">23 / 27</div>
+        <div style="font-size:12px;color:#475569;margin-top:5px">POCs unsupported</div>
+      </div>
+      <div style="padding:16px 18px;background:#0f0e08;border-right:1px solid #1e293b;text-align:center">
+        <div style="font-size:11px;font-weight:700;color:#fbbf24;text-transform:uppercase;letter-spacing:.4px;margin-bottom:7px">With +1 SE</div>
+        <div style="font-size:28px;font-weight:800;color:#fbbf24">~19 / 27</div>
+        <div style="font-size:12px;color:#475569;margin-top:5px">Still improving coverage</div>
+      </div>
+      <div style="padding:16px 18px;background:#0a0f14;border-right:1px solid #1e293b;text-align:center">
+        <div style="font-size:11px;font-weight:700;color:#60a5fa;text-transform:uppercase;letter-spacing:.4px;margin-bottom:7px">East Majors Today</div>
+        <div style="font-size:28px;font-weight:800;color:#60a5fa">19 / 22</div>
+        <div style="font-size:12px;color:#475569;margin-top:5px">Deals with named SE</div>
+      </div>
+      <div style="padding:16px 18px;background:#0a120a;text-align:center">
+        <div style="font-size:11px;font-weight:700;color:#4ade80;text-transform:uppercase;letter-spacing:.4px;margin-bottom:7px">Closed Won YTD</div>
+        <div style="font-size:28px;font-weight:800;color:#4ade80">3.5×</div>
+        <div style="font-size:12px;color:#475569;margin-top:5px">East Majors vs. LATAM</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 7 — THE ASK
+════════════════════════════════════════════════════ -->
+<div class="slide" data-index="7">
+  <div class="section-label">§ 7 — The Ask</div>
+
+  <div style="background:linear-gradient(135deg,#0f2847 0%,#1a0a2e 50%,#0f1a0a 100%);border:2px solid #3b82f6;border-radius:14px;padding:30px 34px;position:relative;overflow:hidden;margin-bottom:16px">
+    <div style="position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(99,102,241,.15),transparent 70%);pointer-events:none"></div>
+    <div style="position:absolute;bottom:-60px;left:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(74,222,128,.08),transparent 70%);pointer-events:none"></div>
+
+    <div style="display:grid;grid-template-columns:1fr auto;gap:28px;align-items:start;margin-bottom:26px">
+      <div>
+        <div style="font-size:19px;font-weight:800;color:#fff;margin-bottom:9px">LATAM is operating at 5–8× above healthy SE capacity — and the problem is about to get worse.</div>
+        <div style="font-size:14px;color:#64748b">With $11.5M in open pipeline, 121 active opportunities, and three mega-deals advancing to S4 in Q3, this is the right moment to act.</div>
+      </div>
+      <div style="background:linear-gradient(135deg,#1d4ed8,#7c3aed);border-radius:12px;padding:20px 28px;text-align:center;flex-shrink:0">
+        <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px">The Ask</div>
+        <div style="font-size:38px;font-weight:800;color:#fff;line-height:1">+1 SE</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.5);margin-top:6px">LATAM · H2 2026</div>
+      </div>
+    </div>
+
+    <div class="g3" style="margin-bottom:24px">
+      <div style="background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.2);border-radius:10px;padding:18px">
+        <div style="font-size:11px;font-weight:700;color:#f87171;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px">SE time per active POC</div>
+        <div style="font-size:30px;font-weight:800;color:#fff;margin-bottom:5px">72 min</div>
+        <div style="font-size:13px;color:#94a3b8">27 deals competing for 32 hrs/month. Benchmark: 8–12 hrs per deal.</div>
+      </div>
+      <div style="background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.2);border-radius:10px;padding:18px">
+        <div style="font-size:11px;font-weight:700;color:#fbbf24;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px">Imminent pipeline shock</div>
+        <div style="font-size:30px;font-weight:800;color:#fff;margin-bottom:5px">$1.55M</div>
+        <div style="font-size:13px;color:#94a3b8">Itaú · Bradesco · BCP Peru advancing to S4 in Q3/Q4 with zero SE capacity.</div>
+      </div>
+      <div style="background:rgba(74,222,128,.07);border:1px solid rgba(74,222,128,.2);border-radius:10px;padding:18px">
+        <div style="font-size:11px;font-weight:700;color:#4ade80;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px">Year 1 ROI</div>
+        <div style="font-size:30px;font-weight:800;color:#fff;margin-bottom:5px">5–7×</div>
+        <div style="font-size:13px;color:#94a3b8">~$1M incremental New ARR vs ~$150–200K annual SE cost.</div>
+      </div>
+    </div>
+
+    <div style="background:rgba(255,255,255,.03);border:1px solid #1e293b;border-radius:10px;padding:18px 22px;margin-bottom:24px">
+      <div style="font-size:13px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px">Proposed Hire Profile</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;font-size:13px">
+        <div><div style="font-size:11px;color:#475569;font-weight:600;text-transform:uppercase;margin-bottom:5px">Location</div><div style="color:#e2e8f0">Brazil (São Paulo preferred) — largest segment of pipeline</div></div>
+        <div><div style="font-size:11px;color:#475569;font-weight:600;text-transform:uppercase;margin-bottom:5px">Languages</div><div style="color:#e2e8f0">Portuguese (primary) · Spanish (preferred)</div></div>
+        <div><div style="font-size:11px;color:#475569;font-weight:600;text-transform:uppercase;margin-bottom:5px">Experience</div><div style="color:#e2e8f0">3–6 years technical pre-sales · product analytics background preferred</div></div>
+        <div><div style="font-size:11px;color:#475569;font-weight:600;text-transform:uppercase;margin-bottom:5px">Coverage Split</div><div style="color:#e2e8f0">New hire anchors Brazil (PT) · Evandro shifts focus to Spanish-speaking markets</div></div>
+      </div>
+    </div>
+
+    <div style="border-top:1px solid rgba(255,255,255,.07);padding-top:20px;font-size:14px;color:#94a3b8;line-height:1.8">
+      With <strong style="color:#fff">$11.5M in open pipeline</strong>, <strong style="color:#fff">121 active opportunities</strong> across 10+ countries, and 4 AEs whose quotas depend on one SE, LATAM has the demand of a two-SE region operating with one. The unsupported POC count is not a product problem — it is a coverage problem. Every week without a second SE is another POC running unsupported, another qualified deal drifting to a competitor, and another mega-deal getting closer to S4 with no one to run it.
+      <br><br>
+      <strong style="color:#fff">One hire. Five to seven times its cost in return. The same coverage standard every other Amplitude team already has. Starting this quarter.</strong>
+    </div>
+  </div>
+
+  <p style="font-size:12px;color:#334155;text-align:center">Data: Salesforce Live · FY2026 · LATAM AEs: Coutinho, Amorim, Rocha, Limão · East Majors AEs: Bogle, Valenta, Carpetto, Harrison, Franovic, Xavier · Prepared by Jeff Dubois &amp; Evandro Pacolla · June 2026</p>
+</div>
+
+<!-- ══════════════════════ FIXED FOOTER NAV ══════════════════════ -->
+<div id="slide-footer">
+  <button class="footer-btn" id="prev-btn" onclick="navigate(-1)">← Previous</button>
+  <div class="footer-center">
+    <div class="footer-title" id="footer-title">Executive Summary</div>
+    <div class="footer-counter" id="footer-counter">1 of 8</div>
+    <div class="footer-dots" id="footer-dots"></div>
+  </div>
+  <button class="footer-btn primary" id="next-btn" onclick="navigate(1)">Next →</button>
+</div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const navLinks = Array.from(document.querySelectorAll('nav a[data-slide]'));
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  const footerTitle = document.getElementById('footer-title');
+  const footerCounter = document.getElementById('footer-counter');
+  const dotsContainer = document.getElementById('footer-dots');
+  const progressBar = document.getElementById('progress-bar');
+
+  const titles = [
+    'Executive Summary', 'LATAM vs. East Majors', 'Pipeline Reality',
+    'SE Capacity Crisis', 'Key Person Risk', 'ROI', 'Hire Timeline', 'The Ask'
+  ];
+
+  // Maps logical nav index → DOM slide index
+  // DOM order: 0=Exec, 1=Pipeline, 2=Capacity, 3=KeyPerson, 4=LATAM, 5=HireTimeline, 6=ROI, 7=TheAsk
+  // Desired:   0=Exec, 1=LATAM,    2=Pipeline, 3=Capacity,  4=KeyPerson, 5=ROI, 6=HireTimeline, 7=TheAsk
+  const slideOrder = [0, 4, 1, 2, 3, 6, 5, 7];
+
+  let current = 0;
+
+  // Build dots
+  slides.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'footer-dot';
+    dot.onclick = () => goTo(i);
+    dotsContainer.appendChild(dot);
+  });
+
+  function goTo(index) {
+    slides[slideOrder[current]].classList.remove('active');
+    current = Math.max(0, Math.min(index, slides.length - 1));
+    slides[slideOrder[current]].classList.add('active');
+    navLinks.forEach((a, i) => a.classList.toggle('active', i === current));
+    footerTitle.textContent = titles[current];
+    footerCounter.textContent = `${current + 1} of ${slides.length}`;
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === slides.length - 1;
+    Array.from(dotsContainer.children).forEach((d, i) => d.classList.toggle('active', i === current));
+    progressBar.style.width = ((current + 1) / slides.length * 100) + '%';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function navigate(dir) { goTo(current + dir); }
+
+  navLinks.forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      goTo(parseInt(a.dataset.slide));
+    });
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') navigate(1);
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   navigate(-1);
+  });
+
+  function toggleExpand(contentId, btnId) {
+    const content = document.getElementById(contentId);
+    const btn = document.getElementById(btnId);
+    const isOpen = content.classList.contains('open');
+    content.classList.toggle('open', !isOpen);
+    btn.classList.toggle('open', !isOpen);
+    const label = contentId.startsWith('pt') ? '44 S0–S2 future deals · $4.22M New ARR' : '38 S0–S2 future deals · $2.06M New ARR';
+    btn.innerHTML = `<span class="chevron">▶</span> ${isOpen ? 'Show' : 'Hide'} ${label}`;
+  }
+
+  goTo(0);
+</script>
+</body>
+</html>
